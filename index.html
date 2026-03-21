@@ -710,6 +710,28 @@
     window.open('https://wa.me/573008985321?text=' + encodeURIComponent(msg), '_blank');
   }
 
-    function sendEmail() {
+  function sendEmail() {
     const msg = buildMessage();
-    if (!msg) { alert('Selecciona al menos un serv
+    if (!msg) { alert('Selecciona al menos un servicio.'); return; }
+    const subject = encodeURIComponent('Solicitud de cotización — Paul Negrete');
+    window.open('mailto:pnegrete0209@gmail.com?subject=' + subject + '&body=' + encodeURIComponent(msg), '_blank');
+  }
+
+  // ── Hamburger menu
+  function toggleMenu() {
+    const btn = document.getElementById('hamburger');
+    const menu = document.getElementById('mobileMenu');
+    btn.classList.toggle('open');
+    menu.classList.toggle('open');
+  }
+  function closeMenu() {
+    document.getElementById('hamburger').classList.remove('open');
+    document.getElementById('mobileMenu').classList.remove('open');
+  }
+  window.addEventListener('scroll', () => {
+    if (document.getElementById('mobileMenu').classList.contains('open')) closeMenu();
+  }, { passive: true });
+
+</script>
+</body>
+</html>
