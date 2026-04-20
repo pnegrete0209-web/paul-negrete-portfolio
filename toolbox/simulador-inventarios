@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulador de Escenarios de Inventario · Paul Negrete Toolbox</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{
+  --bg:#060910;--bg2:#0a0f1a;--card:#0d1525;--card2:#111d30;
+  --border:rgba(255,255,255,0.06);--border2:rgba(255,255,255,0.11);
+  --gold:#f0a500;--gold2:#ffd060;--gold-dim:rgba(240,165,0,0.1);
+  --blue:#2e6da4;--blue2:#4a90d4;--blue3:#7ab8f5;
+  --green:#2dd4a0;--red:#f04444;--orange:#f09020;--purple:#a78bfa;
+  --text:#e2eaf5;--text2:#7a9ab8;--text3:#3a5a7a;
+  --r:14px;--r-sm:9px;
+  --s-base:#4a90d4;--s-a:#f04444;--s-b:#2dd4a0;--s-c:#a78bfa
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 50% 40% at 20% 0%,rgba(167,139,250,0.07),transparent);pointer-events:none;z-index:0}
+
+header{position:relative;z-index:1;padding:22px 40px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;border-bottom:1px solid var(--border)}
+.hbrand{display:flex;align-items:center;gap:10px}
+.hlogo{width:32px;height:32px}
+.htitle{font-family:'Syne',sans-serif;font-size:0.9rem;font-weight:800}
+.htitle span{color:var(--gold)}
+.hbadge{display:inline-flex;align-items:center;gap:7px;background:rgba(167,139,250,0.1);border:1px solid rgba(167,139,250,0.25);border-radius:100px;padding:5px 14px;font-size:0.7rem;font-weight:600;color:var(--purple);letter-spacing:0.06em;text-transform:uppercase}
+
+/* MAIN LAYOUT */
+.page{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:28px 36px 80px}
+
+/* HERO */
+.hero{margin-bottom:28px}
+.hero h1{font-family:'Syne',sans-serif;font-size:clamp(1.7rem,3.5vw,2.6rem);font-weight:800;letter-spacing:-0.03em;margin-bottom:8px}
+.hero h1 .acc{background:linear-gradient(135deg,var(--purple),var(--blue3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{font-size:0.9rem;color:var(--text2);line-height:1.7;font-weight:300;max-width:680px}
+
+/* INPUT PANEL */
+.input-panel{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:28px;margin-bottom:24px}
+.panel-title{font-family:'Syne',sans-serif;font-size:0.8rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text3);margin-bottom:18px;display:flex;align-items:center;justify-content:space-between}
+.input-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.input-grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.field{display:flex;flex-direction:column;gap:5px}
+.flabel{font-size:0.7rem;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:var(--text2)}
+.fhint{font-size:0.66rem;color:var(--text3);line-height:1.4;margin-top:2px}
+.ti{background:var(--card2);border:1px solid var(--border);border-radius:var(--r-sm);padding:9px 12px;font-family:'DM Sans',sans-serif;font-size:0.86rem;color:var(--text);outline:none;transition:border-color 0.2s;width:100%}
+.ti:focus{border-color:var(--purple)}
+.ti.num{font-family:'JetBrains Mono',monospace;text-align:right}
+
+/* SCENARIOS */
+.scenarios-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
+.scenario-card{background:var(--card2);border:1.5px solid var(--border);border-radius:var(--r-sm);padding:16px;position:relative;transition:border-color 0.2s}
+.scenario-card.active{border-color:rgba(167,139,250,0.4);background:rgba(167,139,250,0.06)}
+.sc-label{font-size:0.65rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px}
+.sc-a .sc-label{color:var(--s-a)}
+.sc-b .sc-label{color:var(--s-b)}
+.sc-c .sc-label{color:var(--s-c)}
+.sc-name{font-family:'Syne',sans-serif;font-size:0.9rem;font-weight:700;color:var(--text);margin-bottom:10px}
+.sc-inputs{display:flex;flex-direction:column;gap:7px}
+.sc-row{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.sc-row-label{font-size:0.72rem;color:var(--text2);flex:1}
+.sc-val{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:5px 9px;font-family:'JetBrains Mono',monospace;font-size:0.76rem;color:var(--text);outline:none;width:80px;text-align:right;transition:border-color 0.2s}
+.sc-val:focus{border-color:var(--purple)}
+.sc-suffix{font-size:0.68rem;color:var(--text3);white-space:nowrap}
+
+.btn-simulate{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;background:linear-gradient(135deg,var(--purple),var(--blue2));color:white;font-family:'DM Sans',sans-serif;font-size:0.95rem;font-weight:700;padding:14px;border-radius:11px;border:none;cursor:pointer;transition:all 0.2s;margin-top:4px}
+.btn-simulate:hover{transform:translateY(-1px);box-shadow:0 8px 28px rgba(167,139,250,0.35)}
+
+/* SAMPLE */
+.sample-btn{display:inline-flex;align-items:center;gap:6px;background:var(--gold-dim);border:1px solid rgba(240,165,0,0.2);color:var(--gold);font-family:'DM Sans',sans-serif;font-size:0.75rem;font-weight:600;padding:5px 12px;border-radius:7px;cursor:pointer;transition:all 0.2s}
+.sample-btn:hover{background:rgba(240,165,0,0.18)}
+
+/* RESULTS */
+.results{display:none}
+.results.show{display:block;animation:fadeIn 0.4s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* SCENARIO COMPARISON */
+.comparison-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.comp-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:18px;position:relative;overflow:hidden}
+.comp-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.comp-base::before{background:var(--s-base)}
+.comp-a::before{background:var(--s-a)}
+.comp-b::before{background:var(--s-b)}
+.comp-c::before{background:var(--s-c)}
+.comp-label{font-size:0.65rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:4px}
+.comp-base .comp-label{color:var(--s-base)}
+.comp-a .comp-label{color:var(--s-a)}
+.comp-b .comp-label{color:var(--s-b)}
+.comp-c .comp-label{color:var(--s-c)}
+.comp-name{font-size:0.78rem;color:var(--text);margin-bottom:12px;font-weight:500}
+.comp-metric{display:flex;justify-content:space-between;align-items:baseline;padding:5px 0;border-bottom:1px solid var(--border)}
+.comp-metric:last-child{border-bottom:none}
+.comp-metric-label{font-size:0.68rem;color:var(--text3)}
+.comp-metric-val{font-family:'JetBrains Mono',monospace;font-size:0.78rem;font-weight:500}
+.delta-pos{color:var(--green)}
+.delta-neg{color:var(--red)}
+.delta-neu{color:var(--text2)}
+
+/* CHARTS ROW */
+.charts-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+.chart-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:20px}
+.chart-title{font-family:'Syne',sans-serif;font-size:0.72rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text3);margin-bottom:14px}
+
+/* INSIGHT TABLE */
+.insight-table-wrap{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:20px;margin-bottom:20px;overflow-x:auto}
+.ins-tbl{width:100%;border-collapse:collapse;font-size:0.76rem}
+.ins-tbl th{font-size:0.64rem;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:var(--text3);padding:7px 10px;border-bottom:1px solid var(--border);text-align:left;white-space:nowrap}
+.ins-tbl td{padding:9px 10px;border-bottom:1px solid rgba(255,255,255,0.03);color:var(--text2);vertical-align:middle}
+.ins-tbl tr:last-child td{border-bottom:none}
+.ins-tbl tr:hover td{background:rgba(255,255,255,0.015)}
+.pill{display:inline-flex;align-items:center;padding:2px 8px;border-radius:100px;font-size:0.66rem;font-weight:700;white-space:nowrap}
+
+/* RECOMMENDATION BOX */
+.rec-box{background:linear-gradient(135deg,rgba(167,139,250,0.08),rgba(46,109,164,0.08));border:1px solid rgba(167,139,250,0.2);border-radius:var(--r);padding:24px;margin-bottom:20px}
+.rec-box h3{font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;color:var(--text);margin-bottom:14px}
+.rec-items{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.rec-item{display:flex;gap:12px;align-items:flex-start}
+.rec-num{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800;color:var(--purple);opacity:0.4;line-height:1;flex-shrink:0;width:22px}
+.rec-text-wrap{}
+.rec-title{font-size:0.82rem;font-weight:600;color:var(--text);margin-bottom:3px}
+.rec-desc{font-size:0.76rem;color:var(--text2);line-height:1.55;font-weight:300}
+
+/* CTA */
+.cta-row{display:flex;gap:10px;flex-wrap:wrap}
+.wa-btn{display:inline-flex;align-items:center;gap:9px;background:#25D366;color:white;font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:700;padding:12px 20px;border-radius:10px;border:none;cursor:pointer;transition:all 0.2s;text-decoration:none}
+.wa-btn:hover{background:#1db954;transform:translateY(-1px);box-shadow:0 6px 18px rgba(37,211,102,0.3)}
+.print-btn{display:inline-flex;align-items:center;gap:8px;background:transparent;color:var(--text2);font-family:'DM Sans',sans-serif;font-size:0.84rem;padding:12px 18px;border-radius:10px;border:1px solid var(--border);cursor:pointer;transition:all 0.2s}
+.print-btn:hover{border-color:var(--border2);color:var(--text)}
+
+@media(max-width:900px){
+  .page{padding:20px}
+  .input-grid{grid-template-columns:1fr 1fr}
+  .input-grid-3{grid-template-columns:1fr 1fr}
+  .scenarios-grid{grid-template-columns:1fr}
+  .comparison-grid{grid-template-columns:1fr 1fr}
+  .charts-row{grid-template-columns:1fr}
+  .rec-items{grid-template-columns:1fr}
+}
+@media print{
+  body{background:white;color:#111}
+  .input-panel,.btn-simulate,.sample-btn,.cta-row{display:none}
+  .results{display:block}
+  .comp-card,.chart-card,.rec-box,.insight-table-wrap{background:white;border-color:#ddd}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hbrand">
+    <svg class="hlogo" viewBox="0 0 48 48" fill="none">
+      <defs><linearGradient id="lg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#a78bfa"/><stop offset="100%" stop-color="#f0a500"/></linearGradient></defs>
+      <rect width="48" height="48" rx="12" fill="#0a1220"/>
+      <path d="M24 24 C24 18.5,30.5 14,36 17.5 C41.5 21,41.5 27,36 30.5 C30.5 34,24 29.5,24 24 C24 18.5,17.5 14,12 17.5 C6.5 21,6.5 27,12 30.5 C17.5 34,24 29.5,24 24" stroke="url(#lg)" stroke-width="3" stroke-linecap="round" fill="none"/>
+      <circle cx="24" cy="24" r="1.5" fill="#f0a500" opacity="0.8"/>
+    </svg>
+    <div class="htitle">Paul Negrete <span>·</span> Toolbox</div>
+  </div>
+  <div class="hbadge">🔬 Herramienta 4 — Simulador</div>
+</header>
+
+<div class="page">
+
+  <div class="hero">
+    <h1>Simulador de Escenarios<br><span class="acc">de Inventario</span></h1>
+    <p>Analice qué pasaría con sus costos, nivel de servicio y capital inmovilizado si cambia su stock de seguridad, su proveedor o su política de reorden. Compare hasta 3 escenarios vs. la situación base en tiempo real.</p>
+  </div>
+
+  <!-- INPUT PANEL -->
+  <div class="input-panel">
+    <div class="panel-title">
+      Parámetros del producto / referencia
+      <button class="sample-btn" onclick="loadSample()">✦ Cargar ejemplo</button>
+    </div>
+
+    <div class="input-grid">
+      <div class="field">
+        <label class="flabel">Producto / SKU</label>
+        <input class="ti" id="prodName" placeholder="Ej: Aceite Motor 20W50">
+      </div>
+      <div class="field">
+        <label class="flabel">Demanda diaria promedio (unid.)</label>
+        <input class="ti num" id="demandDay" type="number" value="12" min="0.1" step="0.1">
+        <span class="fhint">Unidades por día en promedio</span>
+      </div>
+      <div class="field">
+        <label class="flabel">Desviación estándar demanda</label>
+        <input class="ti num" id="demandStd" type="number" value="3" min="0" step="0.1">
+        <span class="fhint">Variabilidad de la demanda diaria</span>
+      </div>
+      <div class="field">
+        <label class="flabel">Costo unitario (COP)</label>
+        <input class="ti num" id="unitCost" type="number" value="28000" min="0">
+      </div>
+      <div class="field">
+        <label class="flabel">Costo de pedido (COP/orden)</label>
+        <input class="ti num" id="orderCost" type="number" value="85000" min="0">
+        <span class="fhint">Admin, transporte, recepción</span>
+      </div>
+      <div class="field">
+        <label class="flabel">Costo de almacenamiento (%/año)</label>
+        <input class="ti num" id="holdingPct" type="number" value="25" min="1" max="100">
+        <span class="fhint">% del costo unitario anual</span>
+      </div>
+      <div class="field">
+        <label class="flabel">Costo de quiebre (COP/unid.)</label>
+        <input class="ti num" id="stockoutCost" type="number" value="65000" min="0">
+        <span class="fhint">Venta perdida + cliente insatisfecho</span>
+      </div>
+      <div class="field">
+        <label class="flabel">Días hábiles por año</label>
+        <input class="ti num" id="workDays" type="number" value="250" min="100" max="365">
+      </div>
+    </div>
+
+    <!-- SCENARIOS -->
+    <div style="font-family:'Syne',sans-serif;font-size:0.75rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text3);margin-bottom:12px">
+      Escenarios a comparar (modifique lead time, SS% y descuento de proveedor)
+    </div>
+    <div class="scenarios-grid">
+      <!-- SCENARIO A -->
+      <div class="scenario-card sc-a">
+        <div class="sc-label">Escenario A</div>
+        <input class="ti" id="nameA" placeholder="Ej: Reducir SS 20%" style="margin-bottom:10px;font-size:0.82rem;padding:7px 10px">
+        <div class="sc-inputs">
+          <div class="sc-row"><div class="sc-row-label">Lead time (días)</div><input class="sc-val" id="ltA" type="number" value="7" min="1"><span class="sc-suffix">días</span></div>
+          <div class="sc-row"><div class="sc-row-label">Stock seguridad</div><input class="sc-val" id="ssA" type="number" value="80" min="0"><span class="sc-suffix">% del base</span></div>
+          <div class="sc-row"><div class="sc-row-label">Descuento proveedor</div><input class="sc-val" id="discA" type="number" value="0" min="0" max="50"><span class="sc-suffix">%</span></div>
+          <div class="sc-row"><div class="sc-row-label">Confiabilidad prov.</div><input class="sc-val" id="relA" type="number" value="90" min="50" max="100"><span class="sc-suffix">%</span></div>
+        </div>
+      </div>
+      <!-- SCENARIO B -->
+      <div class="scenario-card sc-b">
+        <div class="sc-label">Escenario B</div>
+        <input class="ti" id="nameB" placeholder="Ej: Nuevo proveedor" style="margin-bottom:10px;font-size:0.82rem;padding:7px 10px">
+        <div class="sc-inputs">
+          <div class="sc-row"><div class="sc-row-label">Lead time (días)</div><input class="sc-val" id="ltB" type="number" value="5" min="1"><span class="sc-suffix">días</span></div>
+          <div class="sc-row"><div class="sc-row-label">Stock seguridad</div><input class="sc-val" id="ssB" type="number" value="100" min="0"><span class="sc-suffix">% del base</span></div>
+          <div class="sc-row"><div class="sc-row-label">Descuento proveedor</div><input class="sc-val" id="discB" type="number" value="8" min="0" max="50"><span class="sc-suffix">%</span></div>
+          <div class="sc-row"><div class="sc-row-label">Confiabilidad prov.</div><input class="sc-val" id="relB" type="number" value="97" min="50" max="100"><span class="sc-suffix">%</span></div>
+        </div>
+      </div>
+      <!-- SCENARIO C -->
+      <div class="scenario-card sc-c">
+        <div class="sc-label">Escenario C</div>
+        <input class="ti" id="nameC" placeholder="Ej: Lead time reducido" style="margin-bottom:10px;font-size:0.82rem;padding:7px 10px">
+        <div class="sc-inputs">
+          <div class="sc-row"><div class="sc-row-label">Lead time (días)</div><input class="sc-val" id="ltC" type="number" value="3" min="1"><span class="sc-suffix">días</span></div>
+          <div class="sc-row"><div class="sc-row-label">Stock seguridad</div><input class="sc-val" id="ssC" type="number" value="100" min="0"><span class="sc-suffix">% del base</span></div>
+          <div class="sc-row"><div class="sc-row-label">Descuento proveedor</div><input class="sc-val" id="discC" type="number" value="0" min="0" max="50"><span class="sc-suffix">%</span></div>
+          <div class="sc-row"><div class="sc-row-label">Confiabilidad prov.</div><input class="sc-val" id="relC" type="number" value="99" min="50" max="100"><span class="sc-suffix">%</span></div>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn-simulate" onclick="simulate()">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      Simular escenarios
+    </button>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="results" id="results">
+
+    <div class="comparison-grid" id="compGrid"></div>
+
+    <div class="charts-row">
+      <div class="chart-card">
+        <div class="chart-title">Costo total anual por escenario</div>
+        <canvas id="chartCost" style="max-height:220px"></canvas>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Composición del costo total</div>
+        <canvas id="chartComp" style="max-height:220px"></canvas>
+      </div>
+    </div>
+
+    <div class="insight-table-wrap">
+      <div class="chart-title" style="margin-bottom:12px">Tabla comparativa detallada</div>
+      <table class="ins-tbl" id="insightTable"></table>
+    </div>
+
+    <div class="rec-box" id="recBox"></div>
+
+    <div class="cta-row" id="ctaRow"></div>
+
+    <div style="text-align:center;font-size:0.66rem;color:var(--text3);margin-top:20px;padding-top:14px;border-top:1px solid var(--border)">
+      Paul Negrete Toolbox v1.0 · paulnegrete.netlify.app · Herramienta de análisis de sensibilidad de inventario
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+const FMT = n => Math.round(n).toLocaleString('es-CO');
+const FMT2 = n => n.toFixed(1);
+const FMTM = n => (n/1000000).toFixed(2) + 'M';
+let chartCost = null, chartComp = null;
+
+function calcScenario(params) {
+  const { demandDay, demandStd, unitCost, orderCost, holdingPct, stockoutCost, workDays, lt, ssPct, discount, reliability } = params;
+  const demandYear = demandDay * workDays;
+  const effectiveCost = unitCost * (1 - discount / 100);
+  const holdingRate = holdingPct / 100;
+
+  // EOQ
+  const eoq = Math.sqrt((2 * demandYear * orderCost) / (effectiveCost * holdingRate));
+
+  // Safety stock: z * std * sqrt(LT)
+  // z = 1.65 for 95%, 1.28 for 90%, base uses 1.65
+  const zBase = 1.65;
+  const ssBase = Math.ceil(zBase * demandStd * Math.sqrt(lt));
+  const ss = Math.round(ssBase * (ssPct / 100));
+
+  // Reorder point
+  const rop = Math.ceil(demandDay * lt + ss);
+
+  // Average inventory
+  const avgInv = eoq / 2 + ss;
+
+  // Number of orders per year
+  const ordersPerYear = demandYear / eoq;
+
+  // Costs
+  const holdingCost = avgInv * effectiveCost * holdingRate;
+  const orderingCost = ordersPerYear * orderCost;
+  const purchaseCost = demandYear * effectiveCost;
+
+  // Stockout probability (simplified: P(stockout) = 1 - reliability * (ss adequacy))
+  const ssAdequacy = Math.min(1, ss / Math.max(1, ssBase));
+  const stockoutProb = Math.max(0, (1 - reliability / 100) * (1 - ssAdequacy * 0.8));
+  const expectedStockout = demandYear * stockoutProb * 0.05; // 5% of annual demand at risk
+  const stockoutCostTotal = expectedStockout * stockoutCost;
+
+  // Fill rate (simplified)
+  const fillRate = Math.min(99.9, 85 + (ss / Math.max(1, ssBase)) * 10 + (reliability / 100) * 5);
+
+  const totalCost = holdingCost + orderingCost + stockoutCostTotal;
+
+  return { eoq, ss, rop, avgInv, ordersPerYear, holdingCost, orderingCost, purchaseCost, stockoutCostTotal, totalCost, fillRate, effectiveCost, demandYear };
+}
+
+function simulate() {
+  const demandDay = parseFloat(document.getElementById('demandDay').value) || 12;
+  const demandStd = parseFloat(document.getElementById('demandStd').value) || 3;
+  const unitCost = parseFloat(document.getElementById('unitCost').value) || 28000;
+  const orderCost = parseFloat(document.getElementById('orderCost').value) || 85000;
+  const holdingPct = parseFloat(document.getElementById('holdingPct').value) || 25;
+  const stockoutCost = parseFloat(document.getElementById('stockoutCost').value) || 65000;
+  const workDays = parseFloat(document.getElementById('workDays').value) || 250;
+  const prodName = document.getElementById('prodName').value || 'Producto';
+
+  const base = { demandDay, demandStd, unitCost, orderCost, holdingPct, stockoutCost, workDays, lt: 7, ssPct: 100, discount: 0, reliability: 90 };
+
+  const scenariosRaw = [
+    { id: 'A', color: 'var(--s-a)', name: document.getElementById('nameA').value || 'Escenario A', lt: +document.getElementById('ltA').value, ssPct: +document.getElementById('ssA').value, discount: +document.getElementById('discA').value, reliability: +document.getElementById('relA').value },
+    { id: 'B', color: 'var(--s-b)', name: document.getElementById('nameB').value || 'Escenario B', lt: +document.getElementById('ltB').value, ssPct: +document.getElementById('ssB').value, discount: +document.getElementById('discB').value, reliability: +document.getElementById('relB').value },
+    { id: 'C', color: 'var(--s-c)', name: document.getElementById('nameC').value || 'Escenario C', lt: +document.getElementById('ltC').value, ssPct: +document.getElementById('ssC').value, discount: +document.getElementById('discC').value, reliability: +document.getElementById('relC').value },
+  ];
+
+  const baseCalc = calcScenario(base);
+  const scenarios = scenariosRaw.map(s => ({ ...s, ...calcScenario({ ...base, lt: s.lt, ssPct: s.ssPct, discount: s.discount, reliability: s.reliability }) }));
+
+  const allScenarios = [{ id: 'Base', color: 'var(--s-base)', name: 'Situación actual', ...baseCalc }, ...scenarios];
+
+  // COMPARISON CARDS
+  const compHtml = allScenarios.map((s, i) => {
+    const isBase = i === 0;
+    const deltaTotal = isBase ? null : s.totalCost - baseCalc.totalCost;
+    const deltaFill = isBase ? null : s.fillRate - baseCalc.fillRate;
+    const deltaSS = isBase ? null : s.ss - baseCalc.ss;
+    return `<div class="comp-card comp-${s.id.toLowerCase()}">
+      <div class="comp-label">${isBase ? 'BASE' : 'ESCENARIO ' + s.id}</div>
+      <div class="comp-name">${s.name}</div>
+      <div class="comp-metric"><span class="comp-metric-label">Costo total anual</span><span class="comp-metric-val ${isBase?'delta-neu':deltaTotal<0?'delta-pos':'delta-neg'}">$${FMT(s.totalCost)}</span></div>
+      <div class="comp-metric"><span class="comp-metric-label">Fill Rate</span><span class="comp-metric-val ${isBase?'delta-neu':deltaFill>0?'delta-pos':'delta-neg'}">${FMT2(s.fillRate)}%</span></div>
+      <div class="comp-metric"><span class="comp-metric-label">EOQ (unidades)</span><span class="comp-metric-val delta-neu">${Math.round(s.eoq)}</span></div>
+      <div class="comp-metric"><span class="comp-metric-label">Stock seguridad</span><span class="comp-metric-val delta-neu">${s.ss} u.</span></div>
+      <div class="comp-metric"><span class="comp-metric-label">Punto de reorden</span><span class="comp-metric-val delta-neu">${s.rop} u.</span></div>
+      ${!isBase ? `<div class="comp-metric"><span class="comp-metric-label">Ahorro vs base</span><span class="comp-metric-val ${deltaTotal<0?'delta-pos':'delta-neg'}">${deltaTotal<0?'▼ $'+FMT(-deltaTotal):'▲ $'+FMT(deltaTotal)}</span></div>` : ''}
+    </div>`;
+  }).join('');
+
+  document.getElementById('compGrid').innerHTML = compHtml;
+
+  // CHARTS
+  if (chartCost) { chartCost.destroy(); chartCost = null; }
+  if (chartComp) { chartComp.destroy(); chartComp = null; }
+
+  const scColors = ['rgba(74,144,212,0.75)', 'rgba(240,68,68,0.75)', 'rgba(45,212,160,0.75)', 'rgba(167,139,250,0.75)'];
+  const scBorders = ['#4a90d4', '#f04444', '#2dd4a0', '#a78bfa'];
+
+  const costCtx = document.getElementById('chartCost').getContext('2d');
+  chartCost = new Chart(costCtx, {
+    type: 'bar',
+    data: {
+      labels: allScenarios.map(s => s.name.length > 16 ? s.name.slice(0,14)+'…' : s.name),
+      datasets: [{
+        data: allScenarios.map(s => Math.round(s.totalCost)),
+        backgroundColor: scColors,
+        borderRadius: 6, borderSkipped: false
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ' $' + ctx.raw.toLocaleString('es-CO') } } },
+      scales: {
+        x: { ticks: { color: '#7a9ab8', font: { size: 10 } }, grid: { color: 'rgba(255,255,255,0.03)' } },
+        y: { ticks: { color: '#7a9ab8', font: { size: 10 }, callback: v => '$' + (v/1000).toFixed(0) + 'k' }, grid: { color: 'rgba(255,255,255,0.03)' } }
+      }
+    }
+  });
+
+  const compCtx = document.getElementById('chartComp').getContext('2d');
+  chartComp = new Chart(compCtx, {
+    type: 'bar',
+    data: {
+      labels: allScenarios.map(s => s.name.length > 14 ? s.name.slice(0,12)+'…' : s.name),
+      datasets: [
+        { label: 'Almacenamiento', data: allScenarios.map(s => Math.round(s.holdingCost)), backgroundColor: 'rgba(240,165,0,0.7)', borderRadius: 4, borderSkipped: false },
+        { label: 'Pedidos', data: allScenarios.map(s => Math.round(s.orderingCost)), backgroundColor: 'rgba(74,144,212,0.7)', borderRadius: 4, borderSkipped: false },
+        { label: 'Quiebres', data: allScenarios.map(s => Math.round(s.stockoutCostTotal)), backgroundColor: 'rgba(240,68,68,0.7)', borderRadius: 4, borderSkipped: false },
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { position: 'bottom', labels: { color: '#7a9ab8', boxWidth: 10, font: { size: 9 } } } },
+      scales: {
+        x: { stacked: true, ticks: { color: '#7a9ab8', font: { size: 10 } }, grid: { color: 'rgba(255,255,255,0.03)' } },
+        y: { stacked: true, ticks: { color: '#7a9ab8', font: { size: 10 }, callback: v => '$' + (v/1000).toFixed(0) + 'k' }, grid: { color: 'rgba(255,255,255,0.03)' } }
+      }
+    }
+  });
+
+  // INSIGHT TABLE
+  const tblRows = [
+    { label: 'Costo total anual', key: 'totalCost', fmt: v => '$' + FMT(v), better: 'lower' },
+    { label: 'Fill Rate', key: 'fillRate', fmt: v => FMT2(v) + '%', better: 'higher' },
+    { label: 'Cantidad óptima pedido (EOQ)', key: 'eoq', fmt: v => Math.round(v) + ' u.', better: 'neutral' },
+    { label: 'Stock de seguridad', key: 'ss', fmt: v => v + ' u.', better: 'neutral' },
+    { label: 'Punto de reorden', key: 'rop', fmt: v => v + ' u.', better: 'neutral' },
+    { label: 'Inventario promedio', key: 'avgInv', fmt: v => FMT(Math.round(v)) + ' u.', better: 'neutral' },
+    { label: 'Órdenes por año', key: 'ordersPerYear', fmt: v => FMT2(v), better: 'neutral' },
+    { label: 'Costo almacenamiento', key: 'holdingCost', fmt: v => '$' + FMT(v), better: 'lower' },
+    { label: 'Costo de pedidos', key: 'orderingCost', fmt: v => '$' + FMT(v), better: 'lower' },
+    { label: 'Costo quiebres estimado', key: 'stockoutCostTotal', fmt: v => '$' + FMT(v), better: 'lower' },
+  ];
+
+  let tblHtml = `<thead><tr><th>Métrica</th><th style="color:var(--s-base)">Base</th>${scenarios.map(s=>`<th style="color:${s.color}">${s.name.slice(0,14)}</th>`).join('')}</tr></thead><tbody>`;
+  tblRows.forEach(row => {
+    tblHtml += `<tr><td style="color:var(--text);font-weight:500">${row.label}</td>`;
+    const baseVal = baseCalc[row.key];
+    tblHtml += `<td style="font-family:'JetBrains Mono',monospace;font-size:0.74rem">${row.fmt(baseVal)}</td>`;
+    scenarios.forEach(s => {
+      const val = s[row.key];
+      let cls = '';
+      if (row.better === 'lower') cls = val < baseVal ? 'delta-pos' : val > baseVal ? 'delta-neg' : 'delta-neu';
+      else if (row.better === 'higher') cls = val > baseVal ? 'delta-pos' : val < baseVal ? 'delta-neg' : 'delta-neu';
+      else cls = 'delta-neu';
+      const delta = val - baseVal;
+      const deltaStr = Math.abs(delta) > 0.05 ? (delta > 0 ? ' (+' : ' (') + (typeof val === 'number' && val > 1000 ? '$' + FMT(Math.round(delta)) : FMT2(delta)) + ')' : '';
+      tblHtml += `<td class="${cls}" style="font-family:'JetBrains Mono',monospace;font-size:0.74rem">${row.fmt(val)}<span style="opacity:0.55;font-size:0.65rem">${deltaStr}</span></td>`;
+    });
+    tblHtml += `</tr>`;
+  });
+  tblHtml += '</tbody>';
+  document.getElementById('insightTable').innerHTML = tblHtml;
+
+  // RECOMMENDATIONS
+  const best = [...scenarios].sort((a, b) => a.totalCost - b.totalCost)[0];
+  const bestFill = [...scenarios].sort((a, b) => b.fillRate - a.fillRate)[0];
+  const savings = baseCalc.totalCost - best.totalCost;
+
+  const recHtml = `<h3>💡 Análisis de sensibilidad — Recomendaciones</h3>
+    <div class="rec-items">
+      <div class="rec-item"><div class="rec-num">01</div><div class="rec-text-wrap">
+        <div class="rec-title">Escenario de menor costo: ${best.name}</div>
+        <div class="rec-desc">Costo total $${FMT(best.totalCost)} vs base $${FMT(baseCalc.totalCost)}. ${savings > 0 ? 'Ahorro anual estimado: $' + FMT(savings) + '.' : 'Sin ahorro neto; evaluar beneficios cualitativos.'} EOQ recomendado: ${Math.round(best.eoq)} unidades por pedido.</div>
+      </div></div>
+      <div class="rec-item"><div class="rec-num">02</div><div class="rec-text-wrap">
+        <div class="rec-title">Mejor nivel de servicio: ${bestFill.name}</div>
+        <div class="rec-desc">Fill Rate de ${FMT2(bestFill.fillRate)}% (base: ${FMT2(baseCalc.fillRate)}%). Un punto de fill rate equivale a clientes retenidos y menos ventas perdidas. El costo adicional puede justificarse por el impacto comercial.</div>
+      </div></div>
+      <div class="rec-item"><div class="rec-num">03</div><div class="rec-text-wrap">
+        <div class="rec-title">Stock de seguridad óptimo</div>
+        <div class="rec-desc">La demanda diaria de ${demandDay} u. con σ=${demandStd} u. sugiere un SS base de ${baseCalc.ss} unidades (95% de nivel de servicio). Reducirlo aumenta el riesgo de quiebre en proporción no lineal.</div>
+      </div></div>
+      <div class="rec-item"><div class="rec-num">04</div><div class="rec-text-wrap">
+        <div class="rec-title">Impacto del lead time</div>
+        <div class="rec-desc">Cada día de reducción en lead time permite bajar el stock de seguridad en ~${FMT2(demandStd * 0.5)} unidades, liberando capital de trabajo. Negociar lead times más cortos con proveedores tiene alto retorno.</div>
+      </div></div>
+    </div>`;
+
+  document.getElementById('recBox').innerHTML = recHtml;
+
+  // CTA
+  const msg = 'Hola Paul, acabo de simular escenarios de inventario para ' + prodName + '.\n\n' +
+    '📊 RESULTADOS:\n' +
+    '• Base: $' + FMT(baseCalc.totalCost) + '/año · Fill Rate ' + FMT2(baseCalc.fillRate) + '%\n' +
+    scenarios.map(s => '• ' + s.name + ': $' + FMT(s.totalCost) + '/año · Fill Rate ' + FMT2(s.fillRate) + '%').join('\n') + '\n\n' +
+    '• Mejor escenario: ' + best.name + ' ($' + FMT(best.totalCost) + ')\n' +
+    (savings > 0 ? '• Ahorro potencial: $' + FMT(savings) + '/año\n\n' : '\n') +
+    '¿Podemos analizar cómo implementar el escenario óptimo?';
+
+  document.getElementById('ctaRow').innerHTML = `
+    <a class="wa-btn" href="https://wa.me/573008985321?text=${encodeURIComponent(msg)}" target="_blank">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Compartir análisis con Paul
+    </a>
+    <button class="print-btn" onclick="window.print()">🖨 Imprimir reporte</button>
+    <button class="print-btn" onclick="document.getElementById('results').style.display='none';document.getElementById('results').className='results'">↺ Nueva simulación</button>
+  `;
+
+  const resultsEl = document.getElementById('results');
+  resultsEl.className = 'results show';
+  resultsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function loadSample() {
+  document.getElementById('prodName').value = 'Aceite Motor 20W50 (lt)';
+  document.getElementById('demandDay').value = '12';
+  document.getElementById('demandStd').value = '3.5';
+  document.getElementById('unitCost').value = '28000';
+  document.getElementById('orderCost').value = '85000';
+  document.getElementById('holdingPct').value = '25';
+  document.getElementById('stockoutCost').value = '65000';
+  document.getElementById('workDays').value = '250';
+  document.getElementById('nameA').value = 'Reducir SS 20%';
+  document.getElementById('ltA').value = '7';
+  document.getElementById('ssA').value = '80';
+  document.getElementById('discA').value = '0';
+  document.getElementById('relA').value = '90';
+  document.getElementById('nameB').value = 'Nuevo proveedor local';
+  document.getElementById('ltB').value = '4';
+  document.getElementById('ssB').value = '100';
+  document.getElementById('discB').value = '8';
+  document.getElementById('relB').value = '97';
+  document.getElementById('nameC').value = 'Contrato largo plazo';
+  document.getElementById('ltC').value = '3';
+  document.getElementById('ssC').value = '110';
+  document.getElementById('discC').value = '12';
+  document.getElementById('relC').value = '99';
+  simulate();
+}
+</script>
+</body>
+</html>
