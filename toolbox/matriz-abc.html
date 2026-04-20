@@ -156,6 +156,14 @@ header{position:relative;z-index:1;padding:22px 40px;display:flex;align-items:ce
 </head>
 <body>
 
+<script>
+(function(){
+  if(!sessionStorage.getItem('pn_toolbox_auth')){
+    window.location.replace('./index.html');
+  }
+})();
+</script>
+  
 <header>
   <div class="hbrand">
     <svg class="hlogo" viewBox="0 0 48 48" fill="none">
