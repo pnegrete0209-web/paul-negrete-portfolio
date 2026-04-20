@@ -4,504 +4,526 @@
 <meta charset="UTF-8">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230d1827'/><path d='M50 50 C50 38,64 30,75 36 C86 42,86 58,75 64 C64 70,50 62,50 50 C50 38,36 30,25 36 C14 42,14 58,25 64 C36 70,50 62,50 50' stroke='%23f0a500' stroke-width='7' stroke-linecap='round' fill='none'/></svg>">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Paul André Negrete Burgos — Consultor en Datos & Logística</title>
+<meta name="description" content="Paul André Negrete — Consultor en Optimización de Operaciones, Inteligencia de Negocios y Automatización. Montería, Colombia.">
+<title>Paul André Negrete Burgos — Analista de Datos & Consultor en Operaciones &amp; Datos</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #080c14;
-    --bg2: #0d1421;
-    --bg3: #111a2e;
-    --card: #0f1827;
-    --card2: #141f33;
-    --border: rgba(255,255,255,0.07);
-    --border2: rgba(255,255,255,0.12);
-    --gold: #f0a500;
-    --gold2: #ffc740;
-    --blue: #2e6da4;
-    --blue2: #4a90d4;
-    --blue3: #6fb3f5;
-    --text: #e8edf5;
-    --text2: #8fa3bf;
-    --text3: #5a7a9a;
-    --green: #2dd4a0;
-    --radius: 16px;
-    --radius-sm: 10px;
-  }
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
-  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; line-height: 1.6; }
-  body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events: none; z-index: 9999; opacity: 0.5; }
-  body::after { content: ''; position: fixed; inset: 0; background-image: linear-gradient(rgba(46,109,164,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(46,109,164,0.04) 1px, transparent 1px); background-size: 60px 60px; pointer-events: none; z-index: 0; }
-
-  /* ── NAV ── */
-  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 16px 60px; background: rgba(8,12,20,0.88); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); }
-
-  /* ── LOGO ── */
-  .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; flex-shrink: 0; }
-  .logo-mark-wrap { width: 44px; height: 44px; flex-shrink: 0; position: relative; }
-  .logo-mark-svg { width: 44px; height: 44px; transition: transform 0.3s; }
-  .nav-logo:hover .logo-mark-svg { transform: scale(1.08); }
-  .logo-text { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.0rem; color: var(--text); letter-spacing: -0.02em; line-height: 1; white-space: nowrap; }
-  .logo-text em { font-style: normal; color: var(--gold); }
-  .logo-text small { display: block; font-size: 0.58rem; font-weight: 500; color: var(--text3); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 2px; }
-
-  .nav-links { display: flex; gap: 36px; list-style: none; }
-  .nav-links a { font-size: 0.82rem; font-weight: 500; color: var(--text2); text-decoration: none; letter-spacing: 0.05em; text-transform: uppercase; transition: color 0.2s; }
-  .nav-links a:hover { color: var(--gold); }
-  .nav-cta { background: var(--gold); color: var(--bg) !important; padding: 9px 22px; border-radius: 8px; font-weight: 700 !important; }
-  .nav-cta:hover { background: var(--gold2) !important; }
-
-  /* ── HERO ── */
-  .hero { position: relative; min-height: 100vh; display: flex; align-items: center; padding: 140px 60px 80px; overflow: visible; z-index: 1; }
-  .hero-glow { position: absolute; width: 700px; height: 700px; border-radius: 50%; background: radial-gradient(circle, rgba(46,109,164,0.18) 0%, transparent 70%); top: -200px; right: -100px; pointer-events: none; }
-  .hero-glow2 { position: absolute; width: 400px; height: 400px; border-radius: 50%; background: radial-gradient(circle, rgba(240,165,0,0.1) 0%, transparent 70%); bottom: 0; left: 200px; pointer-events: none; }
-  .hero-content { max-width: 720px; position: relative; z-index: 2; }
-  .hero-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(240,165,0,0.1); border: 1px solid rgba(240,165,0,0.25); border-radius: 100px; padding: 6px 16px; font-size: 0.78rem; font-weight: 500; color: var(--gold); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 28px; opacity: 0; animation: fadeUp 0.6s 0.2s forwards; }
-  .hero-badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--gold); animation: blink 2s infinite; }
-  @keyframes blink { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(1.3)} }
-  .hero h1 { font-family: 'Syne', sans-serif; font-size: clamp(2.4rem, 5.5vw, 5.5rem); font-weight: 800; line-height: 1.0; letter-spacing: -0.03em; color: var(--text); margin-bottom: 8px; opacity: 0; animation: fadeUp 0.6s 0.35s forwards; }
-  .hero h1 .line2 { display: block; background: linear-gradient(135deg, var(--blue3), var(--gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-  .hero-sub { font-size: 1.15rem; color: var(--text2); margin: 24px 0 40px; line-height: 1.7; max-width: 560px; font-weight: 300; opacity: 0; animation: fadeUp 0.6s 0.5s forwards; }
-  .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; opacity: 0; animation: fadeUp 0.6s 0.65s forwards; }
-  @keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
-
-  .btn-primary { display: inline-flex; align-items: center; gap: 10px; background: var(--gold); color: var(--bg); font-family: 'DM Sans', sans-serif; font-size: 0.95rem; font-weight: 700; padding: 14px 28px; border-radius: 10px; text-decoration: none; transition: all 0.2s; border: none; cursor: pointer; }
-  .btn-primary:hover { background: var(--gold2); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(240,165,0,0.3); }
-  .btn-secondary { display: inline-flex; align-items: center; gap: 10px; background: transparent; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 0.95rem; font-weight: 500; padding: 14px 28px; border-radius: 10px; text-decoration: none; border: 1px solid var(--border2); transition: all 0.2s; cursor: pointer; }
-  .btn-secondary:hover { border-color: var(--blue2); color: var(--blue3); }
-
-  .hero-stats { display: flex; gap: 48px; margin-top: 60px; padding-top: 40px; border-top: 1px solid var(--border); opacity: 0; animation: fadeUp 0.6s 0.8s forwards; }
-  .stat-num { font-family: 'Syne', sans-serif; font-size: 2.2rem; font-weight: 800; color: var(--text); letter-spacing: -0.03em; }
-  .stat-num span { color: var(--gold); }
-  .stat-label { font-size: 0.8rem; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 2px; }
-
-  /* ── SECTIONS ── */
-  section { position: relative; z-index: 1; padding: 100px 60px; }
-  .section-tag { display: inline-block; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; }
-  .section-title { font-family: 'Syne', sans-serif; font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; letter-spacing: -0.03em; color: var(--text); line-height: 1.1; margin-bottom: 16px; }
-  .section-sub { font-size: 1.05rem; color: var(--text2); font-weight: 300; max-width: 560px; line-height: 1.7; }
-  .section-header { margin-bottom: 60px; }
-
-  /* ── SERVICIOS ── */
-  #servicios { background: var(--bg2); }
-  .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-  .service-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 32px; transition: all 0.3s; position: relative; overflow: hidden; }
-  .service-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--gold), transparent); opacity: 0; transition: opacity 0.3s; }
-  .service-card:hover { border-color: var(--border2); transform: translateY(-4px); box-shadow: 0 20px 60px rgba(0,0,0,0.4); }
-  .service-card:hover::before { opacity: 1; }
-  .service-icon { width: 52px; height: 52px; border-radius: 14px; background: rgba(46,109,164,0.12); border: 1px solid rgba(46,109,164,0.2); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 20px; }
-  .service-card h3 { font-family: 'Syne', sans-serif; font-size: 1.05rem; font-weight: 700; color: var(--text); margin-bottom: 10px; }
-  .service-card p { font-size: 0.88rem; color: var(--text2); line-height: 1.65; font-weight: 300; margin-bottom: 20px; }
-  .service-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px; }
-  .tag { font-size: 0.72rem; font-weight: 500; padding: 3px 10px; border-radius: 100px; background: rgba(46,109,164,0.1); border: 1px solid rgba(46,109,164,0.2); color: var(--blue3); }
-  .service-price { font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--gold); }
-  .service-price small { font-family: 'DM Sans', sans-serif; font-size: 0.75rem; font-weight: 400; color: var(--text3); margin-left: 4px; }
-
-  /* ── PROYECTOS ── */
-  #proyectos { background: var(--bg); }
-  .projects-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px; }
-  .project-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; transition: all 0.3s; display: flex; flex-direction: column; }
-  .project-card:hover { border-color: var(--border2); transform: translateY(-5px); box-shadow: 0 24px 60px rgba(0,0,0,0.45); }
-  .project-preview { position: relative; height: 200px; background: var(--bg3); overflow: hidden; display: flex; align-items: center; justify-content: center; }
-  .project-preview-serpens { background: linear-gradient(135deg, #0a1628 0%, #0d2040 50%, #0a2535 100%); }
-  .project-preview-agora { background: linear-gradient(135deg, #0d1a10 0%, #0a2010 50%, #0d1a28 100%); }
-  .project-preview-inner { text-align: center; padding: 24px; position: relative; z-index: 1; }
-  .project-preview-logo { font-family: 'Syne', sans-serif; font-size: 2.2rem; font-weight: 800; letter-spacing: -0.04em; margin-bottom: 6px; }
-  .project-preview-serpens .project-preview-logo { color: #60a5fa; }
-  .project-preview-agora .project-preview-logo { color: var(--green); }
-  .project-preview-tagline { font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.6; }
-  .project-preview-serpens .project-preview-tagline { color: #93c5fd; }
-  .project-preview-agora .project-preview-tagline { color: #6ee7b7; }
-  .project-preview-deco { position: absolute; inset: 0; overflow: hidden; }
-  .project-preview-deco::before { content: ''; position: absolute; width: 200px; height: 200px; border-radius: 50%; opacity: 0.15; top: -60px; right: -60px; }
-  .project-preview-serpens .project-preview-deco::before { background: radial-gradient(circle, #60a5fa, transparent); }
-  .project-preview-agora .project-preview-deco::before { background: radial-gradient(circle, var(--green), transparent); }
-  .project-body { padding: 28px 28px 24px; flex: 1; display: flex; flex-direction: column; }
-  .project-badges { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
-  .project-badge { font-size: 0.7rem; font-weight: 600; padding: 3px 10px; border-radius: 100px; }
-  .badge-live { background: rgba(45,212,160,0.12); border: 1px solid rgba(45,212,160,0.25); color: var(--green); }
-  .badge-tech { background: rgba(46,109,164,0.1); border: 1px solid rgba(46,109,164,0.2); color: var(--blue3); }
-  .project-body h3 { font-family: 'Syne', sans-serif; font-size: 1.2rem; font-weight: 700; color: var(--text); margin-bottom: 10px; }
-  .project-body p { font-size: 0.88rem; color: var(--text2); line-height: 1.7; font-weight: 300; flex: 1; margin-bottom: 24px; }
-  .project-links { display: flex; gap: 10px; }
-  .btn-project-primary { display: inline-flex; align-items: center; gap: 8px; background: var(--blue); color: white; font-size: 0.85rem; font-weight: 600; padding: 10px 18px; border-radius: 8px; text-decoration: none; transition: all 0.2s; }
-  .btn-project-primary:hover { background: var(--blue2); transform: translateY(-1px); }
-  .btn-project-secondary { display: inline-flex; align-items: center; gap: 8px; background: transparent; color: var(--text2); font-size: 0.85rem; font-weight: 500; padding: 10px 18px; border-radius: 8px; text-decoration: none; border: 1px solid var(--border); transition: all 0.2s; }
-  .btn-project-secondary:hover { border-color: var(--border2); color: var(--text); }
-
-  /* ── COTIZADOR ── */
-  #cotizador { background: var(--bg2); border-top: 1px solid var(--border); }
-  .cotizador-layout { display: grid; grid-template-columns: 1fr 380px; gap: 40px; align-items: start; }
-  .cotizador-form { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 40px; }
-  .form-group { margin-bottom: 28px; }
-  .form-label { display: block; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text2); margin-bottom: 12px; }
-  .service-checkboxes { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .checkbox-card { display: flex; align-items: center; gap: 12px; background: var(--card2); border: 2px solid var(--border); border-radius: var(--radius-sm); padding: 14px 16px; cursor: pointer; transition: all 0.22s; user-select: none; }
-  .checkbox-card:hover { border-color: var(--blue3); background: rgba(74,144,212,0.07); }
-  .checkbox-card.selected { background: rgba(46,109,164,0.15); border-color: var(--blue2); box-shadow: 0 0 0 3px rgba(74,144,212,0.15); }
-  .checkbox-card input[type="checkbox"] { display: none; }
-  .checkbox-indicator { width: 22px; height: 22px; border-radius: 6px; border: 2px solid var(--text3); display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.2s; background: transparent; }
-  .checkbox-indicator svg { width: 13px; height: 13px; stroke: transparent; transition: stroke 0.15s; stroke-width: 3; fill: none; }
-  .checkbox-card.selected .checkbox-indicator { background: var(--blue2); border-color: var(--blue2); box-shadow: 0 0 8px rgba(74,144,212,0.5); }
-  .checkbox-card.selected .checkbox-indicator svg { stroke: white; }
-  .checkbox-label { font-size: 0.85rem; color: var(--text2); line-height: 1.3; transition: color 0.2s; }
-  .checkbox-card.selected .checkbox-label { color: var(--text); font-weight: 500; }
-  .form-select, .form-input { width: 100%; background: var(--card2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 13px 16px; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; color: var(--text); outline: none; transition: border-color 0.2s; appearance: none; }
-  .form-select:focus, .form-input:focus { border-color: var(--blue2); }
-  option { background: var(--bg2); }
-  .range-track { display: flex; align-items: center; gap: 16px; }
-  .form-range { flex: 1; -webkit-appearance: none; height: 4px; border-radius: 2px; background: var(--border2); outline: none; }
-  .form-range::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%; background: var(--blue2); cursor: pointer; border: 2px solid var(--bg); box-shadow: 0 0 0 2px var(--blue); }
-  .range-val { font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--gold); min-width: 60px; text-align: right; }
-
-  /* ── PANEL LATERAL COTIZADOR ── */
-  .quote-result { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 36px; position: sticky; top: 90px; }
-  .quote-title { font-family: 'Syne', sans-serif; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text3); margin-bottom: 24px; }
-  .quote-items { min-height: 100px; margin-bottom: 24px; }
-  .quote-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100px; color: var(--text3); font-size: 0.85rem; text-align: center; gap: 10px; }
-  .quote-item { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); }
-  .quote-item:last-child { border-bottom: none; }
-  .qi-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--blue2); flex-shrink: 0; }
-  .qi-name { font-size: 0.88rem; color: var(--text); font-weight: 500; line-height: 1.3; }
-  .quote-divider { height: 1px; background: var(--border2); margin: 20px 0; }
-  .quote-ready { background: rgba(45,212,160,0.07); border: 1px solid rgba(45,212,160,0.18); border-radius: var(--radius-sm); padding: 16px; margin-bottom: 20px; text-align: center; }
-  .quote-ready-icon { font-size: 1.5rem; margin-bottom: 6px; }
-  .quote-ready-text { font-size: 0.82rem; color: var(--text2); line-height: 1.5; }
-  .quote-ready-text strong { color: var(--green); display: block; font-size: 0.92rem; margin-bottom: 3px; }
-  .quote-note { font-size: 0.78rem; color: var(--text3); margin-bottom: 20px; line-height: 1.5; text-align: center; }
-  .btn-whatsapp { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; background: #25D366; color: white; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; font-weight: 700; padding: 14px 20px; border-radius: 10px; text-decoration: none; border: none; cursor: pointer; transition: all 0.2s; margin-bottom: 10px; }
-  .btn-whatsapp:hover { background: #1db954; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(37,211,102,0.3); }
-  .btn-email { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; background: transparent; color: var(--text2); font-family: 'DM Sans', sans-serif; font-size: 0.88rem; font-weight: 500; padding: 12px 20px; border-radius: 10px; text-decoration: none; border: 1px solid var(--border); cursor: pointer; transition: all 0.2s; }
-  .btn-email:hover { border-color: var(--border2); color: var(--text); }
-
-  /* ── SOBRE MÍ ── */
-  #sobre-mi { background: var(--bg); }
-  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; }
-  .about-text p { font-size: 1rem; color: var(--text2); font-weight: 300; line-height: 1.8; margin-bottom: 20px; }
-  .about-skills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 32px; }
-  .skill-chip { display: flex; align-items: center; gap: 7px; padding: 7px 14px; background: var(--card); border: 1px solid var(--border); border-radius: 100px; font-size: 0.82rem; color: var(--text2); font-weight: 400; }
-  .skill-chip .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
-  .certs-list { display: flex; flex-direction: column; gap: 12px; }
-  .cert-item { display: flex; align-items: flex-start; gap: 14px; padding: 16px 20px; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm); transition: border-color 0.2s; }
-  .cert-item:hover { border-color: var(--border2); }
-  .cert-icon { width: 36px; height: 36px; border-radius: 10px; background: rgba(240,165,0,0.1); border: 1px solid rgba(240,165,0,0.2); display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
-  .cert-name { font-size: 0.88rem; font-weight: 500; color: var(--text); line-height: 1.3; margin-bottom: 2px; }
-  .cert-source { font-size: 0.78rem; color: var(--text3); }
-
-  /* ── FOOTER ── */
-  footer { position: relative; z-index: 1; background: var(--card); border-top: 1px solid var(--border); padding: 48px 60px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 24px; }
-  .footer-brand { display: flex; align-items: center; gap: 10px; }
-  .footer-logo-text { font-family: 'Syne', sans-serif; font-size: 1.05rem; font-weight: 800; color: var(--text); }
-  .footer-logo-text em { font-style: normal; color: var(--gold); }
-  .footer-links { display: flex; gap: 28px; flex-wrap: wrap; }
-  .footer-links a { font-size: 0.85rem; color: var(--text3); text-decoration: none; transition: color 0.2s; }
-  .footer-links a:hover { color: var(--gold); }
-  .footer-copy { font-size: 0.78rem; color: var(--text3); }
-
-  /* ── REVEAL ── */
-  .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s, transform 0.7s; }
-  .reveal.visible { opacity: 1; transform: none; }
-
-  /* ── HAMBURGER MENU ── */
-  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; background: none; border: none; }
-  .hamburger span { display: block; width: 24px; height: 2px; background: var(--text2); border-radius: 2px; transition: all 0.3s; }
-  .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-  .hamburger.open span:nth-child(2) { opacity: 0; }
-  .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-  .mobile-menu { display: none; position: fixed; top: 73px; left: 0; right: 0; background: rgba(8,12,20,0.98); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 99; padding: 0; overflow: hidden; max-height: 0; transition: max-height 0.35s ease, padding 0.35s ease; }
-  .mobile-menu.open { max-height: 400px; padding: 16px 0 24px; }
-  .mobile-menu a { display: block; padding: 14px 28px; font-size: 0.95rem; font-weight: 500; color: var(--text2); text-decoration: none; letter-spacing: 0.05em; text-transform: uppercase; border-bottom: 1px solid var(--border); transition: color 0.2s; }
-  .mobile-menu a:hover { color: var(--gold); }
-  .mobile-menu .mobile-cta { background: var(--gold); color: var(--bg) !important; margin: 16px 28px 0; border-radius: 10px; text-align: center; border-bottom: none; font-weight: 700; }
-
-  /* ── TABLET (≤1024px) ── */
-  @media (max-width: 1024px) {
-    nav { padding: 14px 24px; }
-    .nav-links { display: none; }
-    .hamburger { display: flex; }
-    section { padding: 70px 24px; }
-    .hero { padding: 110px 24px 60px; }
-    .hero-content { max-width: 100%; }
-    .services-grid { grid-template-columns: 1fr 1fr; }
-    .projects-grid { grid-template-columns: 1fr; }
-    .cotizador-layout { grid-template-columns: 1fr; }
-    .quote-result { position: static; }
-    .about-grid { grid-template-columns: 1fr; gap: 40px; }
-    footer { padding: 32px 24px; flex-direction: column; align-items: flex-start; gap: 20px; }
-    .footer-links { flex-direction: column; gap: 12px; }
-  }
-
-  /* ── MOBILE (≤640px) ── */
-  @media (max-width: 640px) {
-    nav { padding: 12px 20px; }
-    .logo-text { font-size: 0.88rem; }
-    .logo-text small { display: none; }
-    section { padding: 56px 20px; }
-    .hero { padding: 100px 20px 50px; min-height: auto; }
-    .hero h1 { font-size: clamp(2rem, 9vw, 3rem); letter-spacing: -0.02em; line-height: 1.05; }
-    .hero-sub { font-size: 1rem; margin: 18px 0 28px; }
-    .hero-actions { flex-direction: column; gap: 12px; }
-    .hero-actions a { width: 100%; justify-content: center; }
-    .hero-stats { gap: 20px; flex-wrap: wrap; padding-top: 28px; margin-top: 36px; }
-    .hero-stats > div { min-width: calc(50% - 10px); }
-    .stat-num { font-size: 1.8rem; }
-    .services-grid { grid-template-columns: 1fr; gap: 14px; }
-    .service-card { padding: 24px; }
-    .service-checkboxes { grid-template-columns: 1fr; }
-    .section-title { font-size: clamp(1.6rem, 7vw, 2.5rem); }
-    .cotizador-form { padding: 24px 20px; }
-    .quote-result { padding: 24px 20px; }
-    .projects-grid { gap: 16px; }
-    .project-body { padding: 20px; }
-    .about-grid { gap: 32px; }
-    footer { padding: 28px 20px; }
-    .footer-copy { font-size: 0.72rem; }
-    .hero-badge { font-size: 0.7rem; padding: 5px 12px; }
-    .btn-primary, .btn-secondary { padding: 13px 22px; font-size: 0.9rem; }
-  }
-
-  /* ── SMALL MOBILE (≤380px) ── */
-  @media (max-width: 380px) {
-    .hero h1 { font-size: 1.85rem; }
-    .logo-text { font-size: 0.82rem; }
-  }
+:root{--bg:#080c14;--bg2:#0d1421;--bg3:#111a2e;--card:#0f1827;--card2:#141f33;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);--gold:#f0a500;--gold2:#ffc740;--blue:#2e6da4;--blue2:#4a90d4;--blue3:#6fb3f5;--text:#e8edf5;--text2:#8fa3bf;--text3:#5a7a9a;--green:#2dd4a0;--radius:16px;--radius-sm:10px}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;line-height:1.6}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:0.5}
+body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(46,109,164,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(46,109,164,0.04) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0}
+nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:14px 60px;background:rgba(8,12,20,0.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.nav-logo{display:flex;align-items:center;gap:12px;text-decoration:none;flex-shrink:0}
+.logo-mark-wrap{width:42px;height:42px;flex-shrink:0}
+.logo-mark-svg{width:42px;height:42px;transition:transform 0.3s}
+.nav-logo:hover .logo-mark-svg{transform:scale(1.08)}
+.logo-text{font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:var(--text);letter-spacing:-0.02em;line-height:1;white-space:nowrap}
+.logo-text em{font-style:normal;color:var(--gold)}
+.logo-text small{display:block;font-size:0.58rem;font-weight:500;color:var(--text3);letter-spacing:0.1em;text-transform:uppercase;margin-top:2px}
+.nav-links{display:flex;gap:24px;list-style:none}
+.nav-links a{font-size:0.78rem;font-weight:500;color:var(--text2);text-decoration:none;letter-spacing:0.05em;text-transform:uppercase;transition:color 0.2s}
+.nav-links a:hover{color:var(--gold)}
+.nav-cta{background:var(--gold);color:var(--bg)!important;padding:8px 18px;border-radius:8px;font-weight:700!important}
+.nav-cta:hover{background:var(--gold2)!important}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none}
+.hamburger span{display:block;width:24px;height:2px;background:var(--text2);border-radius:2px;transition:all 0.3s}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.hamburger.open span:nth-child(2){opacity:0}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.mobile-menu{display:none;position:fixed;top:71px;left:0;right:0;background:rgba(8,12,20,0.98);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);z-index:199;overflow:hidden;max-height:0;transition:max-height 0.35s ease}
+.mobile-menu.open{max-height:500px}
+.mobile-menu a{display:block;padding:13px 28px;font-size:0.88rem;font-weight:500;color:var(--text2);text-decoration:none;text-transform:uppercase;letter-spacing:0.05em;border-bottom:1px solid var(--border);transition:color 0.2s}
+.mobile-menu a:hover{color:var(--gold)}
+.mobile-menu .mobile-cta{background:var(--gold);color:var(--bg)!important;margin:14px 28px 20px;border-radius:10px;text-align:center;border-bottom:none;font-weight:700}
+.hero{position:relative;min-height:100vh;display:flex;align-items:center;padding:130px 60px 80px;overflow:visible;z-index:1}
+.hero-glow{position:absolute;width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(46,109,164,0.18) 0%,transparent 70%);top:-200px;right:-100px;pointer-events:none}
+.hero-glow2{position:absolute;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(240,165,0,0.1) 0%,transparent 70%);bottom:0;left:200px;pointer-events:none}
+.hero-img-wrap{position:absolute;right:0;top:0;bottom:0;width:42%;overflow:hidden;z-index:1;pointer-events:none}
+.hero-img-wrap::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,var(--bg) 0%,transparent 40%),linear-gradient(180deg,var(--bg) 0%,transparent 20%,transparent 80%,var(--bg) 100%);z-index:2}
+.hero-img-wrap img{width:100%;height:100%;object-fit:cover;opacity:0.2;filter:saturate(0.3) brightness(0.6)}
+.hero-content{max-width:680px;position:relative;z-index:2}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(240,165,0,0.1);border:1px solid rgba(240,165,0,0.25);border-radius:100px;padding:6px 16px;font-size:0.75rem;font-weight:500;color:var(--gold);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:28px;opacity:0;animation:fadeUp 0.6s 0.2s forwards}
+.hero-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--gold);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(1.3)}}
+.hero h1{font-family:'Syne',sans-serif;font-size:clamp(2.2rem,5vw,5rem);font-weight:800;line-height:1.05;letter-spacing:-0.03em;color:var(--text);margin-bottom:8px;opacity:0;animation:fadeUp 0.6s 0.35s forwards}
+.hero h1 .line2{display:block;background:linear-gradient(135deg,var(--blue3),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{font-size:1.02rem;color:var(--text2);margin:20px 0 34px;line-height:1.8;max-width:580px;font-weight:300;opacity:0;animation:fadeUp 0.6s 0.5s forwards}
+.hero-actions{display:flex;gap:14px;flex-wrap:wrap;opacity:0;animation:fadeUp 0.6s 0.65s forwards}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.btn-primary{display:inline-flex;align-items:center;gap:10px;background:var(--gold);color:var(--bg);font-family:'DM Sans',sans-serif;font-size:0.92rem;font-weight:700;padding:13px 26px;border-radius:10px;text-decoration:none;transition:all 0.2s;border:none;cursor:pointer}
+.btn-primary:hover{background:var(--gold2);transform:translateY(-2px);box-shadow:0 8px 30px rgba(240,165,0,0.3)}
+.btn-secondary{display:inline-flex;align-items:center;gap:10px;background:transparent;color:var(--text);font-family:'DM Sans',sans-serif;font-size:0.92rem;font-weight:500;padding:13px 26px;border-radius:10px;text-decoration:none;border:1px solid var(--border2);transition:all 0.2s;cursor:pointer}
+.btn-secondary:hover{border-color:var(--blue2);color:var(--blue3)}
+.hero-stats{display:flex;gap:44px;margin-top:52px;padding-top:36px;border-top:1px solid var(--border);opacity:0;animation:fadeUp 0.6s 0.8s forwards}
+.stat-num{font-family:'Syne',sans-serif;font-size:2.1rem;font-weight:800;color:var(--text);letter-spacing:-0.03em}
+.stat-num span{color:var(--gold)}
+.stat-label{font-size:0.74rem;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;margin-top:2px}
+section{position:relative;z-index:1;padding:96px 60px}
+.section-tag{display:inline-block;font-size:0.7rem;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
+.section-title{font-family:'Syne',sans-serif;font-size:clamp(1.8rem,4vw,3rem);font-weight:800;letter-spacing:-0.03em;color:var(--text);line-height:1.1;margin-bottom:16px}
+.section-sub{font-size:1rem;color:var(--text2);font-weight:300;max-width:560px;line-height:1.75}
+.section-header{margin-bottom:56px}
+#servicios{background:var(--bg2)}
+.services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.service-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:32px;transition:all 0.3s;position:relative;overflow:hidden}
+.service-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold),transparent);opacity:0;transition:opacity 0.3s}
+.service-card:hover{border-color:var(--border2);transform:translateY(-4px);box-shadow:0 20px 60px rgba(0,0,0,0.4)}
+.service-card:hover::before{opacity:1}
+.service-icon{width:52px;height:52px;border-radius:14px;background:rgba(46,109,164,0.12);border:1px solid rgba(46,109,164,0.2);display:flex;align-items:center;justify-content:center;font-size:1.5rem;margin-bottom:20px}
+.service-card h3{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:700;color:var(--text);margin-bottom:10px}
+.service-card p{font-size:0.87rem;color:var(--text2);line-height:1.7;font-weight:300;margin-bottom:20px}
+.service-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px}
+.tag{font-size:0.7rem;font-weight:500;padding:3px 10px;border-radius:100px;background:rgba(46,109,164,0.1);border:1px solid rgba(46,109,164,0.2);color:var(--blue3)}
+.service-price{font-family:'Syne',sans-serif;font-size:0.95rem;font-weight:700;color:var(--gold)}
+.service-price small{font-family:'DM Sans',sans-serif;font-size:0.75rem;font-weight:400;color:var(--text3);margin-left:4px}
+#proyectos{background:var(--bg)}
+.projects-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.project-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:all 0.3s;display:flex;flex-direction:column}
+.project-card:hover{border-color:var(--border2);transform:translateY(-5px);box-shadow:0 24px 60px rgba(0,0,0,0.45)}
+.project-preview{position:relative;height:155px;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.project-preview img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.18;filter:saturate(0.4)}
+.pp-serpens{background:linear-gradient(135deg,#0a1628,#0d2040)}
+.pp-vertice{background:linear-gradient(135deg,#1a0d0a,#2d1a08)}
+.pp-vital{background:linear-gradient(135deg,#0a1a20,#082028)}
+.project-preview-inner{text-align:center;padding:18px;position:relative;z-index:1}
+.project-preview-logo{font-family:'Syne',sans-serif;font-size:1.7rem;font-weight:800;letter-spacing:-0.03em;margin-bottom:4px}
+.pp-serpens .project-preview-logo{color:#60a5fa}
+.pp-vertice .project-preview-logo{color:#f0a500}
+.pp-vital .project-preview-logo{color:#2dd4a0}
+.project-preview-tagline{font-size:0.65rem;letter-spacing:0.14em;text-transform:uppercase;opacity:0.6}
+.project-body{padding:20px;flex:1;display:flex;flex-direction:column}
+.project-badges{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.project-badge{font-size:0.68rem;font-weight:600;padding:3px 10px;border-radius:100px}
+.badge-live{background:rgba(45,212,160,0.12);border:1px solid rgba(45,212,160,0.25);color:var(--green)}
+.badge-dev{background:rgba(240,165,0,0.1);border:1px solid rgba(240,165,0,0.25);color:var(--gold)}
+.badge-tech{background:rgba(46,109,164,0.1);border:1px solid rgba(46,109,164,0.2);color:var(--blue3)}
+.project-body h3{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;color:var(--text);margin-bottom:8px}
+.project-body p{font-size:0.83rem;color:var(--text2);line-height:1.7;font-weight:300;flex:1;margin-bottom:16px}
+.project-links{display:flex;gap:8px}
+.btn-proj{display:inline-flex;align-items:center;gap:7px;font-size:0.8rem;font-weight:600;padding:8px 14px;border-radius:8px;text-decoration:none;transition:all 0.2s;border:none;cursor:pointer}
+.btn-proj-blue{background:var(--blue);color:white}
+.btn-proj-blue:hover{background:var(--blue2);transform:translateY(-1px)}
+.btn-proj-gold{background:var(--gold);color:var(--bg)}
+.btn-proj-gold:hover{background:var(--gold2)}
+.btn-proj-green{background:var(--green);color:var(--bg)}
+.btn-proj-green:hover{background:#26bfa0}
+#fortalezas{background:var(--bg2)}
+.strengths-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.strength-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:28px;transition:border-color 0.3s}
+.strength-card:hover{border-color:var(--border2)}
+.strength-num{font-family:'Syne',sans-serif;font-size:2.2rem;font-weight:800;color:var(--gold);opacity:0.25;line-height:1;margin-bottom:12px}
+.strength-card h3{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;color:var(--text);margin-bottom:10px}
+.strength-card p{font-size:0.86rem;color:var(--text2);line-height:1.72;font-weight:300}
+#validacion{background:var(--bg)}
+.validation-wrap{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:48px;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;position:relative;overflow:hidden}
+.validation-wrap::before{content:'';position:absolute;top:-60px;right:-60px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(240,165,0,0.08),transparent)}
+.validation-quote{font-family:'Syne',sans-serif;font-size:3rem;font-weight:800;color:var(--gold);opacity:0.3;line-height:1;margin-bottom:12px}
+.validation-text{font-size:1.02rem;color:var(--text);line-height:1.78;font-weight:300;font-style:italic;margin-bottom:20px}
+.validation-author{font-size:0.78rem;color:var(--text3);letter-spacing:0.1em;text-transform:uppercase}
+.validation-stats{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.vstat{background:var(--card2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:18px}
+.vstat-num{font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;color:var(--gold);letter-spacing:-0.02em}
+.vstat-label{font-size:0.73rem;color:var(--text3);text-transform:uppercase;letter-spacing:0.07em;margin-top:4px;line-height:1.4}
+#agendamiento{background:var(--bg2)}
+.agenda-layout{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
+.agenda-steps{display:flex;flex-direction:column;gap:16px;margin-bottom:28px}
+.agenda-step{display:flex;align-items:flex-start;gap:14px}
+.step-num{width:28px;height:28px;border-radius:50%;background:rgba(240,165,0,0.12);border:1px solid rgba(240,165,0,0.3);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:0.72rem;font-weight:800;color:var(--gold);flex-shrink:0;margin-top:2px}
+.step-text{font-size:0.87rem;color:var(--text2);line-height:1.6}
+.step-text strong{color:var(--text);display:block;margin-bottom:2px}
+.calendly-wrap{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;min-height:460px;display:flex;flex-direction:column}
+.calendly-placeholder{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:36px;text-align:center;gap:12px}
+.btn-agenda{display:inline-flex;align-items:center;gap:10px;background:var(--gold);color:var(--bg);font-family:'DM Sans',sans-serif;font-size:0.92rem;font-weight:700;padding:13px 26px;border-radius:10px;text-decoration:none;transition:all 0.2s;border:none;cursor:pointer}
+.btn-agenda:hover{background:var(--gold2);transform:translateY(-2px);box-shadow:0 8px 24px rgba(240,165,0,0.3)}
+#cotizador{background:var(--bg)}
+.cotizador-layout{display:grid;grid-template-columns:1fr 350px;gap:36px;align-items:start}
+.cotizador-form{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:34px}
+.form-group{margin-bottom:24px}
+.form-label{display:block;font-size:0.77rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--text2);margin-bottom:12px}
+.service-checkboxes{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.checkbox-card{display:flex;align-items:center;gap:11px;background:var(--card2);border:2px solid var(--border);border-radius:var(--radius-sm);padding:12px 14px;cursor:pointer;transition:all 0.22s;user-select:none}
+.checkbox-card:hover{border-color:var(--blue3);background:rgba(74,144,212,0.07)}
+.checkbox-card.selected{background:rgba(46,109,164,0.15);border-color:var(--blue2);box-shadow:0 0 0 3px rgba(74,144,212,0.12)}
+.checkbox-indicator{width:20px;height:20px;border-radius:5px;border:2px solid var(--text3);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s;background:transparent}
+.checkbox-indicator svg{width:12px;height:12px;stroke:transparent;transition:stroke 0.15s;stroke-width:3;fill:none}
+.checkbox-card.selected .checkbox-indicator{background:var(--blue2);border-color:var(--blue2)}
+.checkbox-card.selected .checkbox-indicator svg{stroke:white}
+.checkbox-label{font-size:0.82rem;color:var(--text2);line-height:1.3;transition:color 0.2s}
+.checkbox-card.selected .checkbox-label{color:var(--text);font-weight:500}
+.form-select,.form-input{width:100%;background:var(--card2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 15px;font-family:'DM Sans',sans-serif;font-size:0.88rem;color:var(--text);outline:none;transition:border-color 0.2s;appearance:none}
+.form-select:focus,.form-input:focus{border-color:var(--blue2)}
+option{background:var(--bg2)}
+.range-track{display:flex;align-items:center;gap:14px}
+.form-range{flex:1;-webkit-appearance:none;height:4px;border-radius:2px;background:var(--border2);outline:none}
+.form-range::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--blue2);cursor:pointer;border:2px solid var(--bg);box-shadow:0 0 0 2px var(--blue)}
+.range-val{font-family:'Syne',sans-serif;font-size:0.9rem;font-weight:700;color:var(--gold);min-width:50px;text-align:right}
+.quote-result{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:30px;position:sticky;top:88px}
+.quote-title{font-family:'Syne',sans-serif;font-size:0.74rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--text3);margin-bottom:18px}
+.quote-items{min-height:80px;margin-bottom:18px}
+.quote-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:80px;color:var(--text3);font-size:0.82rem;text-align:center;gap:8px}
+.quote-item{display:flex;align-items:center;gap:9px;padding:9px 0;border-bottom:1px solid var(--border)}
+.quote-item:last-child{border-bottom:none}
+.qi-dot{width:6px;height:6px;border-radius:50%;background:var(--blue2);flex-shrink:0}
+.qi-name{font-size:0.84rem;color:var(--text);font-weight:500;line-height:1.3}
+.quote-divider{height:1px;background:var(--border2);margin:16px 0}
+.quote-ready{background:rgba(45,212,160,0.07);border:1px solid rgba(45,212,160,0.18);border-radius:var(--radius-sm);padding:14px;margin-bottom:14px;text-align:center}
+.quote-ready-text{font-size:0.79rem;color:var(--text2);line-height:1.5}
+.quote-ready-text strong{color:var(--green);display:block;font-size:0.88rem;margin-bottom:3px}
+.quote-note{font-size:0.74rem;color:var(--text3);margin-bottom:14px;line-height:1.5;text-align:center}
+.btn-whatsapp{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;background:#25D366;color:white;font-family:'DM Sans',sans-serif;font-size:0.9rem;font-weight:700;padding:12px 18px;border-radius:10px;text-decoration:none;border:none;cursor:pointer;transition:all 0.2s;margin-bottom:8px}
+.btn-whatsapp:hover{background:#1db954;transform:translateY(-1px);box-shadow:0 8px 24px rgba(37,211,102,0.3)}
+.btn-email{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;background:transparent;color:var(--text2);font-family:'DM Sans',sans-serif;font-size:0.84rem;font-weight:500;padding:10px 18px;border-radius:10px;text-decoration:none;border:1px solid var(--border);cursor:pointer;transition:all 0.2s}
+.btn-email:hover{border-color:var(--border2);color:var(--text)}
+#sobre-mi{background:var(--bg2)}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start}
+.about-text p{font-size:0.97rem;color:var(--text2);font-weight:300;line-height:1.85;margin-bottom:18px}
+.about-skills{display:flex;flex-wrap:wrap;gap:8px;margin-top:28px}
+.skill-chip{display:flex;align-items:center;gap:7px;padding:7px 13px;background:var(--card);border:1px solid var(--border);border-radius:100px;font-size:0.79rem;color:var(--text2);font-weight:400}
+.skill-chip .dot{width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0}
+.certs-list{display:flex;flex-direction:column;gap:10px}
+.cert-item{display:flex;align-items:flex-start;gap:14px;padding:14px 17px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);transition:border-color 0.2s}
+.cert-item:hover{border-color:var(--border2)}
+.cert-icon{width:34px;height:34px;border-radius:10px;background:rgba(240,165,0,0.1);border:1px solid rgba(240,165,0,0.2);display:flex;align-items:center;justify-content:center;font-size:0.95rem;flex-shrink:0}
+.cert-name{font-size:0.85rem;font-weight:500;color:var(--text);line-height:1.3;margin-bottom:2px}
+.cert-source{font-size:0.73rem;color:var(--text3)}
+footer{position:relative;z-index:1;background:var(--card);border-top:1px solid var(--border);padding:42px 60px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:22px}
+.footer-brand{display:flex;align-items:center;gap:10px}
+.footer-logo-text{font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;color:var(--text)}
+.footer-logo-text em{font-style:normal;color:var(--gold)}
+.footer-links{display:flex;gap:22px;flex-wrap:wrap}
+.footer-links a{font-size:0.82rem;color:var(--text3);text-decoration:none;transition:color 0.2s}
+.footer-links a:hover{color:var(--gold)}
+.footer-copy{font-size:0.74rem;color:var(--text3)}
+.chat-fab{position:fixed;bottom:28px;right:28px;width:54px;height:54px;border-radius:50%;background:var(--gold);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(240,165,0,0.4);z-index:1000;transition:all 0.2s}
+.chat-fab:hover{transform:scale(1.1);box-shadow:0 12px 32px rgba(240,165,0,0.5)}
+.chat-window{position:fixed;bottom:94px;right:28px;width:350px;max-height:490px;background:var(--card);border:1px solid var(--border2);border-radius:20px;box-shadow:0 24px 80px rgba(0,0,0,0.6);z-index:1000;display:flex;flex-direction:column;overflow:hidden;opacity:0;pointer-events:none;transform:translateY(16px) scale(0.97);transition:all 0.25s}
+.chat-window.open{opacity:1;pointer-events:all;transform:translateY(0) scale(1)}
+.chat-header{padding:14px 18px;background:var(--card2);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:11px}
+.chat-avatar{width:34px;height:34px;border-radius:50%;background:rgba(240,165,0,0.12);border:1px solid rgba(240,165,0,0.25);display:flex;align-items:center;justify-content:center;font-size:0.95rem;flex-shrink:0}
+.chat-header-info{flex:1}
+.chat-header-name{font-family:'Syne',sans-serif;font-size:0.85rem;font-weight:700;color:var(--text)}
+.chat-header-status{font-size:0.68rem;color:var(--green);display:flex;align-items:center;gap:5px}
+.chat-header-status::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--green)}
+.chat-close{background:none;border:none;cursor:pointer;color:var(--text3);padding:3px;display:flex}
+.chat-messages{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px;min-height:180px;max-height:280px}
+.chat-messages::-webkit-scrollbar{width:3px}
+.chat-messages::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+.chat-msg{max-width:86%;padding:9px 13px;border-radius:14px;font-size:0.82rem;line-height:1.55}
+.chat-msg.bot{background:var(--card2);color:var(--text2);align-self:flex-start;border-radius:4px 14px 14px 14px}
+.chat-msg.user{background:var(--blue);color:white;align-self:flex-end;border-radius:14px 14px 4px 14px}
+.chat-msg.typing{background:var(--card2);align-self:flex-start;border-radius:4px 14px 14px 14px;display:flex;gap:4px;align-items:center;padding:11px 15px}
+.chat-msg.typing span{width:6px;height:6px;border-radius:50%;background:var(--text3);animation:bounce 1.2s infinite}
+.chat-msg.typing span:nth-child(2){animation-delay:0.2s}
+.chat-msg.typing span:nth-child(3){animation-delay:0.4s}
+@keyframes bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-6px)}}
+.chat-input-wrap{padding:11px 14px;border-top:1px solid var(--border);display:flex;gap:8px}
+.chat-input{flex:1;background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:9px 13px;font-family:'DM Sans',sans-serif;font-size:0.82rem;color:var(--text);outline:none;transition:border-color 0.2s}
+.chat-input:focus{border-color:var(--blue2)}
+.chat-send{background:var(--gold);border:none;border-radius:8px;width:34px;height:34px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background 0.2s}
+.chat-send:hover{background:var(--gold2)}
+.reveal{opacity:1;transform:none}
+@media(prefers-reduced-motion:no-preference){
+  .reveal.animate{opacity:0;transform:translateY(22px);transition:opacity 0.65s ease,transform 0.65s ease}
+  .reveal.animate.visible{opacity:1;transform:none}
+}
+@media(max-width:1024px){
+  nav{padding:12px 22px}
+  .nav-links{display:none}
+  .hamburger{display:flex}
+  section{padding:68px 22px}
+  #validacion{padding:68px 22px}
+  .hero{padding:106px 22px 58px}
+  .hero-img-wrap{display:none}
+  .hero-content{max-width:100%}
+  .services-grid{grid-template-columns:1fr 1fr}
+  .projects-grid{grid-template-columns:1fr 1fr}
+  .strengths-grid{grid-template-columns:1fr 1fr}
+  .cotizador-layout{grid-template-columns:1fr}
+  .quote-result{position:static}
+  .about-grid{grid-template-columns:1fr;gap:36px}
+  .agenda-layout{grid-template-columns:1fr}
+  .validation-wrap{grid-template-columns:1fr;gap:28px;padding:32px}
+  footer{padding:30px 22px;flex-direction:column;align-items:flex-start;gap:18px}
+  .footer-links{flex-direction:column;gap:11px}
+}
+@media(max-width:640px){
+  nav{padding:10px 17px}
+  .logo-text small{display:none}
+  section{padding:50px 17px}
+  #validacion{padding:50px 17px}
+  .hero{padding:92px 17px 46px;min-height:auto}
+  .hero h1{font-size:clamp(1.85rem,9vw,2.7rem);line-height:1.08}
+  .hero-sub{font-size:0.93rem;margin:15px 0 24px}
+  .hero-actions{flex-direction:column;gap:10px}
+  .hero-actions a{width:100%;justify-content:center}
+  .hero-stats{gap:14px;flex-wrap:wrap;padding-top:22px;margin-top:28px}
+  .hero-stats>div{min-width:calc(50% - 7px)}
+  .stat-num{font-size:1.65rem}
+  .services-grid{grid-template-columns:1fr;gap:11px}
+  .service-card{padding:20px}
+  .projects-grid{grid-template-columns:1fr;gap:13px}
+  .strengths-grid{grid-template-columns:1fr;gap:11px}
+  .service-checkboxes{grid-template-columns:1fr}
+  .section-title{font-size:clamp(1.45rem,7vw,2.1rem)}
+  .cotizador-form{padding:20px 16px}
+  .quote-result{padding:20px 16px}
+  .project-body{padding:17px}
+  .about-grid{gap:26px}
+  footer{padding:24px 17px}
+  .btn-primary,.btn-secondary{padding:12px 20px;font-size:0.88rem}
+  .chat-window{width:calc(100vw - 28px);right:14px;bottom:82px}
+  .chat-fab{bottom:18px;right:18px;width:48px;height:48px}
+}
+@media(max-width:380px){.hero h1{font-size:1.7rem}}
 </style>
 </head>
 <body>
 
-<!-- ═══════════ NAV ═══════════ -->
 <nav>
   <a href="#" class="nav-logo">
     <div class="logo-mark-wrap">
       <svg class="logo-mark-svg" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <linearGradient id="ig" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#6fb3f5"/>
-            <stop offset="100%" stop-color="#f0a500"/>
+            <stop offset="0%" stop-color="#6fb3f5"/><stop offset="100%" stop-color="#f0a500"/>
           </linearGradient>
-          <filter id="glow">
-            <feGaussianBlur stdDeviation="1.5" result="blur"/>
-            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-          </filter>
+          <filter id="glow"><feGaussianBlur stdDeviation="1.5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
         </defs>
-        <!-- Fondo con borde sutil -->
         <rect width="48" height="48" rx="12" fill="#0a1220"/>
         <rect width="48" height="48" rx="12" fill="none" stroke="rgba(240,165,0,0.2)" stroke-width="1"/>
-        <!-- Símbolo infinito elegante -->
-        <path d="M24 24 C24 18.5,30.5 14,36 17.5 C41.5 21,41.5 27,36 30.5 C30.5 34,24 29.5,24 24 C24 18.5,17.5 14,12 17.5 C6.5 21,6.5 27,12 30.5 C17.5 34,24 29.5,24 24"
-              stroke="url(#ig)" stroke-width="3" stroke-linecap="round" fill="none" filter="url(#glow)"/>
-        <!-- Punto central -->
+        <path d="M24 24 C24 18.5,30.5 14,36 17.5 C41.5 21,41.5 27,36 30.5 C30.5 34,24 29.5,24 24 C24 18.5,17.5 14,12 17.5 C6.5 21,6.5 27,12 30.5 C17.5 34,24 29.5,24 24" stroke="url(#ig)" stroke-width="3" stroke-linecap="round" fill="none" filter="url(#glow)"/>
         <circle cx="24" cy="24" r="1.5" fill="#f0a500" opacity="0.8"/>
       </svg>
     </div>
-    <div class="logo-text">
-      Paul André <em>Negrete Burgos</em>
-      <small>Consultor · Datos &amp; Logística</small>
-    </div>
+    <div class="logo-text">Paul André <em>Negrete Burgos</em><small>Consultor · Operaciones &amp; Datos</small></div>
   </a>
   <ul class="nav-links">
     <li><a href="#servicios">Servicios</a></li>
     <li><a href="#proyectos">Proyectos</a></li>
+    <li><a href="#agendamiento">Agendar</a></li>
     <li><a href="#cotizador">Cotizador</a></li>
     <li><a href="#sobre-mi">Sobre mí</a></li>
-    <li><a href="#cotizador" class="nav-cta">Cotizar ahora</a></li>
+    <li><a href="#agendamiento" class="nav-cta">Consultoría gratis</a></li>
   </ul>
-  <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menú">
-    <span></span><span></span><span></span>
-  </button>
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menú"><span></span><span></span><span></span></button>
 </nav>
+
 <div class="mobile-menu" id="mobileMenu">
   <a href="#servicios" onclick="closeMenu()">Servicios</a>
   <a href="#proyectos" onclick="closeMenu()">Proyectos</a>
+  <a href="#agendamiento" onclick="closeMenu()">Agendar consulta</a>
   <a href="#cotizador" onclick="closeMenu()">Cotizador</a>
   <a href="#sobre-mi" onclick="closeMenu()">Sobre mí</a>
-  <a href="#cotizador" class="mobile-cta" onclick="closeMenu()">Cotizar ahora</a>
+  <a href="#agendamiento" class="mobile-cta" onclick="closeMenu()">Consultoría gratuita</a>
 </div>
 
-<!-- ═══════════ HERO ═══════════ -->
 <section class="hero">
   <div class="hero-glow"></div>
   <div class="hero-glow2"></div>
+  <div class="hero-img-wrap">
+    <img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=900&q=75&auto=format&fit=crop" alt="" loading="lazy">
+  </div>
   <div class="hero-content">
     <div class="hero-badge">Disponible para proyectos · Montería, Colombia</div>
-    <h1>
-      Datos, Logística<br>
-      <span class="line2">&amp; Tecnología</span>
-    </h1>
-    <p class="hero-sub">Consultor independiente con más de 10 años de experiencia. Transformo procesos logísticos y datos en resultados concretos para tu negocio.</p>
+    <h1>Optimización de<br><span class="line2">Operaciones &amp; Datos</span></h1>
+    <p class="hero-sub">Consultor especializado en la integración de procesos logísticos y análisis de datos. Con más de 10 años de experiencia, transformo entornos operativos complejos en sistemas eficientes y automatizados — permitiendo decisiones basadas en evidencia, no en intuición.</p>
     <div class="hero-actions">
-      <a href="#cotizador" class="btn-primary">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
-        Cotizar mi proyecto
+      <a href="#agendamiento" class="btn-primary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Agendar diagnóstico gratuito
       </a>
       <a href="#servicios" class="btn-secondary">
-        Ver servicios
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        Ver servicios <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </a>
     </div>
     <div class="hero-stats">
       <div><div class="stat-num">10<span>+</span></div><div class="stat-label">Años de exp.</div></div>
-      <div><div class="stat-num">6</div><div class="stat-label">Líneas de servicio</div></div>
+      <div><div class="stat-num">3</div><div class="stat-label">Soluciones activas</div></div>
       <div><div class="stat-num">8<span>+</span></div><div class="stat-label">Certificaciones</div></div>
       <div><div class="stat-num" style="color:var(--green)">SAP</div><div class="stat-label">Exp. ERP B1</div></div>
     </div>
   </div>
 </section>
 
-<!-- ═══════════ SERVICIOS ═══════════ -->
 <section id="servicios">
   <div class="section-header reveal">
     <div class="section-tag">¿Qué ofrezco?</div>
-    <h2 class="section-title">Servicios profesionales</h2>
-    <p class="section-sub">Soluciones a medida para empresas y particulares en Montería, Córdoba y todo el país.</p>
+    <h2 class="section-title">Servicios especializados</h2>
+    <p class="section-sub">La tecnología como medio, no como fin. Cada solución está diseñada para impactar directamente en la eficiencia y rentabilidad de su operación.</p>
   </div>
   <div class="services-grid">
     <div class="service-card reveal">
-      <div class="service-icon">🚚</div>
-      <h3>Consultoría Logística</h3>
-      <p>Optimización de procesos, gestión de flota, control de inventarios y administración de activos e infraestructura.</p>
-      <div class="service-tags"><span class="tag">Flota</span><span class="tag">Inventarios</span><span class="tag">KPI</span><span class="tag">Cadena de suministro</span></div>
-      <div class="service-price">Desde $150.000 <small>COP / sesión</small></div>
-    </div>
-    <div class="service-card reveal">
       <div class="service-icon">📊</div>
-      <h3>Análisis de Datos & Power BI</h3>
-      <p>Dashboards interactivos, reportes gerenciales y automatización de informes conectados a tus sistemas actuales.</p>
-      <div class="service-tags"><span class="tag">Power BI</span><span class="tag">Excel avanzado</span><span class="tag">DAX</span><span class="tag">KPIs</span></div>
-      <div class="service-price">Desde $350.000 <small>COP / dashboard</small></div>
+      <h3>Inteligencia de Negocios (BI)</h3>
+      <p>Diseño de tableros de control dinámicos para monitoreo de indicadores críticos (KPIs) en cualquier sector, facilitando la interpretación de datos para la alta gerencia y la toma de decisiones basada en evidencia.</p>
+      <div class="service-tags"><span class="tag">Power BI</span><span class="tag">KPIs</span><span class="tag">DAX</span><span class="tag">Reportes gerenciales</span></div>
+      <div class="service-price">Desde $350.000 <small>COP / proyecto</small></div>
     </div>
     <div class="service-card reveal">
-      <div class="service-icon">🗄️</div>
-      <h3>Bases de Datos MySQL</h3>
-      <p>Diseño de modelos relacionales, consultas SQL avanzadas, integración con herramientas de análisis y soporte mensual.</p>
-      <div class="service-tags"><span class="tag">MySQL</span><span class="tag">SQL</span><span class="tag">Modelado ER</span><span class="tag">ETL</span></div>
-      <div class="service-price">Desde $120.000 <small>COP / paquete</small></div>
-    </div>
-    <div class="service-card reveal">
-      <div class="service-icon">🐍</div>
-      <h3>Programación Python</h3>
-      <p>Automatización de tareas, scripts ETL, análisis de datos con Pandas/NumPy y aplicaciones web con Django.</p>
-      <div class="service-tags"><span class="tag">Python</span><span class="tag">Django</span><span class="tag">Pandas</span><span class="tag">Automatización</span></div>
-      <div class="service-price">Desde $200.000 <small>COP / script</small></div>
-    </div>
-    <div class="service-card reveal">
-      <div class="service-icon">⚙️</div>
-      <h3>Implementación ERP / SAP</h3>
-      <p>Consultoría y acompañamiento en SAP Business One, mapeo de procesos, gestión del cambio y capacitación a usuarios.</p>
-      <div class="service-tags"><span class="tag">SAP B1</span><span class="tag">ERP</span><span class="tag">Gestión del cambio</span></div>
+      <div class="service-icon">🔗</div>
+      <h3>Ingeniería de Procesos Logísticos</h3>
+      <p>Optimización de la cadena de suministro, control de inventarios y gestión de flotas, basada en experiencia real liderando la implementación de SAP Business One en entornos multiempresa.</p>
+      <div class="service-tags"><span class="tag">Cadena de suministro</span><span class="tag">SAP B1</span><span class="tag">Flota</span><span class="tag">Inventarios</span></div>
       <div class="service-price">Desde $250.000 <small>COP / sesión</small></div>
     </div>
     <div class="service-card reveal">
-      <div class="service-icon">🎓</div>
-      <h3>Capacitaciones Empresariales</h3>
-      <p>Talleres grupales e individuales en Power BI, Python para datos, SQL para no técnicos y gestión logística operativa.</p>
-      <div class="service-tags"><span class="tag">Talleres</span><span class="tag">In-company</span><span class="tag">Online</span></div>
-      <div class="service-price">Desde $80.000 <small>COP / persona</small></div>
+      <div class="service-icon">⚡</div>
+      <h3>Automatización Operativa</h3>
+      <p>Desarrollo de soluciones a medida para automatizar tareas repetitivas y flujos de trabajo, liberando al equipo humano para actividades de alto valor estratégico. Desde scripts hasta aplicaciones web completas.</p>
+      <div class="service-tags"><span class="tag">Python</span><span class="tag">SQL</span><span class="tag">ETL</span><span class="tag">Flujos de trabajo</span></div>
+      <div class="service-price">Desde $200.000 <small>COP / solución</small></div>
     </div>
   </div>
 </section>
 
-<!-- ═══════════ PROYECTOS ═══════════ -->
 <section id="proyectos">
   <div class="section-header reveal">
-    <div class="section-tag">Portafolio</div>
-    <h2 class="section-title">Proyectos desarrollados</h2>
-    <p class="section-sub">Software real, en producción, construido de principio a fin con tecnologías modernas.</p>
+    <div class="section-tag">Casos de éxito</div>
+    <h2 class="section-title">Soluciones desarrolladas</h2>
+    <p class="section-sub">No software por software — soluciones de negocio que resuelven problemas reales y operan en producción.</p>
   </div>
   <div class="projects-grid">
-    <!-- SERPENS -->
     <div class="project-card reveal">
-      <div class="project-preview project-preview-serpens">
-        <div class="project-preview-deco"></div>
+      <div class="project-preview pp-serpens">
+        <img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=500&q=60&auto=format&fit=crop" alt="" loading="lazy">
         <div class="project-preview-inner">
           <div class="project-preview-logo">SERPENS</div>
-          <div class="project-preview-tagline">Sistema Contable</div>
-          <!-- Decoración tipo UI -->
-          <div style="margin-top:16px;display:flex;gap:6px;justify-content:center;opacity:0.45">
-            <div style="height:4px;width:40px;background:#60a5fa;border-radius:2px"></div>
-            <div style="height:4px;width:24px;background:#93c5fd;border-radius:2px"></div>
-            <div style="height:4px;width:32px;background:#60a5fa;border-radius:2px"></div>
-          </div>
+          <div class="project-preview-tagline" style="color:#93c5fd">Gestión Contable Multiempresa</div>
         </div>
       </div>
       <div class="project-body">
-        <div class="project-badges">
-          <span class="project-badge badge-live">● En producción</span>
-          <span class="project-badge badge-tech">React + Vite</span>
-          <span class="project-badge badge-tech">Supabase</span>
-          <span class="project-badge badge-tech">Multiempresa</span>
-        </div>
-        <h3>SERPENS v5.0 — Sistema Contable</h3>
-        <p>Sistema contable multiempresa para Colombia, construido con React + Vite y Supabase como backend. Plan de cuentas PUC con 2.502 cuentas, períodos contables, cotizaciones y facturación con numeración automática por empresa. Publicado en Vercel y en producción activa.</p>
-        <div class="project-links">
-          <a href="https://serpens.vercel.app/" target="_blank" class="btn-project-primary">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-            Ver en vivo
-          </a>
-        </div>
+        <div class="project-badges"><span class="project-badge badge-live">● En producción</span><span class="project-badge badge-tech">React + Supabase</span></div>
+        <h3>SERPENS v5.0</h3>
+        <p>Sistema para centralizar y simplificar la contabilidad de múltiples unidades de negocio, garantizando integridad de datos y rapidez en cierres financieros. PUC con 2.502 cuentas, períodos contables y facturación automática por empresa.</p>
+        <div class="project-links"><a href="https://serpens.vercel.app/" target="_blank" class="btn-proj btn-proj-blue"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Ver en vivo</a></div>
       </div>
     </div>
-
-    <!-- AGORA LMS -->
     <div class="project-card reveal">
-      <div class="project-preview project-preview-agora">
-        <div class="project-preview-deco"></div>
+      <div class="project-preview pp-vertice">
+        <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=500&q=60&auto=format&fit=crop" alt="" loading="lazy">
         <div class="project-preview-inner">
-          <div class="project-preview-logo">ÁGORA</div>
-          <div class="project-preview-tagline">LMS · Conecta con el saber</div>
-          <div style="margin-top:16px;display:flex;gap:6px;justify-content:center;opacity:0.45">
-            <div style="height:4px;width:32px;background:#2dd4a0;border-radius:2px"></div>
-            <div style="height:4px;width:48px;background:#6ee7b7;border-radius:2px"></div>
-            <div style="height:4px;width:20px;background:#2dd4a0;border-radius:2px"></div>
-          </div>
+          <div class="project-preview-logo">VÉRTICE</div>
+          <div class="project-preview-tagline" style="color:#fcd59c">Gestión de Infraestructura</div>
         </div>
       </div>
       <div class="project-body">
-        <div class="project-badges">
-          <span class="project-badge badge-live">● En producción</span>
-          <span class="project-badge badge-tech">Canva Sites</span>
-          <span class="project-badge badge-tech">LMS</span>
-          <span class="project-badge badge-tech">E-learning</span>
+        <div class="project-badges"><span class="project-badge badge-dev">◐ En desarrollo</span><span class="project-badge badge-tech">Project Mgmt</span></div>
+        <h3>VÉRTICE</h3>
+        <p>Metodología digitalizada para el control total de obras civiles e infraestructura, con módulo de Project Management que garantiza cumplimiento de cronogramas y presupuestos, con trazabilidad completa de activos y recursos.</p>
+        <div class="project-links"><a href="#cotizador" class="btn-proj btn-proj-gold">Solicitar demo</a></div>
+      </div>
+    </div>
+    <div class="project-card reveal">
+      <div class="project-preview pp-vital">
+        <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=500&q=60&auto=format&fit=crop" alt="" loading="lazy">
+        <div class="project-preview-inner">
+          <div class="project-preview-logo">V.I.T.A.L.</div>
+          <div class="project-preview-tagline" style="color:#6ee7b7">Gestión de Información de Salud</div>
         </div>
-        <h3>ÁGORA LMS — Conecta con el saber</h3>
-        <p>Plataforma de aprendizaje en línea orientada a la formación empresarial y profesional. Organización de cursos, contenidos y rutas de aprendizaje diseñadas para equipos de trabajo. Una solución accesible para empresas que quieren capacitar a su talento humano de forma estructurada.</p>
-        <div class="project-links">
-          <a href="https://sysma.my.canva.site/agoralms" target="_blank" class="btn-project-primary">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-            Ver en vivo
-          </a>
-        </div>
+      </div>
+      <div class="project-body">
+        <div class="project-badges"><span class="project-badge badge-dev">◐ En desarrollo</span><span class="project-badge badge-tech">Datos médicos</span></div>
+        <h3>V.I.T.A.L.</h3>
+        <p>Solución de organización de datos médicos para control riguroso de citas y fórmulas, demostrando versatilidad del análisis de datos en el sector bienestar. Trazabilidad del paciente y alertas automáticas de seguimiento.</p>
+        <div class="project-links"><a href="#cotizador" class="btn-proj btn-proj-green">Solicitar demo</a></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ═══════════ COTIZADOR ═══════════ -->
+<section id="fortalezas">
+  <div class="section-header reveal">
+    <div class="section-tag">Capacidades clave</div>
+    <h2 class="section-title">Fortalezas diferenciales</h2>
+    <p class="section-sub">No solo aptitudes — declaraciones de capacidad respaldadas por experiencia real y resultados verificables.</p>
+  </div>
+  <div class="strengths-grid">
+    <div class="strength-card reveal">
+      <div class="strength-num">01</div>
+      <h3>Liderazgo de Transformación Digital</h3>
+      <p>Experiencia probada coordinando equipos multidisciplinarios en la migración de sistemas manuales a entornos ERP robustos, gestionando el cambio organizacional y garantizando la adopción tecnológica en toda la organización.</p>
+    </div>
+    <div class="strength-card reveal">
+      <div class="strength-num">02</div>
+      <h3>Visión Integral de Recursos</h3>
+      <p>Capacidad para gestionar simultáneamente activos físicos, infraestructura y presupuestos operativos con enfoque de mejora continua, eliminando cuellos de botella y maximizando la rentabilidad de cada recurso disponible.</p>
+    </div>
+    <div class="strength-card reveal">
+      <div class="strength-num">03</div>
+      <h3>Soporte Técnico Especializado</h3>
+      <p>Respaldado por certificaciones en SQL, Python y Power BI aplicadas directamente a la resolución de problemas empresariales reales. La tecnología siempre al servicio del negocio, no al revés.</p>
+    </div>
+  </div>
+</section>
+
+<section id="validacion" style="padding:0 60px 96px">
+  <div class="validation-wrap reveal">
+    <div>
+      <div class="validation-quote">"</div>
+      <p class="validation-text">Experiencia verificable en la optimización de operaciones logísticas y análisis de datos en empresas del sector servicios y consumo masivo. Mi enfoque combina la gestión administrativa con arquitecturas tecnológicas que generan decisiones basadas en evidencia.</p>
+      <div class="validation-author">Paul André Negrete · Montería, Córdoba · Colombia</div>
+    </div>
+    <div class="validation-stats">
+      <div class="vstat"><div class="vstat-num">10<span style="color:var(--text3);font-size:1rem">+</span></div><div class="vstat-label">Años optimizando operaciones logísticas</div></div>
+      <div class="vstat"><div class="vstat-num">2.502</div><div class="vstat-label">Cuentas PUC gestionadas en SERPENS</div></div>
+      <div class="vstat"><div class="vstat-num" style="color:var(--green)">SAP</div><div class="vstat-label">Implementación ERP activa en CESINCOR</div></div>
+      <div class="vstat"><div class="vstat-num">8<span style="color:var(--text3);font-size:1rem">+</span></div><div class="vstat-label">Certificaciones técnicas vigentes 2025</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="agendamiento">
+  <div class="section-header reveal">
+    <div class="section-tag">Consultoría gratuita</div>
+    <h2 class="section-title">Agende un diagnóstico</h2>
+    <p class="section-sub">30 minutos para identificar ineficiencias en su operación y definir el camino de mejora — sin costo, sin compromiso.</p>
+  </div>
+  <div class="agenda-layout reveal">
+    <div>
+      <div class="agenda-steps">
+        <div class="agenda-step"><div class="step-num">1</div><div class="step-text"><strong>Seleccione un horario disponible</strong>Se conecta con mi Google Calendar en tiempo real — sin doble reserva ni fricciones.</div></div>
+        <div class="agenda-step"><div class="step-num">2</div><div class="step-text"><strong>Reciba confirmación inmediata</strong>Correo automático con el enlace de videollamada y la agenda del diagnóstico.</div></div>
+        <div class="agenda-step"><div class="step-num">3</div><div class="step-text"><strong>Diagnóstico de 30 minutos</strong>Identificamos cuellos de botella y definimos prioridades de mejora para su operación.</div></div>
+        <div class="agenda-step"><div class="step-num">4</div><div class="step-text"><strong>Propuesta personalizada</strong>Si existe fit, recibe una propuesta concreta con alcance, tiempos e inversión.</div></div>
+      </div>
+      <a href="https://wa.me/573008985321?text=Hola%20Paul,%20quiero%20agendar%20una%20consultoria%20gratuita%20de%2030%20minutos" target="_blank" class="btn-agenda">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Agendar por WhatsApp ahora
+      </a>
+    </div>
+    <div class="calendly-wrap" style="min-height:600px">
+      <div class="calendly-inline-widget" data-url="https://calendly.com/paulandrenegreteburgos?hide_gdpr_banner=1&background_color=0f1827&text_color=e8edf5&primary_color=f0a500" style="min-width:280px;height:600px;border-radius:16px;overflow:hidden;"></div>
+      <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
+    </div>
+  </div>
+</section>
+
 <section id="cotizador">
   <div class="section-header reveal">
     <div class="section-tag">Cotizador inteligente</div>
-    <h2 class="section-title">¿Qué necesitas?</h2>
-    <p class="section-sub">Cuéntame tu proyecto. Te envío la propuesta económica directamente a tu WhatsApp o correo.</p>
+    <h2 class="section-title">¿Cuánto costaría su proyecto?</h2>
+    <p class="section-sub">Seleccione los servicios, configure los parámetros y reciba la propuesta económica directamente — precios calculados internamente y enviados por WhatsApp o correo.</p>
   </div>
   <div class="cotizador-layout reveal">
     <div class="cotizador-form">
       <div class="form-group">
-        <label class="form-label">1. ¿Qué servicios necesitas?</label>
+        <label class="form-label">1. ¿Qué necesita?</label>
         <div class="service-checkboxes" id="serviceCheckboxes">
-          <div class="checkbox-card" onclick="toggleCheck(this,'Diagnóstico Logístico',180000)"><div class="checkbox-indicator"><svg viewBox="0 0 14 14"><polyline points="2,7 5.5,11 12,3"/></svg></div><span class="checkbox-label">🚚 Diagnóstico Logístico</span></div>
-          <div class="checkbox-card" onclick="toggleCheck(this,'Gestión de Flota',150000)"><div class="checkbox-indicator"><svg viewBox="0 0 14 14"><polyline points="2,7 5.5,11 12,3"/></svg></div><span class="checkbox-label">🚗 Gestión de Flota</span></div>
-          <div class="checkbox-card" onclick="toggleCheck(this,'Dashboard Power BI',550000)"><div class="checkbox-indicator"><svg viewBox="0 0 14 14"><polyline points="2,7 5.5,11 12,3"/></svg></div><span class="checkbox-label">📊 Dashboard Power BI</span></div>
-          <div class="checkbox-card" onclick="toggleCheck(this,'Análisis Excel Avanzado',120000)"><div class="checkbox-indicator"><svg viewBox="0 0 14 14"><polyline points="2,7 5.5,11 12,3"/></svg></div><span class="checkbox-label">📈 Análisis Excel</span></div>
-          <div class="checkbox-card" onclick="toggleCheck(this,'Base de Datos MySQL',300000)"><div class="checkbox-indicator"><svg viewBox="0 0 14 14"><polyline points="2,7 5.5,11 12,3"/></svg></div><span class="checkbox-label">🗄️ Base de Datos MySQL</span></div>
-          <div class="checkbox-card" onclick="toggleCheck(this,'Script Python / Automatización',280000)"><div class="checkbox-indicator"><svg viewBox="0 0 14 14"><polyline points="2,7 5.5,11 12,3"/></svg></div><span class="checkbox-label">🐍 Python / Automatización</span></div>
-          <div class="checkbox-card" onclick="toggleCheck(this,'Consultoría SAP / ERP',300000)"><div class="checkbox-indicator"><svg viewBox="0 0 14 14"><polyline points="2,7 5.5,11 12,3"/></svg></div><span class="checkbox-label">⚙️ Consultoría SAP/ERP</span></div>
-          <div class="checkbox-card" onclick="toggleCheck(this,'Capacitación Empresarial',350000)"><div class="checkbox-indicator"><svg viewBox="0 0 14 14"><polyline points="2,7 5.5,11 12,3"/></svg></div><span class="checkbox-label">🎓 Capacitación</span></div>
-          <div class="checkbox-card" onclick="toggleCheck(this,'Aplicación Web Django',900000)"><div class="checkbox-indicator"><svg viewBox="0 0 14 14"><polyline points="2,7 5.5,11 12,3"/></svg></div><span class="checkbox-label">🌐 App Web Django</span></div>
+          <div class="checkbox-card" onclick="toggleCheck(this,'Tablero BI / Dashboard',550000)"><div class="checkbox-indicator"><svg viewBox="0 0 14 14"><polyline points="2,7 5.5,11 12,3"/></svg></div><span class="checkbox-label">📊 Tablero BI / Dashboard</span></div>
+          <div class="checkbox-card" onclick="toggleCheck(this,'Diagnóstico Logístico',180000)"><div class="checkbox-indicator"><svg viewBox="0 0 14 14"><polyline points="2,7 5.5,11 12,3"/></svg></div><span class="checkbox-label">🔗 Diagnóstico Logístico</span></div>
+          <div class="checkbox-card" onclick="toggleCheck(this,'Automatización de Procesos',280000)"><div class="checkbox-indicator"><svg viewBox="0 0 14 14"><polyline points="2,7 5.5,11 12,3"/></svg></div><span class="checkbox-label">⚡ Automatización de Procesos</span></div>
+          <div class="checkbox-card" onclick="toggleCheck(this,'Análisis Excel Avanzado',120000)"><div class="checkbox-indicator"><svg viewBox="0 0 14 14"><polyline points="2,7 5.5,11 12,3"/></svg></div><span class="checkbox-label">📈 Análisis Excel Avanzado</span></div>
+          <div class="checkbox-card" onclick="toggleCheck(this,'Base de Datos / SQL',300000)"><div class="checkbox-indicator"><svg viewBox="0 0 14 14"><polyline points="2,7 5.5,11 12,3"/></svg></div><span class="checkbox-label">🗄️ Base de Datos / SQL</span></div>
+          <div class="checkbox-card" onclick="toggleCheck(this,'Consultoría SAP / ERP',300000)"><div class="checkbox-indicator"><svg viewBox="0 0 14 14"><polyline points="2,7 5.5,11 12,3"/></svg></div><span class="checkbox-label">⚙️ Consultoría SAP / ERP</span></div>
+          <div class="checkbox-card" onclick="toggleCheck(this,'Gestión de Flota',150000)"><div class="checkbox-indicator"><svg viewBox="0 0 14 14"><polyline points="2,7 5.5,11 12,3"/></svg></div><span class="checkbox-label">🚚 Gestión de Flota</span></div>
+          <div class="checkbox-card" onclick="toggleCheck(this,'Capacitación Empresarial',350000)"><div class="checkbox-indicator"><svg viewBox="0 0 14 14"><polyline points="2,7 5.5,11 12,3"/></svg></div><span class="checkbox-label">🎓 Capacitación Empresarial</span></div>
+          <div class="checkbox-card" onclick="toggleCheck(this,'Aplicación Web a Medida',900000)"><div class="checkbox-indicator"><svg viewBox="0 0 14 14"><polyline points="2,7 5.5,11 12,3"/></svg></div><span class="checkbox-label">🌐 Aplicación Web a Medida</span></div>
           <div class="checkbox-card" onclick="toggleCheck(this,'Soporte Mensual',300000)"><div class="checkbox-indicator"><svg viewBox="0 0 14 14"><polyline points="2,7 5.5,11 12,3"/></svg></div><span class="checkbox-label">🔧 Soporte Mensual</span></div>
         </div>
       </div>
-
       <div class="form-group">
         <label class="form-label">2. Complejidad del proyecto</label>
         <select class="form-select" id="complexitySelect" onchange="updateQuote()">
@@ -510,7 +532,6 @@
           <option value="2">Avanzado — Alta complejidad o múltiples sistemas</option>
         </select>
       </div>
-
       <div class="form-group">
         <label class="form-label">3. Modalidad de trabajo</label>
         <select class="form-select" id="modalitySelect" onchange="updateQuote()">
@@ -519,51 +540,37 @@
           <option value="1.4">Mixto (presencial + remoto)</option>
         </select>
       </div>
-
       <div class="form-group">
         <label class="form-label">4. Urgencia de entrega</label>
         <div class="range-track">
-          <span style="font-size:0.8rem;color:var(--text3)">Normal</span>
+          <span style="font-size:0.76rem;color:var(--text3)">Normal</span>
           <input type="range" class="form-range" id="urgencyRange" min="1" max="3" step="1" value="1" oninput="updateUrgency(this)">
-          <span style="font-size:0.8rem;color:var(--text3)">Urgente</span>
+          <span style="font-size:0.76rem;color:var(--text3)">Urgente</span>
           <span class="range-val" id="urgencyVal">+0%</span>
         </div>
       </div>
-
       <div class="form-group">
-        <label class="form-label">5. Tus datos (para el mensaje)</label>
-        <input type="text" class="form-input" id="clientName" placeholder="Tu nombre o empresa" oninput="updateQuote()" style="margin-bottom:10px">
-        <input type="text" class="form-input" id="clientDetail" placeholder="Describe brevemente tu necesidad (opcional)" oninput="updateQuote()">
+        <label class="form-label">5. Sus datos</label>
+        <input type="text" class="form-input" id="clientName" placeholder="Nombre o empresa" oninput="updateQuote()" style="margin-bottom:9px">
+        <input type="text" class="form-input" id="clientDetail" placeholder="Describa brevemente su necesidad (opcional)" oninput="updateQuote()">
       </div>
     </div>
-
-    <!-- Panel lateral — sin precios visibles -->
     <div class="quote-result">
-      <div class="quote-title">Tu selección</div>
+      <div class="quote-title">Su selección</div>
       <div class="quote-items" id="quoteItems">
-        <div class="quote-empty"><span style="font-size:2rem">📋</span>Selecciona al menos un servicio para continuar</div>
+        <div class="quote-empty"><span style="font-size:1.8rem">📋</span>Seleccione al menos un servicio para continuar</div>
       </div>
       <div id="quoteSend" style="display:none">
         <div class="quote-divider"></div>
-        <div class="quote-ready">
-          <div class="quote-ready-icon">✅</div>
-          <div class="quote-ready-text">
-            <strong>¡Tu cotización está lista!</strong>
-            Te envío el desglose de precios y condiciones directamente.
-          </div>
-        </div>
-        <div class="quote-note">La propuesta incluye precios detallados, tiempo estimado y condiciones de pago.</div>
-        <button class="btn-whatsapp" onclick="sendWhatsApp()">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-          Enviar por WhatsApp
-        </button>
+        <div class="quote-ready"><div style="font-size:1.2rem;margin-bottom:5px">✅</div><div class="quote-ready-text"><strong>¡Propuesta lista!</strong>Le envío el desglose de precios directamente.</div></div>
+        <div class="quote-note">Incluye precios detallados, tiempo estimado y condiciones de pago.</div>
+        <button class="btn-whatsapp" onclick="sendWhatsApp()"><svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>Enviar por WhatsApp</button>
         <button class="btn-email" onclick="sendEmail()">✉ Recibir por correo</button>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ═══════════ SOBRE MÍ ═══════════ -->
 <section id="sobre-mi">
   <div class="section-header reveal">
     <div class="section-tag">Mi perfil</div>
@@ -571,27 +578,25 @@
   </div>
   <div class="about-grid">
     <div class="about-text reveal">
-      <p>Soy Paul André Negrete Burgos, Administrador de Empresas y Analista de Datos enfocado en la transformación operativa a través de la tecnología. Con una trayectoria sólida en la optimización de procesos, me especializo en cerrar la brecha entre la gestión logística tradicional y las soluciones digitales avanzadas.</p>
-      <p>Mi experiencia se centra en liderar la transformación digital, destacando mi rol en la implementación de sistemas ERP como SAP Business One. Creo firmemente que el éxito de una organización moderna reside en la capacidad de convertir datos crudos en decisiones estratégicas e inteligentes.</p>
-      <p>Mis pilares profesionales:</p>
-      <p>  1. Análisis de Datos y Tech: Experto en el uso de Power BI, SQL, Python y PHP para diseñar tableros de control y automatizaciones que optimizan el rendimiento del negocio.</p>
-      <p>  2. Gestión de Proyectos: Capacidad probada para liderar equipos multidisciplinarios en proyectos de infraestructura, administración y desarrollo de software.</p>
-      <p>  3. Logística y Operaciones: Especialista en control de inventarios, gestión de flotas y activos físicos bajo estándares internacionales de seguridad y eficiencia.</p>
+      <p>Soy Paul André Negrete, consultor especializado en la integración de procesos logísticos y análisis de datos. Mi enfoque combina la gestión administrativa con arquitecturas tecnológicas que permiten una toma de decisiones basada en evidencia, eliminando cuellos de botella y maximizando la rentabilidad de los recursos.</p>
+      <p>Con más de 10 años transformando operaciones en empresas de la región Caribe colombiana, lideré la implementación de SAP Business One en CESINCOR Ltda., coordinando equipos multidisciplinarios y garantizando la integración de procesos complejos.</p>
+      <p>Mi diferencial es no ser solo un consultor tecnológico, sino un aliado estratégico que entiende tanto el negocio como las herramientas para transformarlo.</p>
       <div class="about-skills">
-        <span class="skill-chip"><span class="dot"></span>Power BI</span>
+        <span class="skill-chip"><span class="dot"></span>Power BI / BI</span>
         <span class="skill-chip"><span class="dot"></span>Python</span>
         <span class="skill-chip"><span class="dot"></span>MySQL / SQL</span>
         <span class="skill-chip"><span class="dot"></span>SAP Business One</span>
-        <span class="skill-chip"><span class="dot"></span>Django</span>
+        <span class="skill-chip"><span class="dot"></span>Cadena de suministro</span>
         <span class="skill-chip"><span class="dot"></span>Excel Avanzado</span>
         <span class="skill-chip"><span class="dot"></span>Gestión de Flota</span>
-        <span class="skill-chip"><span class="dot"></span>Logística</span>
+        <span class="skill-chip"><span class="dot"></span>ISO 39001</span>
         <span class="skill-chip"><span class="dot"></span>Gerencia de Proyectos</span>
+        <span class="skill-chip"><span class="dot"></span>Django / React</span>
       </div>
     </div>
     <div class="certs-list reveal">
       <div class="cert-item"><div class="cert-icon">📊</div><div><div class="cert-name">Diplomado Power BI</div><div class="cert-source">Politécnico Superior · 2025</div></div></div>
-      <div class="cert-item"><div class="cert-icon">🐍</div><div><div class="cert-name">Python, Termux & Django desde 0</div><div class="cert-source">Udemy · 2025</div></div></div>
+      <div class="cert-item"><div class="cert-icon">🐍</div><div><div class="cert-name">Python, Termux &amp; Django desde 0</div><div class="cert-source">Udemy · 2025</div></div></div>
       <div class="cert-item"><div class="cert-icon">🗄️</div><div><div class="cert-name">SQL Total — Domina bases de datos</div><div class="cert-source">Udemy · 2025</div></div></div>
       <div class="cert-item"><div class="cert-icon">🏗️</div><div><div class="cert-name">Diplomado Gerencia de Proyectos</div><div class="cert-source">Politécnico de Colombia · 2025</div></div></div>
       <div class="cert-item"><div class="cert-icon">🛡️</div><div><div class="cert-name">Auditor Interno SGSV ISO 39001</div><div class="cert-source">Consejo Colombiano de Seguridad · 2023</div></div></div>
@@ -600,141 +605,71 @@
   </div>
 </section>
 
-<!-- ═══════════ FOOTER ═══════════ -->
 <footer>
   <div class="footer-brand">
-    <svg width="36" height="36" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg width="32" height="32" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
       <defs><linearGradient id="fg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#6fb3f5"/><stop offset="100%" stop-color="#f0a500"/></linearGradient></defs>
       <rect width="48" height="48" rx="12" fill="#0a1220"/>
       <rect width="48" height="48" rx="12" fill="none" stroke="rgba(240,165,0,0.2)" stroke-width="1"/>
       <path d="M24 24 C24 18.5,30.5 14,36 17.5 C41.5 21,41.5 27,36 30.5 C30.5 34,24 29.5,24 24 C24 18.5,17.5 14,12 17.5 C6.5 21,6.5 27,12 30.5 C17.5 34,24 29.5,24 24" stroke="url(#fg)" stroke-width="3" stroke-linecap="round" fill="none"/>
       <circle cx="24" cy="24" r="1.5" fill="#f0a500" opacity="0.8"/>
     </svg>
-    <div class="footer-logo-text">Paul André <em>Negrete Burgos</em></div>
+    <div class="footer-logo-text">Paul André <em>Negrete</em></div>
   </div>
   <div class="footer-links">
     <a href="tel:+573008985321">📲 +57 300 898 5321</a>
-    <a href="/cdn-cgi/l/email-protection#a4d4cac1c3d6c1d0c19496949de4c3c9c5cdc88ac7cbc9">✉ <span class="__cf_email__" data-cfemail="2959474c4e5b4c5d4c191b1910694e44484045074a4644">infiniti.logconsultores@outlook.com</span></a>
+    <a href="mailto:pnegrete0209@gmail.com">✉ infiniti.logconsultores@outlook.com</a>
     <a href="#">📌 Montería, Córdoba</a>
   </div>
-  <div class="footer-copy">© 2026 · Paul André Negrete Burgos</div>
+  <div class="footer-copy">© 2026 · Paul André Negrete · Consultor en Operaciones &amp; Datos</div>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-  // ── Scroll reveal
-  const obs = new IntersectionObserver(es => es.forEach(e => {
-    if (e.isIntersecting) e.target.classList.add('visible');
-  }), { threshold: 0.05 });
-  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
-  // Fallback: revela todo después de 1.5s por si el observer no dispara
-  setTimeout(() => {
-    document.querySelectorAll('.reveal:not(.visible)').forEach(el => el.classList.add('visible'));
-  }, 1500);
+<button class="chat-fab" id="chatFab" onclick="toggleChat()" title="Asistente de consultoría">
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#080c14" stroke-width="2.2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+</button>
 
-  // ── Cotizador (precios OCULTOS al cliente, solo se envían)
-  let selectedServices = {};
-  let urgencyMult = 1;
+<div class="chat-window" id="chatWindow">
+  <div class="chat-header">
+    <div class="chat-avatar">🤖</div>
+    <div class="chat-header-info">
+      <div class="chat-header-name">Asistente · Paul Negrete</div>
+      <div class="chat-header-status">En línea · Logística &amp; Datos</div>
+    </div>
+    <button class="chat-close" onclick="toggleChat()"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+  </div>
+  <div class="chat-messages" id="chatMessages">
+    <div class="chat-msg bot">👋 Hola, soy el asistente de Paul. Puedo responder preguntas sobre logística, análisis de datos, automatización y los servicios de consultoría. ¿En qué le puedo ayudar?</div>
+  </div>
+  <div class="chat-input-wrap">
+    <input class="chat-input" id="chatInput" type="text" placeholder="Escriba su pregunta..." onkeydown="if(event.key==='Enter')sendChat()">
+    <button class="chat-send" onclick="sendChat()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
+  </div>
+</div>
 
-  function toggleCheck(card, name, price) {
-    if (card.classList.contains('selected')) {
-      card.classList.remove('selected');
-      delete selectedServices[name];
-    } else {
-      card.classList.add('selected');
-      selectedServices[name] = price;
-    }
-    updateQuote();
-  }
-
-  function updateUrgency(range) {
-    const vals = ['+0%', '+15%', '+30%'];
-    const mults = [1, 1.15, 1.3];
-    document.getElementById('urgencyVal').textContent = vals[range.value - 1];
-    urgencyMult = mults[range.value - 1];
-    updateQuote();
-  }
-
-  function formatCOP(n) {
-    return '$' + Math.round(n).toLocaleString('es-CO') + ' COP';
-  }
-
-  function updateQuote() {
-    const keys = Object.keys(selectedServices);
-    const itemsEl = document.getElementById('quoteItems');
-    const sendEl = document.getElementById('quoteSend');
-
-    if (!keys.length) {
-      itemsEl.innerHTML = `<div class="quote-empty"><span style="font-size:2rem">📋</span>Selecciona al menos un servicio para continuar</div>`;
-      sendEl.style.display = 'none';
-      return;
-    }
-
-    // Solo muestra los nombres, SIN precios
-    let html = '';
-    keys.forEach(k => {
-      html += `<div class="quote-item"><div class="qi-dot"></div><div class="qi-name">${k}</div></div>`;
-    });
-    itemsEl.innerHTML = html;
-    sendEl.style.display = 'block';
-  }
-
-  function buildMessage() {
-    const name = document.getElementById('clientName').value || 'un cliente interesado';
-    const detail = document.getElementById('clientDetail').value;
-    const keys = Object.keys(selectedServices);
-    if (!keys.length) return null;
-
-    const complexity = parseFloat(document.getElementById('complexitySelect').value);
-    const modality = parseFloat(document.getElementById('modalitySelect').value);
-    const cText = document.getElementById('complexitySelect').options[document.getElementById('complexitySelect').selectedIndex].text.split('—')[0].trim();
-    const mText = document.getElementById('modalitySelect').options[document.getElementById('modalitySelect').selectedIndex].text.split('(')[0].trim();
-    const uText = urgencyMult === 1 ? 'Normal' : urgencyMult === 1.15 ? 'Prioritario (+15%)' : 'Urgente (+30%)';
-
-    let total = 0;
-    const lines = keys.map(k => {
-      const v = Math.round(selectedServices[k] * complexity * modality * urgencyMult);
-      total += v;
-      return `  • ${k}: ${formatCOP(v)}`;
-    }).join('\n');
-
-    return `Hola Paul! 👋 Soy ${name} y me interesa cotizar tus servicios.\n\n` +
-      `📋 *SERVICIOS SOLICITADOS:*\n${lines}\n\n` +
-      `⚙️ *Complejidad:* ${cText}\n` +
-      `📍 *Modalidad:* ${mText}\n` +
-      `⏱ *Urgencia:* ${uText}\n\n` +
-      `💰 *TOTAL ESTIMADO: ${formatCOP(total)}*\n\n` +
-      (detail ? `📝 *Detalle adicional:* ${detail}\n\n` : '') +
-      `¿Podemos agendar una consulta gratuita de 30 minutos para afinar los detalles?`;
-  }
-
-  function sendWhatsApp() {
-    const msg = buildMessage();
-    if (!msg) { alert('Selecciona al menos un servicio.'); return; }
-    window.open('https://wa.me/573008985321?text=' + encodeURIComponent(msg), '_blank');
-  }
-
-  function sendEmail() {
-    const msg = buildMessage();
-    if (!msg) { alert('Selecciona al menos un servicio.'); return; }
-    const subject = encodeURIComponent('Solicitud de cotización — Paul Negrete');
-    window.open('mailto:infiniti.logconsultores@outlook.com?subject=' + subject + '&body=' + encodeURIComponent(msg), '_blank');
-  }
-
-  // ── Hamburger menu
-  function toggleMenu() {
-    const btn = document.getElementById('hamburger');
-    const menu = document.getElementById('mobileMenu');
-    btn.classList.toggle('open');
-    menu.classList.toggle('open');
-  }
-  function closeMenu() {
-    document.getElementById('hamburger').classList.remove('open');
-    document.getElementById('mobileMenu').classList.remove('open');
-  }
-  window.addEventListener('scroll', () => {
-    if (document.getElementById('mobileMenu').classList.contains('open')) closeMenu();
-  }, { passive: true });
-
+<script>
+if('IntersectionObserver' in window&&!window.matchMedia('(prefers-reduced-motion:reduce)').matches){
+  document.querySelectorAll('.reveal').forEach(el=>el.classList.add('animate'));
+  const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}})},{threshold:0.05,rootMargin:'0px 0px -30px 0px'});
+  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+  setTimeout(()=>document.querySelectorAll('.reveal.animate:not(.visible)').forEach(el=>el.classList.add('visible')),2000);
+}
+function toggleMenu(){document.getElementById('hamburger').classList.toggle('open');document.getElementById('mobileMenu').classList.toggle('open')}
+function closeMenu(){document.getElementById('hamburger').classList.remove('open');document.getElementById('mobileMenu').classList.remove('open')}
+window.addEventListener('scroll',()=>{if(document.getElementById('mobileMenu').classList.contains('open'))closeMenu()},{passive:true});
+let selectedServices={},urgencyMult=1;
+function toggleCheck(card,name,price){if(card.classList.contains('selected')){card.classList.remove('selected');delete selectedServices[name]}else{card.classList.add('selected');selectedServices[name]=price}updateQuote()}
+function updateUrgency(range){const vals=['+0%','+15%','+30%'],mults=[1,1.15,1.3];document.getElementById('urgencyVal').textContent=vals[range.value-1];urgencyMult=mults[range.value-1];updateQuote()}
+function formatCOP(n){return'$'+Math.round(n).toLocaleString('es-CO')+' COP'}
+function updateQuote(){const keys=Object.keys(selectedServices),itemsEl=document.getElementById('quoteItems'),sendEl=document.getElementById('quoteSend');if(!keys.length){itemsEl.innerHTML='<div class="quote-empty"><span style="font-size:1.8rem">📋</span>Seleccione al menos un servicio</div>';sendEl.style.display='none';return}itemsEl.innerHTML=keys.map(k=>'<div class="quote-item"><div class="qi-dot"></div><div class="qi-name">'+k+'</div></div>').join('');sendEl.style.display='block'}
+function buildMessage(){const name=document.getElementById('clientName').value||'un cliente interesado',detail=document.getElementById('clientDetail').value,keys=Object.keys(selectedServices);if(!keys.length)return null;const complexity=parseFloat(document.getElementById('complexitySelect').value),modality=parseFloat(document.getElementById('modalitySelect').value),cSel=document.getElementById('complexitySelect'),mSel=document.getElementById('modalitySelect'),cText=cSel.options[cSel.selectedIndex].text.split('—')[0].trim(),mText=mSel.options[mSel.selectedIndex].text.split('(')[0].trim(),uText=urgencyMult===1?'Normal':urgencyMult===1.15?'Prioritario (+15%)':'Urgente (+30%)';let total=0;const lines=keys.map(k=>{const v=Math.round(selectedServices[k]*complexity*modality*urgencyMult);total+=v;return'  \u2022 '+k+': '+formatCOP(v)}).join('\n');return'Hola Paul! \uD83D\uDC4B Soy '+name+' y estoy interesado/a en sus servicios de consultor\xEDa.\n\n\uD83D\uDCCB *SERVICIOS SOLICITADOS:*\n'+lines+'\n\n\u2699\uFE0F *Complejidad:* '+cText+'\n\uD83D\uDCCD *Modalidad:* '+mText+'\n\u23F1 *Urgencia:* '+uText+'\n\n\uD83D\uDCB0 *TOTAL ESTIMADO: '+formatCOP(total)+'*\n\n'+(detail?'\uD83D\uDCDD *Detalle:* '+detail+'\n\n':'')+'?\xBFPodemos agendar el diagn\xF3stico gratuito de 30 minutos?'}
+function sendWhatsApp(){const msg=buildMessage();if(!msg){alert('Seleccione al menos un servicio.');return}window.open('https://wa.me/573008985321?text='+encodeURIComponent(msg),'_blank')}
+function sendEmail(){const msg=buildMessage();if(!msg){alert('Seleccione al menos un servicio.');return}const name=document.getElementById('clientName').value||'Cliente';window.open('mailto:pnegrete0209@gmail.com?subject='+encodeURIComponent('Solicitud de consultor\xEDa \u2014 '+name)+'&body='+encodeURIComponent(msg),'_blank')}
+let chatOpen=false,chatHistory=[];
+const SYS='Eres el asistente virtual de Paul Andr\xE9 Negrete, consultor colombiano especializado en optimizaci\xF3n de operaciones log\xEDsticas, inteligencia de negocios (BI) y automatizaci\xF3n de procesos. Respondes en espa\xF1ol, de forma clara, profesional y concisa (m\xE1ximo 3 p\xE1rrafos).\n\nRespondes preguntas sobre: log\xEDstica (gesti\xF3n de flota, inventarios, cadena de suministro, KPIs), an\xE1lisis de datos (Power BI, dashboards, Excel), automatizaci\xF3n (Python, flujos de trabajo), SAP Business One, y los proyectos SERPENS (contabilidad multiempresa), V\xC9RTICE (infraestructura), V.I.T.A.L. (salud).\n\nSi preguntan por precios, indica que el cotizador est\xE1 en el sitio. Para agendar, dir\xEDgelos al WhatsApp +57 300 898 5321. No inventes informaci\xF3n que no conozcas.';
+function toggleChat(){chatOpen=!chatOpen;document.getElementById('chatWindow').classList.toggle('open',chatOpen);if(chatOpen)setTimeout(()=>document.getElementById('chatInput').focus(),300)}
+function addMsg(text,role){const el=document.createElement('div');el.className='chat-msg '+role;el.textContent=text;document.getElementById('chatMessages').appendChild(el);document.getElementById('chatMessages').scrollTop=9999;return el}
+function addTyping(){const el=document.createElement('div');el.className='chat-msg typing';el.innerHTML='<span></span><span></span><span></span>';document.getElementById('chatMessages').appendChild(el);document.getElementById('chatMessages').scrollTop=9999;return el}
+async function sendChat(){const input=document.getElementById('chatInput'),text=input.value.trim();if(!text)return;input.value='';addMsg(text,'user');chatHistory.push({role:'user',content:text});const typing=addTyping();try{const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:SYS,messages:chatHistory.slice(-10)})});const data=await res.json();const reply=data.content?.[0]?.text||'Lo siento, no pude procesar esa consulta. Cont\xE1ctame por WhatsApp.';typing.remove();addMsg(reply,'bot');chatHistory.push({role:'assistant',content:reply})}catch(e){typing.remove();addMsg('Hubo un error. Por favor cont\xE1ctame directamente: +57 300 898 5321','bot')}}
 </script>
 </body>
 </html>
