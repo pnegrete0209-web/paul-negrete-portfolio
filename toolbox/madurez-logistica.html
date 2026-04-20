@@ -175,6 +175,14 @@ main{position:relative;z-index:1;max-width:800px;margin:0 auto;padding:0 48px 80
 </head>
 <body>
 
+<script>
+(function(){
+  if(!sessionStorage.getItem('pn_toolbox_auth')){
+    window.location.replace('./index.html');
+  }
+})();
+</script>
+  
 <header>
   <div class="header-brand">
     <svg class="header-logo" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
