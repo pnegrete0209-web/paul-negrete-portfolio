@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Toolbox · Paul André Negrete Burgos</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#060910;--bg2:#0a0f1a;--card:#0d1525;--card2:#111d30;
+  --border:rgba(255,255,255,0.06);--border2:rgba(255,255,255,0.12);
+  --gold:#f0a500;--gold2:#ffd060;--gold-dim:rgba(240,165,0,0.1);
+  --blue:#2e6da4;--blue2:#4a90d4;--blue3:#7ab8f5;
+  --green:#2dd4a0;--red:#f04444;--orange:#f09020;--purple:#a78bfa;
+  --text:#e2eaf5;--text2:#7a9ab8;--text3:#3a5a7a;
+  --r:16px;--r-sm:10px
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:0.5}
+
+/* ── LOGIN SCREEN ── */
+.login-screen{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:500;padding:20px}
+.login-screen.hidden{display:none}
+.login-card{background:var(--card);border:1px solid var(--border2);border-radius:20px;padding:44px 40px;width:100%;max-width:400px;text-align:center;position:relative;overflow:hidden}
+.login-card::before{content:'';position:absolute;top:-80px;left:50%;transform:translateX(-50%);width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(240,165,0,0.08),transparent);pointer-events:none}
+.login-logo{margin:0 auto 20px;width:56px;height:56px}
+.login-title{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;letter-spacing:-0.02em;margin-bottom:6px}
+.login-title span{color:var(--gold)}
+.login-sub{font-size:0.82rem;color:var(--text3);margin-bottom:32px}
+.login-field{position:relative;margin-bottom:14px}
+.login-input{width:100%;background:var(--card2);border:1.5px solid var(--border);border-radius:11px;padding:13px 16px;font-family:'JetBrains Mono',monospace;font-size:0.9rem;color:var(--text);outline:none;transition:border-color 0.2s;text-align:center;letter-spacing:0.08em}
+.login-input:focus{border-color:var(--gold)}
+.login-input::placeholder{font-family:'DM Sans',sans-serif;letter-spacing:0;color:var(--text3)}
+.login-input.error{border-color:var(--red);animation:shake 0.4s ease}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.login-btn{width:100%;background:var(--gold);color:var(--bg);font-family:'DM Sans',sans-serif;font-size:0.95rem;font-weight:700;padding:13px;border-radius:11px;border:none;cursor:pointer;transition:all 0.2s;margin-top:4px}
+.login-btn:hover{background:var(--gold2);transform:translateY(-1px);box-shadow:0 8px 24px rgba(240,165,0,0.35)}
+.login-error{font-size:0.78rem;color:var(--red);margin-top:8px;min-height:18px;transition:opacity 0.2s}
+.login-hint{font-size:0.72rem;color:var(--text3);margin-top:20px;line-height:1.5}
+.login-hint a{color:var(--gold);text-decoration:none}
+
+/* ── DASHBOARD ── */
+.dashboard{display:none}
+.dashboard.show{display:block}
+
+/* HEADER */
+nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:14px 48px;background:rgba(6,9,16,0.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);flex-wrap:wrap;gap:12px}
+.nav-brand{display:flex;align-items:center;gap:12px}
+.nav-logo-svg{width:38px;height:38px}
+.nav-brand-text{font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;color:var(--text)}
+.nav-brand-text span{color:var(--gold)}
+.nav-brand-sub{font-size:0.58rem;display:block;color:var(--text3);letter-spacing:0.1em;text-transform:uppercase;margin-top:1px}
+.nav-right{display:flex;align-items:center;gap:12px}
+.nav-date{font-size:0.75rem;color:var(--text3);font-family:'JetBrains Mono',monospace}
+.btn-logout{display:inline-flex;align-items:center;gap:7px;background:transparent;color:var(--text3);font-family:'DM Sans',sans-serif;font-size:0.78rem;padding:7px 14px;border-radius:8px;border:1px solid var(--border);cursor:pointer;transition:all 0.2s}
+.btn-logout:hover{border-color:var(--red);color:var(--red)}
+.btn-portfolio{display:inline-flex;align-items:center;gap:7px;background:var(--gold-dim);color:var(--gold);font-family:'DM Sans',sans-serif;font-size:0.78rem;font-weight:600;padding:7px 14px;border-radius:8px;border:1px solid rgba(240,165,0,0.2);cursor:pointer;transition:all 0.2s;text-decoration:none}
+.btn-portfolio:hover{background:rgba(240,165,0,0.18)}
+
+/* HERO STRIP */
+.hero-strip{padding:40px 48px 0;position:relative;overflow:hidden}
+.hero-strip::before{content:'';position:absolute;top:-60px;right:-60px;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(240,165,0,0.06),transparent);pointer-events:none}
+.hero-greeting{font-size:0.75rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
+.hero-title{font-family:'Syne',sans-serif;font-size:clamp(1.6rem,3.5vw,2.6rem);font-weight:800;letter-spacing:-0.03em;margin-bottom:8px}
+.hero-sub{font-size:0.9rem;color:var(--text2);font-weight:300;max-width:500px;line-height:1.65}
+
+/* STATS ROW */
+.stats-row{display:flex;gap:14px;padding:24px 48px;flex-wrap:wrap}
+.stat-pill{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--border);border-radius:var(--r-sm);padding:12px 18px;flex:1;min-width:140px}
+.stat-icon{font-size:1.2rem;flex-shrink:0}
+.stat-info{}
+.stat-val{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800;color:var(--text);line-height:1}
+.stat-label{font-size:0.68rem;color:var(--text3);text-transform:uppercase;letter-spacing:0.07em;margin-top:2px}
+
+/* TOOLS GRID */
+.tools-section{padding:0 48px 60px}
+.section-hdr{font-family:'Syne',sans-serif;font-size:0.75rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--text3);margin-bottom:16px;display:flex;align-items:center;gap:10px}
+.section-hdr::after{content:'';flex:1;height:1px;background:var(--border)}
+.tools-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:32px}
+
+/* TOOL CARD */
+.tool-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:0;overflow:hidden;transition:all 0.3s;display:flex;flex-direction:column;cursor:pointer;text-decoration:none}
+.tool-card:hover{border-color:var(--border2);transform:translateY(-4px);box-shadow:0 20px 60px rgba(0,0,0,0.4)}
+.tool-card-top{height:5px;width:100%}
+.tool-card-body{padding:24px;flex:1;display:flex;flex-direction:column}
+.tool-icon{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin-bottom:16px;border:1px solid var(--border)}
+.tool-num{font-size:0.65rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--text3);margin-bottom:5px}
+.tool-name{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;color:var(--text);margin-bottom:8px;line-height:1.2}
+.tool-desc{font-size:0.8rem;color:var(--text2);line-height:1.6;font-weight:300;flex:1;margin-bottom:16px}
+.tool-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:16px}
+.tool-tag{font-size:0.65rem;font-weight:500;padding:2px 8px;border-radius:100px;background:rgba(46,109,164,0.1);border:1px solid rgba(46,109,164,0.18);color:var(--blue3)}
+.tool-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;font-family:'DM Sans',sans-serif;font-size:0.84rem;font-weight:700;padding:10px;border-radius:9px;border:none;cursor:pointer;transition:all 0.2s}
+.tool-btn:hover{transform:translateY(-1px)}
+
+/* NOTES SECTION */
+.notes-section{padding:0 48px 32px}
+.notes-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:24px}
+.notes-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.notes-title{font-family:'Syne',sans-serif;font-size:0.78rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text3)}
+.notes-saved{font-size:0.68rem;color:var(--green);opacity:0;transition:opacity 0.3s}
+.notes-saved.show{opacity:1}
+.notes-ta{width:100%;background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:14px;font-family:'DM Sans',sans-serif;font-size:0.84rem;color:var(--text);outline:none;resize:vertical;min-height:100px;line-height:1.6;transition:border-color 0.2s}
+.notes-ta:focus{border-color:var(--blue2)}
+.notes-ta::placeholder{color:var(--text3)}
+
+/* CHANGE PASSWORD SECTION */
+.settings-section{padding:0 48px 60px}
+.settings-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:24px}
+.settings-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;align-items:end;margin-top:14px}
+.field{display:flex;flex-direction:column;gap:5px}
+.flabel{font-size:0.7rem;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:var(--text2)}
+.ti{background:var(--card2);border:1px solid var(--border);border-radius:var(--r-sm);padding:10px 13px;font-family:'DM Sans',sans-serif;font-size:0.84rem;color:var(--text);outline:none;transition:border-color 0.2s;width:100%}
+.ti:focus{border-color:var(--gold)}
+.btn-change-pwd{background:var(--blue);color:white;font-family:'DM Sans',sans-serif;font-size:0.84rem;font-weight:700;padding:10px 18px;border-radius:var(--r-sm);border:none;cursor:pointer;transition:all 0.2s;white-space:nowrap;width:100%}
+.btn-change-pwd:hover{background:var(--blue2)}
+.pwd-msg{font-size:0.75rem;margin-top:8px;min-height:18px}
+
+@media(max-width:1024px){
+  nav{padding:12px 22px}
+  .hero-strip,.stats-row,.tools-section,.notes-section,.settings-section{padding-left:22px;padding-right:22px}
+  .tools-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:640px){
+  nav{padding:11px 17px}
+  .hero-strip,.stats-row,.tools-section,.notes-section,.settings-section{padding-left:17px;padding-right:17px}
+  .tools-grid{grid-template-columns:1fr}
+  .stats-row{gap:10px}
+  .settings-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- ── LOGIN ── -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-card">
+    <svg class="login-logo" viewBox="0 0 48 48" fill="none">
+      <defs><linearGradient id="lg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#7ab8f5"/><stop offset="100%" stop-color="#f0a500"/></linearGradient></defs>
+      <rect width="48" height="48" rx="14" fill="#0a1220"/>
+      <rect width="48" height="48" rx="14" fill="none" stroke="rgba(240,165,0,0.25)" stroke-width="1"/>
+      <path d="M24 24 C24 18.5,30.5 14,36 17.5 C41.5 21,41.5 27,36 30.5 C30.5 34,24 29.5,24 24 C24 18.5,17.5 14,12 17.5 C6.5 21,6.5 27,12 30.5 C17.5 34,24 29.5,24 24" stroke="url(#lg)" stroke-width="3" stroke-linecap="round" fill="none"/>
+      <circle cx="24" cy="24" r="1.5" fill="#f0a500" opacity="0.8"/>
+    </svg>
+    <div class="login-title">Paul<span>.</span>Toolbox</div>
+    <div class="login-sub">Zona privada · Solo acceso autorizado</div>
+    <div class="login-field">
+      <input class="login-input" id="pwdInput" type="password" placeholder="Contraseña de acceso"
+        onkeydown="if(event.key==='Enter')tryLogin()">
+    </div>
+    <button class="login-btn" onclick="tryLogin()">
+      Ingresar al Toolbox
+    </button>
+    <div class="login-error" id="loginError"></div>
+    <div class="login-hint">
+      ¿Olvidaste la contraseña? Contacta a
+      <a href="https://paulnegrete.netlify.app" target="_blank">paulnegrete.netlify.app</a>
+    </div>
+  </div>
+</div>
+
+<!-- ── DASHBOARD ── -->
+<div class="dashboard" id="dashboard">
+
+  <nav>
+    <div class="nav-brand">
+      <svg class="nav-logo-svg" viewBox="0 0 48 48" fill="none">
+        <defs><linearGradient id="ng" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#7ab8f5"/><stop offset="100%" stop-color="#f0a500"/></linearGradient></defs>
+        <rect width="48" height="48" rx="12" fill="#0a1220"/>
+        <path d="M24 24 C24 18.5,30.5 14,36 17.5 C41.5 21,41.5 27,36 30.5 C30.5 34,24 29.5,24 24 C24 18.5,17.5 14,12 17.5 C6.5 21,6.5 27,12 30.5 C17.5 34,24 29.5,24 24" stroke="url(#ng)" stroke-width="3" stroke-linecap="round" fill="none"/>
+        <circle cx="24" cy="24" r="1.5" fill="#f0a500" opacity="0.8"/>
+      </svg>
+      <div>
+        <div class="nav-brand-text">Paul<span>.</span>Toolbox</div>
+        <span class="nav-brand-sub">Centro de herramientas · Acceso privado</span>
+      </div>
+    </div>
+    <div class="nav-right">
+      <div class="nav-date" id="navDate"></div>
+      <a href="https://paulnegrete.netlify.app" target="_blank" class="btn-portfolio">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Mi portafolio
+      </a>
+      <button class="btn-logout" onclick="logout()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Salir
+      </button>
+    </div>
+  </nav>
+
+  <div class="hero-strip">
+    <div class="hero-greeting">👋 Bienvenido, Paul</div>
+    <div class="hero-title">Centro de Herramientas Propietarias</div>
+    <div class="hero-sub">5 herramientas de consultoría listas para usar con clientes. Activos de propiedad intelectual — uso exclusivo.</div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-pill"><div class="stat-icon">🧰</div><div class="stat-info"><div class="stat-val">5</div><div class="stat-label">Herramientas activas</div></div></div>
+    <div class="stat-pill"><div class="stat-icon">🔐</div><div class="stat-info"><div class="stat-val">Privado</div><div class="stat-label">Acceso protegido</div></div></div>
+    <div class="stat-pill"><div class="stat-icon">📊</div><div class="stat-info"><div class="stat-val">3 fases</div><div class="stat-label">Diagnóstico · Ejecución · Control</div></div></div>
+    <div class="stat-pill"><div class="stat-icon">📤</div><div class="stat-info"><div class="stat-val">WhatsApp</div><div class="stat-label">Reportes al instante</div></div></div>
+  </div>
+
+  <!-- TOOLS -->
+  <div class="tools-section">
+    <div class="section-hdr">Fase 1 · Diagnóstico y Valoración</div>
+    <div class="tools-grid">
+
+      <a class="tool-card" href="./madurez-logistica.html">
+        <div class="tool-card-top" style="background:linear-gradient(90deg,var(--gold),var(--orange))"></div>
+        <div class="tool-card-body">
+          <div class="tool-icon" style="background:var(--gold-dim);border-color:rgba(240,165,0,0.2)">📋</div>
+          <div class="tool-num">Herramienta 01</div>
+          <div class="tool-name">Calculadora de Madurez Logística</div>
+          <div class="tool-desc">Evalúa 5 dimensiones clave (ERI, Fill Rate, costos, tecnología y procesos) mediante 12 preguntas estructuradas. Genera un diagnóstico visual con radar chart y recomendaciones priorizadas.</div>
+          <div class="tool-tags"><span class="tool-tag">Diagnóstico</span><span class="tool-tag">ERI</span><span class="tool-tag">Fill Rate</span><span class="tool-tag">KPIs</span></div>
+          <div class="tool-btn" style="background:var(--gold-dim);color:var(--gold);border:1px solid rgba(240,165,0,0.25)">
+            Abrir herramienta
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </div>
+        </div>
+      </a>
+
+      <a class="tool-card" href="./analizador-flotas.html">
+        <div class="tool-card-top" style="background:linear-gradient(90deg,var(--blue2),var(--blue3))"></div>
+        <div class="tool-card-body">
+          <div class="tool-icon" style="background:rgba(74,144,212,0.1);border-color:rgba(74,144,212,0.2)">🚚</div>
+          <div class="tool-num">Herramienta 02</div>
+          <div class="tool-name">Analizador de Flotas & CPK</div>
+          <div class="tool-desc">Calcula el Costo por Kilómetro de cada vehículo, detecta unidades no rentables vs. benchmark y analiza la desviación entre mantenimiento preventivo y correctivo.</div>
+          <div class="tool-tags"><span class="tool-tag">CPK</span><span class="tool-tag">Mantenimiento</span><span class="tool-tag">Flota</span><span class="tool-tag">Benchmark</span></div>
+          <div class="tool-btn" style="background:rgba(74,144,212,0.1);color:var(--blue3);border:1px solid rgba(74,144,212,0.25)">
+            Abrir herramienta
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </div>
+        </div>
+      </a>
+
+      <a class="tool-card" href="./matriz-abc.html">
+        <div class="tool-card-top" style="background:linear-gradient(90deg,var(--red),var(--orange))"></div>
+        <div class="tool-card-body">
+          <div class="tool-icon" style="background:rgba(240,68,68,0.1);border-color:rgba(240,68,68,0.2)">📦</div>
+          <div class="tool-num">Herramienta 03</div>
+          <div class="tool-name">Matriz ABC Multicriterio</div>
+          <div class="tool-desc">Clasifica inventario por valor económico, criticidad operacional y rotación con pesos configurables. Genera curva de Pareto, stock de seguridad recomendado y layout de bodega por categoría.</div>
+          <div class="tool-tags"><span class="tool-tag">Inventario</span><span class="tool-tag">Pareto</span><span class="tool-tag">Bodega</span><span class="tool-tag">Stock</span></div>
+          <div class="tool-btn" style="background:rgba(240,68,68,0.1);color:#ff8080;border:1px solid rgba(240,68,68,0.25)">
+            Abrir herramienta
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </div>
+        </div>
+      </a>
+
+    </div>
+
+    <div class="section-hdr">Fase 2 · Ejecución y Análisis</div>
+    <div class="tools-grid">
+
+      <a class="tool-card" href="./simulador-inventario.html">
+        <div class="tool-card-top" style="background:linear-gradient(90deg,var(--purple),var(--blue2))"></div>
+        <div class="tool-card-body">
+          <div class="tool-icon" style="background:rgba(167,139,250,0.1);border-color:rgba(167,139,250,0.2)">🔬</div>
+          <div class="tool-num">Herramienta 04</div>
+          <div class="tool-name">Simulador de Escenarios de Inventario</div>
+          <div class="tool-desc">Compara hasta 3 escenarios (reducción de SS, cambio de proveedor, reducción de lead time) calculando EOQ, Fill Rate y costo total anual. Análisis de sensibilidad con recomendaciones automáticas.</div>
+          <div class="tool-tags"><span class="tool-tag">EOQ</span><span class="tool-tag">Escenarios</span><span class="tool-tag">Lead time</span><span class="tool-tag">Proveedor</span></div>
+          <div class="tool-btn" style="background:rgba(167,139,250,0.1);color:var(--purple);border:1px solid rgba(167,139,250,0.25)">
+            Abrir herramienta
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </div>
+        </div>
+      </a>
+
+      <a class="tool-card" href="./auditoria-iso39001.html">
+        <div class="tool-card-top" style="background:linear-gradient(90deg,var(--green),var(--blue2))"></div>
+        <div class="tool-card-body">
+          <div class="tool-icon" style="background:rgba(45,212,160,0.1);border-color:rgba(45,212,160,0.2)">🛡</div>
+          <div class="tool-num">Herramienta 05</div>
+          <div class="tool-name">Auditoría ISO 39001 — SGSV</div>
+          <div class="tool-desc">Checklist digital de 33 ítems en 7 cláusulas de la norma ISO 39001:2012. Califica Conforme / Observación / NC Menor / NC Mayor. Genera informe oficial firmado con tu certificación del CCS.</div>
+          <div class="tool-tags"><span class="tool-tag">ISO 39001</span><span class="tool-tag">Auditoría</span><span class="tool-tag">SV</span><span class="tool-tag">Informe</span></div>
+          <div class="tool-btn" style="background:rgba(45,212,160,0.1);color:var(--green);border:1px solid rgba(45,212,160,0.25)">
+            Abrir herramienta
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </div>
+        </div>
+      </a>
+
+      <!-- PLACEHOLDER: próxima herramienta -->
+      <div class="tool-card" style="opacity:0.4;cursor:default">
+        <div class="tool-card-top" style="background:var(--border2)"></div>
+        <div class="tool-card-body">
+          <div class="tool-icon" style="background:var(--card2);border-color:var(--border)">🔜</div>
+          <div class="tool-num">Herramienta 06</div>
+          <div class="tool-name">Próximamente</div>
+          <div class="tool-desc">Espacio reservado para la próxima herramienta del Toolbox. Puedes sugerir cuál construir a continuación.</div>
+          <div class="tool-tags"><span class="tool-tag">En desarrollo</span></div>
+          <div class="tool-btn" style="background:var(--card2);color:var(--text3);border:1px solid var(--border);cursor:not-allowed">Próximamente</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- NOTES -->
+  <div class="notes-section">
+    <div class="notes-card">
+      <div class="notes-header">
+        <div class="notes-title">📝 Notas privadas · Sesión actual</div>
+        <div class="notes-saved" id="notesSaved">✓ Guardado</div>
+      </div>
+      <textarea class="notes-ta" id="notesArea" placeholder="Clientes activos, pendientes, ideas para nuevas herramientas, follow-ups..."
+        oninput="saveNotes()"></textarea>
+    </div>
+  </div>
+
+  <!-- SETTINGS -->
+  <div class="settings-section">
+    <div class="notes-card">
+      <div class="notes-header">
+        <div class="notes-title">⚙️ Cambiar contraseña de acceso</div>
+      </div>
+      <div class="settings-grid">
+        <div class="field"><label class="flabel">Contraseña actual</label><input class="ti" id="pwdCurrent" type="password" placeholder="••••••••"></div>
+        <div class="field"><label class="flabel">Nueva contraseña</label><input class="ti" id="pwdNew" type="password" placeholder="Mínimo 8 caracteres"></div>
+        <button class="btn-change-pwd" onclick="changePwd()">Actualizar contraseña</button>
+      </div>
+      <div class="pwd-msg" id="pwdMsg"></div>
+      <div style="font-size:0.72rem;color:var(--text3);margin-top:12px;line-height:1.6">
+        ⚠️ La nueva contraseña se guarda en este navegador. Si cambias de dispositivo o navegador, usa la contraseña por defecto: <strong style="color:var(--gold);font-family:'JetBrains Mono',monospace">PaulN@2026</strong>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end dashboard -->
+
+<script>
+// ── SHA-256 implementation
+async function sha256(str) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+}
+
+// ── Default password hash (PaulN@2026)
+const DEFAULT_HASH = '89b8e109f09d160741223fff89f621a7378b164eca26c6c47361a82f534cd594';
+const SESSION_KEY = 'pn_toolbox_auth';
+const HASH_KEY = 'pn_toolbox_hash';
+const NOTES_KEY = 'pn_toolbox_notes';
+
+function getStoredHash() {
+  return localStorage.getItem(HASH_KEY) || DEFAULT_HASH;
+}
+
+async function tryLogin() {
+  const pwd = document.getElementById('pwdInput').value;
+  if (!pwd) return;
+  const hash = await sha256(pwd);
+  if (hash === getStoredHash()) {
+    sessionStorage.setItem(SESSION_KEY, '1');
+    showDashboard();
+  } else {
+    const input = document.getElementById('pwdInput');
+    input.classList.add('error');
+    document.getElementById('loginError').textContent = '❌ Contraseña incorrecta. Intente de nuevo.';
+    setTimeout(() => { input.classList.remove('error'); input.value = ''; input.focus(); }, 800);
+  }
+}
+
+function showDashboard() {
+  document.getElementById('loginScreen').classList.add('hidden');
+  document.getElementById('dashboard').classList.add('show');
+  initDashboard();
+}
+
+function logout() {
+  if (confirm('¿Cerrar sesión?')) { sessionStorage.removeItem(SESSION_KEY); location.reload(); }
+}
+
+function initDashboard() {
+  // Date
+  const now = new Date();
+  document.getElementById('navDate').textContent = now.toLocaleDateString('es-CO',{weekday:'long',day:'numeric',month:'long'});
+  // Notes
+  document.getElementById('notesArea').value = localStorage.getItem(NOTES_KEY) || '';
+}
+
+let notesTimer;
+function saveNotes() {
+  clearTimeout(notesTimer);
+  notesTimer = setTimeout(() => {
+    localStorage.setItem(NOTES_KEY, document.getElementById('notesArea').value);
+    const saved = document.getElementById('notesSaved');
+    saved.classList.add('show');
+    setTimeout(() => saved.classList.remove('show'), 2000);
+  }, 800);
+}
+
+async function changePwd() {
+  const current = document.getElementById('pwdCurrent').value;
+  const newPwd = document.getElementById('pwdNew').value;
+  const msg = document.getElementById('pwdMsg');
+  if (!current || !newPwd) { msg.textContent = '⚠️ Complete ambos campos.'; msg.style.color = 'var(--orange)'; return; }
+  if (newPwd.length < 8) { msg.textContent = '⚠️ La nueva contraseña debe tener al menos 8 caracteres.'; msg.style.color = 'var(--orange)'; return; }
+  const currentHash = await sha256(current);
+  if (currentHash !== getStoredHash()) { msg.textContent = '❌ La contraseña actual es incorrecta.'; msg.style.color = 'var(--red)'; return; }
+  const newHash = await sha256(newPwd);
+  localStorage.setItem(HASH_KEY, newHash);
+  msg.textContent = '✓ Contraseña actualizada correctamente.';
+  msg.style.color = 'var(--green)';
+  document.getElementById('pwdCurrent').value = '';
+  document.getElementById('pwdNew').value = '';
+  setTimeout(() => msg.textContent = '', 3000);
+}
+
+// ── CHECK SESSION ON LOAD
+window.addEventListener('DOMContentLoaded', () => {
+  if (sessionStorage.getItem(SESSION_KEY)) {
+    showDashboard();
+  } else {
+    document.getElementById('pwdInput').focus();
+  }
+  // Allow Enter on login
+  document.getElementById('pwdInput').addEventListener('keydown', e => { if(e.key==='Enter') tryLogin(); });
+});
+</script>
+</body>
+</html>
