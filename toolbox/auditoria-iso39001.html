@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Auditoría ISO 39001 · Paul Negrete Toolbox</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#060910;--bg2:#0a0f1a;--card:#0d1525;--card2:#111d30;
+  --border:rgba(255,255,255,0.06);--border2:rgba(255,255,255,0.11);
+  --gold:#f0a500;--gold2:#ffd060;--gold-dim:rgba(240,165,0,0.1);
+  --blue:#2e6da4;--blue2:#4a90d4;--blue3:#7ab8f5;
+  --green:#2dd4a0;--red:#f04444;--orange:#f09020;--yellow:#f0c040;
+  --text:#e2eaf5;--text2:#7a9ab8;--text3:#3a5a7a;
+  --r:14px;--r-sm:9px;
+  --c-ok:#2dd4a0;--c-obs:#4a90d4;--c-minor:#f09020;--c-major:#f04444;--c-na:#5a7a9a
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 60% 40% at 50% -10%,rgba(45,212,160,0.07),transparent);pointer-events:none;z-index:0}
+
+/* HEADER */
+header{position:relative;z-index:10;padding:18px 40px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;border-bottom:1px solid var(--border);background:rgba(6,9,16,0.9);backdrop-filter:blur(20px);position:sticky;top:0}
+.hbrand{display:flex;align-items:center;gap:10px}
+.hlogo{width:32px;height:32px}
+.htitle{font-family:'Syne',sans-serif;font-size:0.9rem;font-weight:800;color:var(--text)}
+.htitle span{color:var(--gold)}
+.hbadge{display:inline-flex;align-items:center;gap:7px;background:rgba(45,212,160,0.1);border:1px solid rgba(45,212,160,0.25);border-radius:100px;padding:5px 14px;font-size:0.7rem;font-weight:600;color:var(--green);letter-spacing:0.06em;text-transform:uppercase}
+.hbadge::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+
+/* PAGE */
+.page{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:28px 36px 80px;display:grid;grid-template-columns:260px 1fr;gap:28px;align-items:start}
+
+/* SIDEBAR */
+.sidebar{position:sticky;top:72px}
+.sidebar-header{font-family:'Syne',sans-serif;font-size:0.75rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text3);margin-bottom:12px}
+.nav-items{display:flex;flex-direction:column;gap:4px;margin-bottom:20px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:var(--r-sm);cursor:pointer;transition:all 0.2s;border:1px solid transparent;text-decoration:none}
+.nav-item:hover{background:var(--card2);border-color:var(--border)}
+.nav-item.active{background:var(--card);border-color:var(--border2)}
+.nav-item-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;border:2px solid var(--text3);transition:all 0.2s}
+.nav-item.done .nav-item-dot{background:var(--green);border-color:var(--green)}
+.nav-item.active .nav-item-dot{background:var(--gold);border-color:var(--gold)}
+.nav-item-label{font-size:0.78rem;color:var(--text2);line-height:1.3;flex:1}
+.nav-item.active .nav-item-label{color:var(--text);font-weight:500}
+.nav-item-score{font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:var(--text3)}
+
+/* PROGRESS CARD */
+.progress-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:16px}
+.progress-title{font-size:0.68rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text3);margin-bottom:10px}
+.overall-score{font-family:'Syne',sans-serif;font-size:2.2rem;font-weight:800;letter-spacing:-0.03em;line-height:1;margin-bottom:4px}
+.overall-label{font-size:0.72rem;color:var(--text3);margin-bottom:12px}
+.prog-bar{height:6px;background:var(--border2);border-radius:3px;overflow:hidden;margin-bottom:6px}
+.prog-fill{height:100%;border-radius:3px;transition:width 0.5s ease}
+.compliance-pills{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}
+.cpill{font-size:0.63rem;font-weight:700;padding:2px 8px;border-radius:100px;white-space:nowrap}
+.cpill-ok{background:rgba(45,212,160,0.12);color:var(--c-ok);border:1px solid rgba(45,212,160,0.25)}
+.cpill-obs{background:rgba(74,144,212,0.12);color:var(--c-obs);border:1px solid rgba(74,144,212,0.25)}
+.cpill-minor{background:rgba(240,144,32,0.12);color:var(--c-minor);border:1px solid rgba(240,144,32,0.25)}
+.cpill-major{background:rgba(240,68,68,0.12);color:var(--c-major);border:1px solid rgba(240,68,68,0.3)}
+
+/* AUDIT FORM */
+.audit-info{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:22px;margin-bottom:20px}
+.ai-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ai-title{font-family:'Syne',sans-serif;font-size:0.8rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text3);margin-bottom:14px}
+.field{display:flex;flex-direction:column;gap:5px}
+.flabel{font-size:0.69rem;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:var(--text2)}
+.ti{background:var(--card2);border:1px solid var(--border);border-radius:var(--r-sm);padding:8px 11px;font-family:'DM Sans',sans-serif;font-size:0.82rem;color:var(--text);outline:none;transition:border-color 0.2s;width:100%}
+.ti:focus{border-color:var(--green)}
+
+/* CLAUSE SECTIONS */
+.clause{background:var(--card);border:1px solid var(--border);border-radius:var(--r);margin-bottom:16px;overflow:hidden;display:none}
+.clause.active{display:block;animation:fadeIn 0.35s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.clause-header{padding:18px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:14px;cursor:pointer}
+.clause-num{font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;color:var(--gold);line-height:1;width:28px;flex-shrink:0}
+.clause-info{flex:1}
+.clause-title{font-family:'Syne',sans-serif;font-size:0.95rem;font-weight:700;color:var(--text);margin-bottom:2px}
+.clause-sub{font-size:0.75rem;color:var(--text3)}
+.clause-score-badge{font-family:'JetBrains Mono',monospace;font-size:0.78rem;font-weight:500;padding:4px 10px;border-radius:100px;border:1px solid var(--border);color:var(--text2);white-space:nowrap}
+
+/* CHECKLIST ITEMS */
+.checklist{padding:6px 0}
+.check-item{padding:14px 22px;border-bottom:1px solid var(--border);display:flex;gap:14px;align-items:flex-start}
+.check-item:last-child{border-bottom:none}
+.check-item:hover{background:rgba(255,255,255,0.01)}
+.check-left{flex:1}
+.check-ref{font-size:0.64rem;font-weight:700;letter-spacing:0.08em;color:var(--text3);margin-bottom:3px;text-transform:uppercase}
+.check-question{font-size:0.84rem;color:var(--text);line-height:1.5;margin-bottom:6px;font-weight:400}
+.check-guide{font-size:0.74rem;color:var(--text3);line-height:1.45;font-style:italic;margin-bottom:10px}
+.check-evidence{width:100%;background:var(--card2);border:1px solid var(--border);border-radius:6px;padding:7px 10px;font-family:'DM Sans',sans-serif;font-size:0.76rem;color:var(--text2);outline:none;resize:vertical;min-height:40px;transition:border-color 0.2s}
+.check-evidence:focus{border-color:var(--blue2);color:var(--text)}
+.check-evidence::placeholder{color:var(--text3)}
+.check-right{display:flex;flex-direction:column;gap:5px;flex-shrink:0;width:110px;align-items:stretch}
+.radio-opt{display:flex;align-items:center;gap:7px;padding:5px 8px;border-radius:6px;cursor:pointer;border:1.5px solid transparent;transition:all 0.2s;user-select:none}
+.radio-opt.ok{border-color:rgba(45,212,160,0.2)}
+.radio-opt.obs{border-color:rgba(74,144,212,0.2)}
+.radio-opt.minor{border-color:rgba(240,144,32,0.2)}
+.radio-opt.major{border-color:rgba(240,68,68,0.2)}
+.radio-opt.na{border-color:rgba(90,122,154,0.2)}
+.radio-opt.selected-ok{background:rgba(45,212,160,0.12);border-color:rgba(45,212,160,0.5)}
+.radio-opt.selected-obs{background:rgba(74,144,212,0.12);border-color:rgba(74,144,212,0.5)}
+.radio-opt.selected-minor{background:rgba(240,144,32,0.12);border-color:rgba(240,144,32,0.5)}
+.radio-opt.selected-major{background:rgba(240,68,68,0.12);border-color:rgba(240,68,68,0.5)}
+.radio-opt.selected-na{background:rgba(90,122,154,0.1);border-color:rgba(90,122,154,0.3)}
+.radio-dot{width:10px;height:10px;border-radius:50%;border:2px solid;flex-shrink:0;transition:background 0.15s}
+.radio-dot.ok{border-color:var(--c-ok)}
+.radio-dot.obs{border-color:var(--c-obs)}
+.radio-dot.minor{border-color:var(--c-minor)}
+.radio-dot.major{border-color:var(--c-major)}
+.radio-dot.na{border-color:var(--c-na)}
+.selected-ok .radio-dot.ok,.selected-obs .radio-dot.obs,.selected-minor .radio-dot.minor,.selected-major .radio-dot.major,.selected-na .radio-dot.na{background:currentColor}
+.radio-lbl{font-size:0.68rem;font-weight:600;letter-spacing:0.04em}
+
+/* NAV BUTTONS */
+.clause-nav{display:flex;gap:10px;justify-content:space-between;padding:16px 22px;background:var(--bg2);border-top:1px solid var(--border)}
+.btn-prev{display:inline-flex;align-items:center;gap:7px;background:transparent;color:var(--text2);font-family:'DM Sans',sans-serif;font-size:0.84rem;font-weight:500;padding:10px 18px;border-radius:9px;border:1px solid var(--border);cursor:pointer;transition:all 0.2s}
+.btn-prev:hover{border-color:var(--border2);color:var(--text)}
+.btn-next{display:inline-flex;align-items:center;gap:7px;background:var(--green);color:var(--bg);font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:700;padding:10px 22px;border-radius:9px;border:none;cursor:pointer;transition:all 0.2s;margin-left:auto}
+.btn-next:hover{background:#26bfa0;transform:translateY(-1px);box-shadow:0 6px 18px rgba(45,212,160,0.3)}
+.btn-report{display:inline-flex;align-items:center;gap:8px;background:var(--gold);color:var(--bg);font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:700;padding:10px 22px;border-radius:9px;border:none;cursor:pointer;transition:all 0.2s;margin-left:auto}
+.btn-report:hover{background:var(--gold2);transform:translateY(-1px);box-shadow:0 6px 18px rgba(240,165,0,0.3)}
+
+/* REPORT */
+.report-section{display:none}
+.report-section.show{display:block;animation:fadeIn 0.4s ease}
+.report-hero{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:32px;margin-bottom:18px;text-align:center;position:relative;overflow:hidden}
+.report-hero::before{content:'';position:absolute;top:-50px;left:50%;transform:translateX(-50%);width:300px;height:300px;border-radius:50%;pointer-events:none}
+.report-score-big{font-family:'Syne',sans-serif;font-size:5rem;font-weight:800;letter-spacing:-0.04em;line-height:1}
+.report-verdict{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;margin-top:8px;padding:6px 20px;border-radius:100px;display:inline-block}
+.sec-scores-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px}
+.sec-score-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r-sm);padding:14px}
+.ssc-title{font-size:0.7rem;color:var(--text3);margin-bottom:6px;line-height:1.3}
+.ssc-val{font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:800}
+.ssc-bar{height:3px;border-radius:2px;margin-top:6px}
+.findings-section{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:22px;margin-bottom:18px}
+.findings-title{font-family:'Syne',sans-serif;font-size:0.78rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text3);margin-bottom:14px}
+.finding-item{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--border)}
+.finding-item:last-child{border-bottom:none}
+.fi-badge{font-size:0.62rem;font-weight:700;padding:3px 8px;border-radius:100px;white-space:nowrap;flex-shrink:0;margin-top:1px}
+.fi-text{font-size:0.78rem;color:var(--text2);line-height:1.55}
+.fi-ref{font-size:0.65rem;color:var(--text3);margin-top:2px;font-family:'JetBrains Mono',monospace}
+
+/* CTA */
+.cta-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.wa-btn{display:inline-flex;align-items:center;gap:9px;background:#25D366;color:white;font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:700;padding:12px 20px;border-radius:10px;border:none;cursor:pointer;transition:all 0.2s;text-decoration:none}
+.wa-btn:hover{background:#1db954;transform:translateY(-1px);box-shadow:0 6px 18px rgba(37,211,102,0.3)}
+.print-btn{display:inline-flex;align-items:center;gap:8px;background:transparent;color:var(--text2);font-family:'DM Sans',sans-serif;font-size:0.84rem;padding:12px 18px;border-radius:10px;border:1px solid var(--border);cursor:pointer;transition:all 0.2s}
+.print-btn:hover{border-color:var(--border2);color:var(--text)}
+
+@media(max-width:900px){
+  .page{grid-template-columns:1fr;padding:16px}
+  .sidebar{position:static}
+  .ai-grid{grid-template-columns:1fr 1fr}
+  .sec-scores-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:600px){
+  header{padding:14px 18px}
+  .page{padding:14px}
+  .check-item{flex-direction:column}
+  .check-right{flex-direction:row;width:100%;flex-wrap:wrap}
+  .ai-grid{grid-template-columns:1fr}
+  .sec-scores-grid{grid-template-columns:1fr}
+}
+@media print{
+  body{background:white;color:#111}
+  header,.sidebar,.clause-nav,.cta-row,.btn-report,.audit-info{display:none!important}
+  .page{grid-template-columns:1fr;padding:0}
+  .clause,.report-section{display:block!important}
+  .clause-header,.check-item,.sec-score-card,.finding-item,.report-hero,.findings-section{background:white;border-color:#ddd}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hbrand">
+    <svg class="hlogo" viewBox="0 0 48 48" fill="none">
+      <defs><linearGradient id="lg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#2dd4a0"/><stop offset="100%" stop-color="#f0a500"/></linearGradient></defs>
+      <rect width="48" height="48" rx="12" fill="#0a1220"/>
+      <path d="M24 24 C24 18.5,30.5 14,36 17.5 C41.5 21,41.5 27,36 30.5 C30.5 34,24 29.5,24 24 C24 18.5,17.5 14,12 17.5 C6.5 21,6.5 27,12 30.5 C17.5 34,24 29.5,24 24" stroke="url(#lg)" stroke-width="3" stroke-linecap="round" fill="none"/>
+      <circle cx="24" cy="24" r="1.5" fill="#f0a500" opacity="0.8"/>
+    </svg>
+    <div class="htitle">Paul Negrete <span>·</span> Toolbox</div>
+  </div>
+  <div class="hbadge">🛡 Herramienta 5 — Auditoría ISO 39001</div>
+</header>
+
+<div class="page">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="progress-card">
+      <div class="progress-title">Progreso global</div>
+      <div class="overall-score" id="overallScore" style="color:var(--text3)">—</div>
+      <div class="overall-label" id="overallLabel">Sin respuestas aún</div>
+      <div class="prog-bar"><div class="prog-fill" id="overallBar" style="width:0%;background:var(--green)"></div></div>
+      <div class="compliance-pills" id="pillsWrap">
+        <span class="cpill cpill-ok" id="pill-ok">✓ 0</span>
+        <span class="cpill cpill-obs" id="pill-obs">◎ 0</span>
+        <span class="cpill cpill-minor" id="pill-minor">▲ 0</span>
+        <span class="cpill cpill-major" id="pill-major">✕ 0</span>
+      </div>
+    </div>
+
+    <div class="sidebar-header">Cláusulas ISO 39001</div>
+    <div class="nav-items" id="navItems"></div>
+
+    <div style="font-size:0.68rem;color:var(--text3);line-height:1.5;padding:10px 0;border-top:1px solid var(--border)">
+      <div style="margin-bottom:5px;font-weight:600;color:var(--text2)">Leyenda</div>
+      <div style="display:flex;flex-direction:column;gap:3px">
+        <span>✓ <span style="color:var(--c-ok)">Conforme</span> — Cumple el requisito</span>
+        <span>◎ <span style="color:var(--c-obs)">Observación</span> — Riesgo potencial</span>
+        <span>▲ <span style="color:var(--c-minor)">No conf. menor</span> — Incumplimiento parcial</span>
+        <span>✕ <span style="color:var(--c-major)">No conf. mayor</span> — Incumplimiento total</span>
+        <span>N/A — No aplica</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div id="mainContent">
+
+    <!-- AUDIT INFO -->
+    <div class="audit-info" id="auditInfoCard">
+      <div class="ai-title">🛡 Auditoría de Gestión de Seguridad Vial · ISO 39001:2012</div>
+      <div class="ai-grid">
+        <div class="field"><label class="flabel">Empresa auditada</label><input class="ti" id="auditCompany" placeholder="Ej: Transportes XYZ S.A.S."></div>
+        <div class="field"><label class="flabel">NIT / Identificación</label><input class="ti" id="auditNit" placeholder="900.123.456-7"></div>
+        <div class="field"><label class="flabel">Auditor líder</label><input class="ti" id="auditLead" placeholder="Paul André Negrete" value="Paul André Negrete"></div>
+        <div class="field"><label class="flabel">Fecha de auditoría</label><input class="ti" id="auditDate" type="date"></div>
+        <div class="field"><label class="flabel">Alcance / Proceso auditado</label><input class="ti" id="auditScope" placeholder="Ej: Transporte de carga, flota de 25 vehículos"></div>
+        <div class="field"><label class="flabel">Tipo de auditoría</label>
+          <select class="ti" id="auditType">
+            <option>Interna</option><option>Seguimiento</option><option>Certificación</option><option>Cliente</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- CLAUSES (generated by JS) -->
+    <div id="clausesContainer"></div>
+
+    <!-- REPORT -->
+    <div class="report-section" id="reportSection"></div>
+
+  </div>
+</div>
+
+<script>
+// ── CLAUSE DATA
+const CLAUSES = [
+  {
+    num: '4', title: 'Contexto de la organización',
+    sub: 'Comprensión del contexto, partes interesadas, alcance del SGSV',
+    items: [
+      { ref:'4.1', q:'¿La organización ha determinado los factores externos e internos que afectan su desempeño en seguridad vial?', guide:'Buscar: análisis de contexto documentado (PESTEL, FODA o similar) con factores de SV.' },
+      { ref:'4.2', q:'¿Están identificadas las partes interesadas relevantes (conductores, clientes, comunidad, autoridades) y sus requisitos?', guide:'Verificar: registro de partes interesadas con necesidades y expectativas.' },
+      { ref:'4.3', q:'¿El alcance del Sistema de Gestión de Seguridad Vial (SGSV) está definido y documentado?', guide:'El alcance debe incluir rutas, tipos de vehículos, actividades y ubicaciones.' },
+      { ref:'4.4', q:'¿La organización ha establecido e implementado los procesos del SGSV conforme a los requisitos?', guide:'Verificar mapa de procesos o descripción de interacción de procesos del SGSV.' },
+    ]
+  },
+  {
+    num: '5', title: 'Liderazgo',
+    sub: 'Compromiso de la alta dirección, política y roles organizacionales',
+    items: [
+      { ref:'5.1a', q:'¿La alta dirección demuestra compromiso con el SGSV asignando recursos suficientes?', guide:'Evidenciar: actas de revisión por la dirección, presupuesto de SV, participación en comités.' },
+      { ref:'5.1b', q:'¿La dirección comunica la importancia de la gestión eficaz de la seguridad vial?', guide:'Buscar: comunicaciones internas, carteleras, correos, reuniones de SV.' },
+      { ref:'5.2a', q:'¿Existe una política de seguridad vial documentada, aprobada y comunicada a todos los empleados?', guide:'La política debe incluir compromisos, ser apropiada al contexto y estar disponible.' },
+      { ref:'5.2b', q:'¿La política de SV incluye compromiso de mejora continua y cumplimiento de requisitos legales?', guide:'Revisar el texto de la política y verificar que incluya estos compromisos explícitamente.' },
+      { ref:'5.3', q:'¿Están definidos y comunicados los roles, responsabilidades y autoridades en SV?', guide:'Buscar: organigrama de SV, perfiles de cargo, designación formal del representante de SV.' },
+    ]
+  },
+  {
+    num: '6', title: 'Planificación',
+    sub: 'Riesgos, oportunidades, objetivos y planificación de cambios',
+    items: [
+      { ref:'6.1', q:'¿La organización ha identificado riesgos y oportunidades de seguridad vial mediante una metodología formal?', guide:'Verificar: matriz de riesgos viales, análisis de accidentalidad, mapeo de rutas críticas.' },
+      { ref:'6.1.2', q:'¿Se han determinado los factores críticos de riesgo vial (velocidad, fatiga, alcohol, infraestructura, mantenimiento)?', guide:'Buscar análisis de causas de accidentes previos o análisis de riesgos por factor causal.' },
+      { ref:'6.2a', q:'¿Los objetivos de seguridad vial son medibles, consistentes con la política y están documentados?', guide:'Verificar que los objetivos tengan indicador, meta, responsable y plazo definidos.' },
+      { ref:'6.2b', q:'¿Existe un plan de acción para alcanzar los objetivos de SV con responsables y recursos asignados?', guide:'Buscar: plan de SV o programa anual con cronograma y presupuesto.' },
+    ]
+  },
+  {
+    num: '7', title: 'Apoyo',
+    sub: 'Recursos, competencia, comunicación y documentación',
+    items: [
+      { ref:'7.1', q:'¿La organización proporciona los recursos necesarios (humanos, tecnológicos, financieros) para el SGSV?', guide:'Evidenciar en presupuesto aprobado, dotación de EPP, herramientas de reporte.' },
+      { ref:'7.2', q:'¿El personal que realiza trabajos que afectan el desempeño vial es competente (educación, formación, experiencia)?', guide:'Revisar: hojas de vida, licencias vigentes, certificados de conducción segura.' },
+      { ref:'7.3a', q:'¿El personal es consciente de la política de SV y su contribución a la eficacia del sistema?', guide:'Verificar con entrevistas o registros de inducción y capacitación en SV.' },
+      { ref:'7.4', q:'¿Existe un programa de comunicación interna y externa sobre seguridad vial (campañas, boletines, etc.)?', guide:'Buscar: cronograma de comunicaciones, registros de campañas, publicaciones.' },
+      { ref:'7.5', q:'¿La información documentada requerida está controlada: creada, actualizada y disponible?', guide:'Verificar sistema de gestión documental, control de versiones, lista maestra de documentos.' },
+    ]
+  },
+  {
+    num: '8', title: 'Operación',
+    sub: 'Planificación operacional, gestión de vehículos, conductores y rutas',
+    items: [
+      { ref:'8.1', q:'¿La organización planifica, implementa y controla los procesos necesarios para cumplir los requisitos de SV?', guide:'Verificar procedimientos operativos: pre-despacho, inspección de vehículos, control de rutas.' },
+      { ref:'8.1a', q:'¿Existe un programa de mantenimiento preventivo documentado para todos los vehículos?', guide:'Revisar plan de mantenimiento por vehículo, registros de revisiones técnico-mecánicas.' },
+      { ref:'8.1b', q:'¿Se controla la velocidad mediante políticas, límites internos y tecnología (GPS, velocímetros)?', guide:'Buscar: política de velocidades por tipo de vía, reportes de GPS, alertas de exceso.' },
+      { ref:'8.1c', q:'¿Existen controles para prevenir conducción bajo efectos de fatiga o sustancias psicoactivas?', guide:'Verificar: pruebas de alcoholemia, test de fatiga pre-turno, registros de jornadas.' },
+      { ref:'8.1d', q:'¿Se realiza evaluación y selección de rutas considerando condiciones de seguridad vial?', guide:'Buscar: análisis de rutas, identificación de tramos críticos, instrucciones de ruta.' },
+      { ref:'8.2', q:'¿Los conductores están capacitados en conducción segura y conocen los procedimientos de emergencia?', guide:'Revisar: programa de capacitación, simulacros, certificaciones de cursos de SV.' },
+    ]
+  },
+  {
+    num: '9', title: 'Evaluación del desempeño',
+    sub: 'Seguimiento, medición, auditoría interna y revisión por la dirección',
+    items: [
+      { ref:'9.1a', q:'¿La organización hace seguimiento y medición de los indicadores de SV definidos?', guide:'Verificar: tablero de KPIs de SV (accidentalidad, km sin accidente, infracciones, etc.).' },
+      { ref:'9.1b', q:'¿Se registran y analizan todos los incidentes, accidentes y cuasi-accidentes viales?', guide:'Buscar: base de datos de eventos, análisis de causa raíz, lecciones aprendidas.' },
+      { ref:'9.2', q:'¿Se planifican y realizan auditorías internas del SGSV con la frecuencia requerida?', guide:'Verificar: programa anual de auditorías, informes de auditorías previas, seguimiento.' },
+      { ref:'9.3', q:'¿La alta dirección revisa el SGSV periódicamente (mínimo una vez al año)?', guide:'Buscar: actas de revisión por la dirección con los elementos de entrada y salida requeridos.' },
+    ]
+  },
+  {
+    num: '10', title: 'Mejora',
+    sub: 'No conformidades, acciones correctivas y mejora continua',
+    items: [
+      { ref:'10.1', q:'¿Cuando ocurre un accidente o no conformidad, se toman acciones para controlarlo y corregirlo?', guide:'Verificar: procedimiento de acciones correctivas, registro de NC, planes de acción.' },
+      { ref:'10.1b', q:'¿Se analiza la causa raíz de los accidentes e incidentes para evitar su recurrencia?', guide:'Buscar: informes de investigación de accidentes con metodología (5 por qués, Ishikawa, etc.).' },
+      { ref:'10.2', q:'¿La organización mejora continuamente la idoneidad, adecuación y eficacia del SGSV?', guide:'Evidenciar: proyectos de mejora, cambios implementados, comparación con períodos anteriores.' },
+    ]
+  }
+];
+
+// ── STATE
+const state = {}; // itemRef -> { value, evidence }
+CLAUSES.forEach(c => c.items.forEach(i => { state[i.ref] = { value: null, evidence: '' }; }));
+
+let currentClause = 0;
+let reportGenerated = false;
+const SCORES = { ok: 3, obs: 2, minor: 1, major: 0, na: null };
+
+// ── INIT
+function init() {
+  // Set today's date
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('auditDate').value = today;
+
+  // Build nav
+  const nav = document.getElementById('navItems');
+  CLAUSES.forEach((c, i) => {
+    const el = document.createElement('div');
+    el.className = 'nav-item' + (i === 0 ? ' active' : '');
+    el.id = 'nav-' + i;
+    el.onclick = () => goTo(i);
+    el.innerHTML = `<div class="nav-item-dot"></div><div class="nav-item-label"><strong style="color:var(--text3);font-size:0.65rem">${c.num}</strong> ${c.title}</div><div class="nav-item-score" id="nav-score-${i}"></div>`;
+    nav.appendChild(el);
+  });
+
+  // Add report nav
+  const repEl = document.createElement('div');
+  repEl.className = 'nav-item';
+  repEl.id = 'nav-report';
+  repEl.onclick = () => generateReport();
+  repEl.innerHTML = `<div class="nav-item-dot" style="background:var(--gold);border-color:var(--gold)"></div><div class="nav-item-label" style="color:var(--gold);font-weight:600">📊 Generar reporte</div>`;
+  nav.appendChild(repEl);
+
+  // Build clauses
+  const container = document.getElementById('clausesContainer');
+  CLAUSES.forEach((c, ci) => {
+    const div = document.createElement('div');
+    div.className = 'clause' + (ci === 0 ? ' active' : '');
+    div.id = 'clause-' + ci;
+
+    let itemsHtml = '<div class="checklist">';
+    c.items.forEach(item => {
+      itemsHtml += `
+        <div class="check-item" id="item-${item.ref}">
+          <div class="check-left">
+            <div class="check-ref">${item.ref}</div>
+            <div class="check-question">${item.q}</div>
+            <div class="check-guide">📋 ${item.guide}</div>
+            <textarea class="check-evidence" placeholder="Evidencia encontrada, observaciones, documento de referencia..." rows="2"
+              oninput="saveEvidence('${item.ref}', this.value)">${state[item.ref].evidence}</textarea>
+          </div>
+          <div class="check-right">
+            <div class="radio-opt ok ${state[item.ref].value==='ok'?'selected-ok':''}" onclick="selectVal('${item.ref}','ok',this)">
+              <div class="radio-dot ok"></div><span class="radio-lbl" style="color:var(--c-ok)">Conforme</span>
+            </div>
+            <div class="radio-opt obs ${state[item.ref].value==='obs'?'selected-obs':''}" onclick="selectVal('${item.ref}','obs',this)">
+              <div class="radio-dot obs"></div><span class="radio-lbl" style="color:var(--c-obs)">Obs.</span>
+            </div>
+            <div class="radio-opt minor ${state[item.ref].value==='minor'?'selected-minor':''}" onclick="selectVal('${item.ref}','minor',this)">
+              <div class="radio-dot minor"></div><span class="radio-lbl" style="color:var(--c-minor)">NC Menor</span>
+            </div>
+            <div class="radio-opt major ${state[item.ref].value==='major'?'selected-major':''}" onclick="selectVal('${item.ref}','major',this)">
+              <div class="radio-dot major"></div><span class="radio-lbl" style="color:var(--c-major)">NC Mayor</span>
+            </div>
+            <div class="radio-opt na ${state[item.ref].value==='na'?'selected-na':''}" onclick="selectVal('${item.ref}','na',this)">
+              <div class="radio-dot na"></div><span class="radio-lbl" style="color:var(--c-na)">N/A</span>
+            </div>
+          </div>
+        </div>`;
+    });
+    itemsHtml += '</div>';
+
+    const isLast = ci === CLAUSES.length - 1;
+    div.innerHTML = `
+      <div class="clause-header" onclick="goTo(${ci})">
+        <div class="clause-num">${c.num}</div>
+        <div class="clause-info">
+          <div class="clause-title">${c.title}</div>
+          <div class="clause-sub">${c.sub}</div>
+        </div>
+        <div class="clause-score-badge" id="badge-${ci}">0/${c.items.length} respondidas</div>
+      </div>
+      ${itemsHtml}
+      <div class="clause-nav">
+        ${ci > 0 ? `<button class="btn-prev" onclick="event.stopPropagation();goTo(${ci-1})"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Anterior</button>` : '<div></div>'}
+        ${isLast
+          ? `<button class="btn-report" onclick="event.stopPropagation();generateReport()">📊 Generar reporte final <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>`
+          : `<button class="btn-next" onclick="event.stopPropagation();goTo(${ci+1})">Siguiente cláusula <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>`
+        }
+      </div>`;
+
+    container.appendChild(div);
+  });
+}
+
+function goTo(idx) {
+  CLAUSES.forEach((_, i) => {
+    document.getElementById('clause-' + i)?.classList.remove('active');
+    document.getElementById('nav-' + i)?.classList.remove('active');
+  });
+  document.getElementById('reportSection').classList.remove('show');
+  document.getElementById('clause-' + idx)?.classList.add('active');
+  document.getElementById('nav-' + idx)?.classList.add('active');
+  currentClause = idx;
+  document.getElementById('mainContent').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function selectVal(ref, val, el) {
+  const item = document.getElementById('item-' + ref);
+  item.querySelectorAll('.radio-opt').forEach(o => {
+    o.className = o.className.replace(/\s?selected-\w+/, '');
+  });
+  state[ref].value = val;
+  el.classList.add('selected-' + val);
+  updateStats();
+}
+
+function saveEvidence(ref, val) { state[ref].evidence = val; }
+
+function getClauseStats(c) {
+  let answered = 0, totalScore = 0, maxScore = 0;
+  let ok = 0, obs = 0, minor = 0, major = 0;
+  c.items.forEach(i => {
+    const v = state[i.ref].value;
+    if (v && v !== 'na') {
+      answered++;
+      totalScore += SCORES[v];
+      maxScore += 3;
+      if (v === 'ok') ok++;
+      else if (v === 'obs') obs++;
+      else if (v === 'minor') minor++;
+      else if (v === 'major') major++;
+    } else if (v === 'na') { answered++; }
+  });
+  const pct = maxScore > 0 ? Math.round((totalScore / maxScore) * 100) : null;
+  return { answered, total: c.items.length, totalScore, maxScore, pct, ok, obs, minor, major };
+}
+
+function updateStats() {
+  let totalAnswered = 0, totalItems = 0, totalScore = 0, totalMax = 0;
+  let allOk = 0, allObs = 0, allMinor = 0, allMajor = 0;
+
+  CLAUSES.forEach((c, ci) => {
+    const s = getClauseStats(c);
+    totalAnswered += s.answered;
+    totalItems += s.total;
+    totalScore += s.totalScore;
+    totalMax += s.maxScore;
+    allOk += s.ok; allObs += s.obs; allMinor += s.minor; allMajor += s.major;
+
+    // Update nav
+    const navScore = document.getElementById('nav-score-' + ci);
+    if (navScore) navScore.textContent = s.pct !== null ? s.pct + '%' : '';
+    const nav = document.getElementById('nav-' + ci);
+    if (nav && s.answered === s.total && s.total > 0) nav.classList.add('done');
+
+    // Update badge
+    const badge = document.getElementById('badge-' + ci);
+    if (badge) badge.textContent = s.answered + '/' + s.total + ' respondidas' + (s.pct !== null ? ' · ' + s.pct + '%' : '');
+  });
+
+  const globalPct = totalMax > 0 ? Math.round((totalScore / totalMax) * 100) : 0;
+  const color = globalPct >= 80 ? 'var(--green)' : globalPct >= 60 ? 'var(--gold)' : globalPct >= 40 ? 'var(--orange)' : 'var(--red)';
+
+  document.getElementById('overallScore').textContent = totalAnswered > 0 ? globalPct + '%' : '—';
+  document.getElementById('overallScore').style.color = totalAnswered > 0 ? color : 'var(--text3)';
+  document.getElementById('overallBar').style.width = globalPct + '%';
+  document.getElementById('overallBar').style.background = color;
+  const verdict = globalPct >= 80 ? 'Buen desempeño' : globalPct >= 60 ? 'En desarrollo' : globalPct >= 40 ? 'Requiere mejora' : 'Estado crítico';
+  document.getElementById('overallLabel').textContent = totalAnswered > 0 ? verdict + ' · ' + totalAnswered + '/' + totalItems : 'Sin respuestas aún';
+  document.getElementById('pill-ok').textContent = '✓ ' + allOk;
+  document.getElementById('pill-obs').textContent = '◎ ' + allObs;
+  document.getElementById('pill-minor').textContent = '▲ ' + allMinor;
+  document.getElementById('pill-major').textContent = '✕ ' + allMajor;
+}
+
+function generateReport() {
+  const company = document.getElementById('auditCompany').value || 'Empresa auditada';
+  const nit = document.getElementById('auditNit').value || '—';
+  const lead = document.getElementById('auditLead').value || 'Paul André Negrete';
+  const date = document.getElementById('auditDate').value ? new Date(document.getElementById('auditDate').value + 'T12:00:00').toLocaleDateString('es-CO', { day:'numeric', month:'long', year:'numeric' }) : new Date().toLocaleDateString('es-CO',{day:'numeric',month:'long',year:'numeric'});
+  const scope = document.getElementById('auditScope').value || 'No especificado';
+  const type = document.getElementById('auditType').value;
+
+  let totalScore = 0, totalMax = 0, allMajor = 0, allMinor = 0, allObs = 0, allOk = 0;
+  const clauseResults = CLAUSES.map(c => { const s = getClauseStats(c); totalScore += s.totalScore; totalMax += s.maxScore; allMajor += s.major; allMinor += s.minor; allObs += s.obs; allOk += s.ok; return { ...c, ...s }; });
+  const globalPct = totalMax > 0 ? Math.round((totalScore / totalMax) * 100) : 0;
+  const color = globalPct >= 80 ? 'var(--green)' : globalPct >= 60 ? 'var(--gold)' : globalPct >= 40 ? 'var(--orange)' : 'var(--red)';
+  const verdict = globalPct >= 80 ? 'APTO' : globalPct >= 60 ? 'CON OBSERVACIONES' : globalPct >= 40 ? 'REQUIERE MEJORAS' : 'NO CONFORME';
+  const verdictBg = globalPct >= 80 ? 'rgba(45,212,160,0.15)' : globalPct >= 60 ? 'rgba(240,165,0,0.12)' : globalPct >= 40 ? 'rgba(240,144,32,0.12)' : 'rgba(240,68,68,0.12)';
+  const verdictBorder = globalPct >= 80 ? 'rgba(45,212,160,0.35)' : globalPct >= 60 ? 'rgba(240,165,0,0.35)' : globalPct >= 40 ? 'rgba(240,144,32,0.35)' : 'rgba(240,68,68,0.35)';
+
+  // Findings
+  const findings = [];
+  CLAUSES.forEach(c => {
+    c.items.forEach(i => {
+      const v = state[i.ref].value;
+      if (v === 'major' || v === 'minor' || v === 'obs') {
+        findings.push({ ref: i.ref, clause: c.title, q: i.q, v, evidence: state[i.ref].evidence });
+      }
+    });
+  });
+  findings.sort((a, b) => { const o = ['major','minor','obs']; return o.indexOf(a.v) - o.indexOf(b.v); });
+
+  const vLabel = { major: '✕ NC Mayor', minor: '▲ NC Menor', obs: '◎ Observación' };
+  const vColor = { major: 'var(--c-major)', minor: 'var(--c-minor)', obs: 'var(--c-obs)' };
+  const vBg = { major: 'rgba(240,68,68,0.12)', minor: 'rgba(240,144,32,0.1)', obs: 'rgba(74,144,212,0.1)' };
+  const vBorder = { major: 'rgba(240,68,68,0.3)', minor: 'rgba(240,144,32,0.25)', obs: 'rgba(74,144,212,0.25)' };
+
+  const secGrid = clauseResults.map(c => {
+    const pct = c.pct || 0;
+    const col = pct >= 80 ? 'var(--green)' : pct >= 60 ? 'var(--gold)' : pct >= 40 ? 'var(--orange)' : 'var(--red)';
+    return `<div class="sec-score-card">
+      <div class="ssc-title">${c.num}. ${c.title}</div>
+      <div class="ssc-val" style="color:${col}">${c.pct !== null ? c.pct + '%' : 'N/E'}</div>
+      <div class="ssc-bar" style="background:${col};width:${pct}%;max-width:100%;height:3px;border-radius:2px;margin-top:6px"></div>
+      <div style="font-size:0.66rem;color:var(--text3);margin-top:4px">${c.answered}/${c.total} · ✓${c.ok} ◎${c.obs} ▲${c.minor} ✕${c.major}</div>
+    </div>`;
+  }).join('');
+
+  const findingsHtml = findings.length ? findings.map(f => `
+    <div class="finding-item">
+      <span class="fi-badge" style="background:${vBg[f.v]};color:${vColor[f.v]};border:1px solid ${vBorder[f.v]}">${vLabel[f.v]}</span>
+      <div>
+        <div class="fi-text">${f.q}</div>
+        ${f.evidence ? `<div style="font-size:0.73rem;color:var(--text3);margin-top:3px;font-style:italic">Evidencia: ${f.evidence}</div>` : ''}
+        <div class="fi-ref">${f.ref} · ${f.clause}</div>
+      </div>
+    </div>`).join('')
+  : '<div style="font-size:0.82rem;color:var(--green);padding:10px 0">✓ No se registraron no conformidades ni observaciones.</div>';
+
+  const waMsg = 'Hola Paul, acabo de completar la auditoría ISO 39001 de ' + company + '.\n\n' +
+    '🛡 RESULTADOS:\n' +
+    '• Puntuación global: ' + globalPct + '% — ' + verdict + '\n' +
+    '• NC Mayores: ' + allMajor + '\n• NC Menores: ' + allMinor + '\n• Observaciones: ' + allObs + '\n• Conformes: ' + allOk + '\n\n' +
+    '¿Podemos revisar el plan de acción?';
+
+  document.getElementById('reportSection').innerHTML = `
+    <div class="report-hero">
+      <div style="font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text3);margin-bottom:6px">
+        Auditoría ${type} · ${company} · NIT ${nit}
+      </div>
+      <div style="font-size:0.8rem;color:var(--text3);margin-bottom:16px">Alcance: ${scope} · ${date} · Auditor: ${lead}</div>
+      <div class="report-score-big" style="color:${color}">${globalPct}<span style="font-size:2rem;opacity:0.5">%</span></div>
+      <div style="font-size:0.78rem;color:var(--text2);margin-bottom:14px">Índice de Conformidad ISO 39001:2012</div>
+      <div class="report-verdict" style="background:${verdictBg};border:1px solid ${verdictBorder};color:${color}">${verdict}</div>
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:16px">
+        <span class="cpill cpill-ok">✓ ${allOk} Conformes</span>
+        <span class="cpill cpill-obs">◎ ${allObs} Observaciones</span>
+        <span class="cpill cpill-minor">▲ ${allMinor} NC Menores</span>
+        <span class="cpill cpill-major">✕ ${allMajor} NC Mayores</span>
+      </div>
+    </div>
+
+    <div class="sec-scores-grid">${secGrid}</div>
+
+    <div class="findings-section">
+      <div class="findings-title">Hallazgos de la auditoría (${findings.length} total)</div>
+      ${findingsHtml}
+    </div>
+
+    <div class="findings-section" style="background:linear-gradient(135deg,rgba(45,212,160,0.05),rgba(46,109,164,0.05));border-color:rgba(45,212,160,0.15)">
+      <div class="findings-title">Declaración del auditor</div>
+      <div style="font-size:0.82rem;color:var(--text2);line-height:1.7">
+        La presente auditoría fue realizada conforme a los requisitos de la norma ISO 39001:2012 — Sistema de Gestión de la Seguridad Vial (SGSV). 
+        Los hallazgos se basan en evidencia objetiva recopilada durante la auditoría.
+        ${allMajor > 0 ? ' <strong style="color:var(--red)">Se requiere plan de acción correctiva inmediato para las ' + allMajor + ' no conformidad(es) mayor(es).</strong>' : ''}
+        ${allMajor === 0 && allMinor > 0 ? ' <strong style="color:var(--orange)">Las no conformidades menores deben ser tratadas en un plazo máximo de 90 días.</strong>' : ''}
+        ${allMajor === 0 && allMinor === 0 ? ' <strong style="color:var(--green)">El sistema de gestión demuestra un nivel de conformidad adecuado con los requisitos de la norma.</strong>' : ''}
+      </div>
+      <div style="margin-top:16px;font-size:0.76rem;color:var(--text3)">
+        <strong style="color:var(--text)">${lead}</strong> · Auditor Interno SGSV ISO 39001<br>
+        Certificado por el Consejo Colombiano de Seguridad · ${date}
+      </div>
+    </div>
+
+    <div class="cta-row">
+      <a class="wa-btn" href="https://wa.me/573008985321?text=${encodeURIComponent(waMsg)}" target="_blank">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Compartir resultados con Paul
+      </a>
+      <button class="print-btn" onclick="window.print()">🖨 Imprimir informe oficial</button>
+      <button class="print-btn" onclick="location.reload()">↺ Nueva auditoría</button>
+    </div>
+    <div style="text-align:center;font-size:0.65rem;color:var(--text3);margin-top:16px;padding-top:12px;border-top:1px solid var(--border)">
+      Paul Negrete Toolbox v1.0 · paulnegrete.netlify.app · ISO 39001:2012 Checklist
+    </div>
+  `;
+
+  // Hide clauses, show report
+  CLAUSES.forEach((_, i) => { document.getElementById('clause-' + i)?.classList.remove('active'); document.getElementById('nav-' + i)?.classList.remove('active'); });
+  const rep = document.getElementById('reportSection');
+  rep.classList.add('show');
+  rep.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  updateStats();
+}
+
+init();
+</script>
+</body>
+</html>
