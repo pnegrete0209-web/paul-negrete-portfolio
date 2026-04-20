@@ -621,7 +621,7 @@ footer{position:relative;z-index:1;background:var(--card);border-top:1px solid v
     <a href="mailto:pnegrete0209@gmail.com">✉ infiniti.logconsultores@outlook.com</a>
     <a href="#">📌 Montería, Córdoba</a>
   </div>
-  <div class="footer-copy">© 2026 · Paul André Negrete · Consultor en Operaciones &amp; Datos</div>
+  <div class="footer-copy">© 2026 · Paul André Negrete Burgos · Consultor en Operaciones &amp; Datos</div>
 </footer>
 
 <button class="chat-fab" id="chatFab" onclick="toggleChat()" title="Asistente de consultoría">
@@ -632,7 +632,7 @@ footer{position:relative;z-index:1;background:var(--card);border-top:1px solid v
   <div class="chat-header">
     <div class="chat-avatar">🤖</div>
     <div class="chat-header-info">
-      <div class="chat-header-name">Asistente · Paul Negrete</div>
+      <div class="chat-header-name">Asistente · Paul André</div>
       <div class="chat-header-status">En línea · Logística &amp; Datos</div>
     </div>
     <button class="chat-close" onclick="toggleChat()"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
@@ -665,7 +665,7 @@ function buildMessage(){const name=document.getElementById('clientName').value||
 function sendWhatsApp(){const msg=buildMessage();if(!msg){alert('Seleccione al menos un servicio.');return}window.open('https://wa.me/573008985321?text='+encodeURIComponent(msg),'_blank')}
 function sendEmail(){const msg=buildMessage();if(!msg){alert('Seleccione al menos un servicio.');return}const name=document.getElementById('clientName').value||'Cliente';window.open('mailto:pnegrete0209@gmail.com?subject='+encodeURIComponent('Solicitud de consultor\xEDa \u2014 '+name)+'&body='+encodeURIComponent(msg),'_blank')}
 let chatOpen=false,chatHistory=[];
-const SYS='Eres el asistente virtual de Paul Andr\xE9 Negrete, consultor colombiano especializado en optimizaci\xF3n de operaciones log\xEDsticas, inteligencia de negocios (BI) y automatizaci\xF3n de procesos. Respondes en espa\xF1ol, de forma clara, profesional y concisa (m\xE1ximo 3 p\xE1rrafos).\n\nRespondes preguntas sobre: log\xEDstica (gesti\xF3n de flota, inventarios, cadena de suministro, KPIs), an\xE1lisis de datos (Power BI, dashboards, Excel), automatizaci\xF3n (Python, flujos de trabajo), SAP Business One, y los proyectos SERPENS (contabilidad multiempresa), V\xC9RTICE (infraestructura), V.I.T.A.L. (salud).\n\nSi preguntan por precios, indica que el cotizador est\xE1 en el sitio. Para agendar, dir\xEDgelos al WhatsApp +57 300 898 5321. No inventes informaci\xF3n que no conozcas.';
+const SYS='Eres el asistente virtual de Paul Andr\xE9 Negrete Burgos, consultor colombiano especializado en optimizaci\xF3n de operaciones log\xEDsticas, inteligencia de negocios (BI) y automatizaci\xF3n de procesos. Respondes en espa\xF1ol, de forma clara, profesional y concisa (m\xE1ximo 3 p\xE1rrafos).\n\nRespondes preguntas sobre: log\xEDstica (gesti\xF3n de flota, inventarios, cadena de suministro, KPIs), an\xE1lisis de datos (Power BI, dashboards, Excel), automatizaci\xF3n (Python, flujos de trabajo), SAP Business One, y los proyectos SERPENS (contabilidad multiempresa), V\xC9RTICE (infraestructura), V.I.T.A.L. (salud).\n\nSi preguntan por precios, indica que el cotizador est\xE1 en el sitio. Para agendar, dir\xEDgelos al WhatsApp +57 300 898 5321. No inventes informaci\xF3n que no conozcas.';
 function toggleChat(){chatOpen=!chatOpen;document.getElementById('chatWindow').classList.toggle('open',chatOpen);if(chatOpen)setTimeout(()=>document.getElementById('chatInput').focus(),300)}
 function addMsg(text,role){const el=document.createElement('div');el.className='chat-msg '+role;el.textContent=text;document.getElementById('chatMessages').appendChild(el);document.getElementById('chatMessages').scrollTop=9999;return el}
 function addTyping(){const el=document.createElement('div');el.className='chat-msg typing';el.innerHTML='<span></span><span></span><span></span>';document.getElementById('chatMessages').appendChild(el);document.getElementById('chatMessages').scrollTop=9999;return el}
