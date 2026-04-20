@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculadora de Madurez Logística · Paul Negrete</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#060910;--bg2:#0a0f1a;--card:#0d1525;--card2:#111d30;
+  --border:rgba(255,255,255,0.06);--border2:rgba(255,255,255,0.1);
+  --gold:#f0a500;--gold2:#ffd060;--gold-dim:rgba(240,165,0,0.12);
+  --blue:#2e6da4;--blue2:#4a90d4;--blue3:#7ab8f5;
+  --green:#2dd4a0;--red:#f04444;--orange:#f09020;
+  --text:#e2eaf5;--text2:#7a9ab8;--text3:#3a5a7a;
+  --r:14px;--r-sm:9px
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 50% at 50% -10%,rgba(46,109,164,0.12),transparent);pointer-events:none;z-index:0}
+
+/* HEADER */
+header{position:relative;z-index:1;padding:28px 48px 0;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.header-brand{display:flex;align-items:center;gap:10px}
+.header-logo{width:36px;height:36px}
+.header-title{font-family:'Syne',sans-serif;font-size:0.95rem;font-weight:800;color:var(--text);letter-spacing:-0.01em}
+.header-title span{color:var(--gold)}
+.header-badge{display:inline-flex;align-items:center;gap:7px;background:var(--gold-dim);border:1px solid rgba(240,165,0,0.25);border-radius:100px;padding:5px 14px;font-size:0.72rem;font-weight:500;color:var(--gold);letter-spacing:0.06em;text-transform:uppercase}
+.header-badge::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--gold);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+
+/* HERO */
+.hero{position:relative;z-index:1;text-align:center;padding:60px 48px 40px}
+.hero h1{font-family:'Syne',sans-serif;font-size:clamp(2rem,5vw,3.8rem);font-weight:800;letter-spacing:-0.04em;line-height:1.05;margin-bottom:16px}
+.hero h1 .accent{background:linear-gradient(135deg,var(--blue3),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{font-size:1.05rem;color:var(--text2);font-weight:300;max-width:560px;margin:0 auto 36px;line-height:1.75}
+.hero-meta{display:flex;align-items:center;justify-content:center;gap:28px;flex-wrap:wrap}
+.meta-item{display:flex;align-items:center;gap:8px;font-size:0.8rem;color:var(--text3)}
+.meta-item svg{color:var(--gold)}
+
+/* PROGRESS */
+.progress-wrap{position:relative;z-index:1;max-width:720px;margin:0 auto;padding:0 48px 32px}
+.progress-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.progress-label{font-size:0.75rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--text3)}
+.progress-fraction{font-family:'JetBrains Mono',monospace;font-size:0.8rem;color:var(--gold)}
+.progress-bar{height:3px;background:var(--border2);border-radius:2px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--blue2),var(--gold));border-radius:2px;transition:width 0.5s ease}
+.phase-indicators{display:flex;gap:6px;margin-top:10px}
+.phase-dot{flex:1;height:2px;border-radius:1px;background:var(--border2);transition:background 0.3s}
+.phase-dot.active{background:var(--gold)}
+.phase-dot.done{background:var(--green)}
+
+/* MAIN */
+main{position:relative;z-index:1;max-width:800px;margin:0 auto;padding:0 48px 80px}
+
+/* SECTION CARD */
+.section-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:36px;margin-bottom:20px;display:none}
+.section-card.active{display:block;animation:fadeIn 0.4s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.section-tag{font-size:0.68rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
+.section-title{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;letter-spacing:-0.02em;margin-bottom:6px}
+.section-desc{font-size:0.88rem;color:var(--text2);font-weight:300;line-height:1.65;margin-bottom:28px}
+
+/* QUESTIONS */
+.question{margin-bottom:28px;padding-bottom:28px;border-bottom:1px solid var(--border)}
+.question:last-of-type{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.q-label{font-size:0.88rem;font-weight:500;color:var(--text);margin-bottom:4px;line-height:1.45}
+.q-hint{font-size:0.76rem;color:var(--text3);margin-bottom:14px;font-style:italic}
+.options{display:flex;flex-direction:column;gap:8px}
+.opt{display:flex;align-items:flex-start;gap:12px;background:var(--card2);border:1.5px solid var(--border);border-radius:var(--r-sm);padding:13px 16px;cursor:pointer;transition:all 0.2s;user-select:none}
+.opt:hover{border-color:var(--blue2);background:rgba(74,144,212,0.06)}
+.opt.selected{background:rgba(240,165,0,0.08);border-color:rgba(240,165,0,0.4);box-shadow:0 0 0 3px rgba(240,165,0,0.08)}
+.opt-radio{width:18px;height:18px;border-radius:50%;border:2px solid var(--text3);flex-shrink:0;margin-top:1px;transition:all 0.2s;display:flex;align-items:center;justify-content:center}
+.opt.selected .opt-radio{border-color:var(--gold);background:var(--gold)}
+.opt.selected .opt-radio::after{content:'';width:6px;height:6px;border-radius:50%;background:var(--bg)}
+.opt-text{font-size:0.84rem;color:var(--text2);line-height:1.45}
+.opt.selected .opt-text{color:var(--text);font-weight:500}
+.opt-score{font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--text3);margin-left:auto;flex-shrink:0;align-self:center}
+.opt.selected .opt-score{color:var(--gold)}
+
+/* INPUT questions */
+.q-input{width:100%;background:var(--card2);border:1.5px solid var(--border);border-radius:var(--r-sm);padding:12px 16px;font-family:'DM Sans',sans-serif;font-size:0.88rem;color:var(--text);outline:none;transition:border-color 0.2s}
+.q-input:focus{border-color:var(--gold)}
+
+/* COMPANY INFO */
+.company-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.field-wrap{display:flex;flex-direction:column;gap:6px}
+.field-label{font-size:0.76rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--text2)}
+
+/* NAV BUTTONS */
+.nav-buttons{display:flex;gap:12px;justify-content:space-between;margin-top:28px}
+.btn-back{display:inline-flex;align-items:center;gap:8px;background:transparent;color:var(--text2);font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:500;padding:12px 22px;border-radius:10px;border:1px solid var(--border);cursor:pointer;transition:all 0.2s}
+.btn-back:hover{border-color:var(--border2);color:var(--text)}
+.btn-next{display:inline-flex;align-items:center;gap:8px;background:var(--gold);color:var(--bg);font-family:'DM Sans',sans-serif;font-size:0.92rem;font-weight:700;padding:12px 28px;border-radius:10px;border:none;cursor:pointer;transition:all 0.2s;margin-left:auto}
+.btn-next:hover{background:var(--gold2);transform:translateY(-1px);box-shadow:0 6px 20px rgba(240,165,0,0.3)}
+.btn-next:disabled{opacity:0.4;cursor:not-allowed;transform:none;box-shadow:none}
+
+/* RESULTS */
+.result-card{display:none}
+.result-card.active{display:block;animation:fadeIn 0.5s ease}
+
+/* SCORE HERO */
+.score-hero{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:40px;text-align:center;margin-bottom:20px;position:relative;overflow:hidden}
+.score-hero::before{content:'';position:absolute;top:-40px;left:50%;transform:translateX(-50%);width:300px;height:300px;border-radius:50%;opacity:0.08;pointer-events:none}
+.score-company{font-size:0.78rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text3);margin-bottom:8px}
+.score-big{font-family:'Syne',sans-serif;font-size:5rem;font-weight:800;letter-spacing:-0.04em;line-height:1}
+.score-label{font-size:0.9rem;color:var(--text2);margin-top:8px;margin-bottom:20px}
+.score-bar-wrap{max-width:320px;margin:0 auto 20px}
+.score-bar{height:8px;background:var(--border2);border-radius:4px;overflow:hidden;margin-bottom:8px}
+.score-bar-fill{height:100%;border-radius:4px;transition:width 1s ease}
+.score-ticks{display:flex;justify-content:space-between;font-size:0.68rem;color:var(--text3)}
+.maturity-badge{display:inline-flex;align-items:center;gap:8px;border-radius:100px;padding:8px 20px;font-family:'Syne',sans-serif;font-size:0.85rem;font-weight:700;letter-spacing:0.05em}
+
+/* DIMENSION GRID */
+.dimensions-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px}
+.dim-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:20px}
+.dim-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.dim-name{font-family:'Syne',sans-serif;font-size:0.88rem;font-weight:700;color:var(--text)}
+.dim-score-num{font-family:'JetBrains Mono',monospace;font-size:1rem;font-weight:500}
+.dim-bar{height:4px;background:var(--border2);border-radius:2px;overflow:hidden;margin-bottom:8px}
+.dim-bar-fill{height:100%;border-radius:2px;transition:width 1.2s ease}
+.dim-status{font-size:0.74rem;color:var(--text3)}
+
+/* RADAR */
+.radar-wrap{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:28px;margin-bottom:20px;display:flex;flex-direction:column;align-items:center}
+.radar-title{font-family:'Syne',sans-serif;font-size:0.88rem;font-weight:700;color:var(--text);margin-bottom:20px;align-self:flex-start}
+.radar-svg{max-width:100%}
+
+/* FINDINGS */
+.findings-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px}
+.finding-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:20px}
+.finding-type{font-size:0.68rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:8px}
+.finding-card.critical .finding-type{color:var(--red)}
+.finding-card.warning .finding-type{color:var(--orange)}
+.finding-card.ok .finding-type{color:var(--green)}
+.finding-card.opportunity .finding-type{color:var(--blue3)}
+.finding-title{font-size:0.88rem;font-weight:600;color:var(--text);margin-bottom:6px;line-height:1.3}
+.finding-desc{font-size:0.8rem;color:var(--text2);line-height:1.55;font-weight:300}
+
+/* RECS */
+.rec-list{display:flex;flex-direction:column;gap:12px;margin-bottom:20px}
+.rec-item{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:18px 20px;display:flex;gap:16px;align-items:flex-start}
+.rec-num{font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:800;color:var(--gold);opacity:0.4;line-height:1;flex-shrink:0;width:28px}
+.rec-content{}
+.rec-title{font-size:0.88rem;font-weight:600;color:var(--text);margin-bottom:4px}
+.rec-desc{font-size:0.8rem;color:var(--text2);line-height:1.55;font-weight:300}
+.rec-impact{display:inline-flex;align-items:center;gap:5px;margin-top:8px;font-size:0.7rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--green);background:rgba(45,212,160,0.08);border:1px solid rgba(45,212,160,0.2);padding:3px 10px;border-radius:100px}
+
+/* CTA */
+.cta-card{background:linear-gradient(135deg,rgba(46,109,164,0.15),rgba(240,165,0,0.08));border:1px solid rgba(240,165,0,0.2);border-radius:var(--r);padding:36px;text-align:center;margin-bottom:20px}
+.cta-card h3{font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;letter-spacing:-0.02em;margin-bottom:10px}
+.cta-card p{font-size:0.9rem;color:var(--text2);line-height:1.65;font-weight:300;max-width:480px;margin:0 auto 24px}
+.cta-buttons{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn-cta-primary{display:inline-flex;align-items:center;gap:9px;background:var(--gold);color:var(--bg);font-family:'DM Sans',sans-serif;font-size:0.92rem;font-weight:700;padding:13px 26px;border-radius:10px;text-decoration:none;transition:all 0.2s}
+.btn-cta-primary:hover{background:var(--gold2);transform:translateY(-2px);box-shadow:0 8px 24px rgba(240,165,0,0.35)}
+.btn-cta-secondary{display:inline-flex;align-items:center;gap:9px;background:transparent;color:var(--text);font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:500;padding:13px 22px;border-radius:10px;border:1px solid var(--border2);text-decoration:none;transition:all 0.2s;cursor:pointer}
+.btn-cta-secondary:hover{border-color:var(--blue2);color:var(--blue3)}
+
+/* PRINT */
+@media print{
+  body{background:white;color:#111}
+  .score-hero,.dim-card,.finding-card,.rec-item,.cta-card{background:white;border-color:#ddd}
+  .btn-back,.btn-next,.nav-buttons,.cta-buttons,.section-card:not(.active){display:none}
+  header .header-badge{display:none}
+}
+
+@media(max-width:640px){
+  header,main,.progress-wrap,.hero{padding-left:20px;padding-right:20px}
+  .company-grid,.dimensions-grid,.findings-grid{grid-template-columns:1fr}
+  .hero h1{font-size:clamp(1.8rem,8vw,2.8rem)}
+  .score-big{font-size:3.8rem}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-brand">
+    <svg class="header-logo" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#7ab8f5"/><stop offset="100%" stop-color="#f0a500"/></linearGradient></defs>
+      <rect width="48" height="48" rx="12" fill="#0a1220"/>
+      <path d="M24 24 C24 18.5,30.5 14,36 17.5 C41.5 21,41.5 27,36 30.5 C30.5 34,24 29.5,24 24 C24 18.5,17.5 14,12 17.5 C6.5 21,6.5 27,12 30.5 C17.5 34,24 29.5,24 24" stroke="url(#g)" stroke-width="3" stroke-linecap="round" fill="none"/>
+      <circle cx="24" cy="24" r="1.5" fill="#f0a500" opacity="0.8"/>
+    </svg>
+    <div class="header-title">Paul Negrete <span>·</span> Toolbox</div>
+  </div>
+  <div class="header-badge">Herramienta Propietaria v1.0</div>
+</header>
+
+<div class="hero">
+  <h1>Calculadora de<br><span class="accent">Madurez Logística</span></h1>
+  <p>Evalúe el nivel de madurez operacional de su empresa en 5 dimensiones clave y obtenga un diagnóstico visual con recomendaciones priorizadas.</p>
+  <div class="hero-meta">
+    <div class="meta-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>~8 minutos</div>
+    <div class="meta-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>5 dimensiones</div>
+    <div class="meta-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><polyline points="3 9 21 9"/><polyline points="9 21 9 9"/></svg>Reporte imprimible</div>
+  </div>
+</div>
+
+<div class="progress-wrap">
+  <div class="progress-header">
+    <span class="progress-label">Progreso</span>
+    <span class="progress-fraction" id="progressFraction">0 / 5</span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+  <div class="phase-indicators">
+    <div class="phase-dot" id="ph0"></div>
+    <div class="phase-dot" id="ph1"></div>
+    <div class="phase-dot" id="ph2"></div>
+    <div class="phase-dot" id="ph3"></div>
+    <div class="phase-dot" id="ph4"></div>
+  </div>
+</div>
+
+<main>
+
+<!-- PASO 0: Datos empresa -->
+<div class="section-card active" id="step-0">
+  <div class="section-tag">Paso 1 de 5</div>
+  <h2 class="section-title">Datos de la empresa</h2>
+  <p class="section-desc">Esta información personaliza el reporte de diagnóstico y no se almacena en ningún servidor.</p>
+  <div class="company-grid">
+    <div class="field-wrap"><label class="field-label">Empresa / Cliente</label><input class="q-input" id="companyName" placeholder="Ej: Distribuidora XYZ"></div>
+    <div class="field-wrap"><label class="field-label">Sector / Industria</label><input class="q-input" id="companySector" placeholder="Ej: Consumo masivo"></div>
+    <div class="field-wrap"><label class="field-label">Nombre del evaluador</label><input class="q-input" id="evaluatorName" placeholder="Su nombre"></div>
+    <div class="field-wrap"><label class="field-label">Número de empleados</label>
+      <select class="q-input" id="companySize">
+        <option value="">Seleccione…</option>
+        <option value="micro">1–10 (Microempresa)</option>
+        <option value="small">11–50 (Pequeña)</option>
+        <option value="medium">51–200 (Mediana)</option>
+        <option value="large">201+ (Grande)</option>
+      </select>
+    </div>
+  </div>
+  <div class="nav-buttons">
+    <div></div>
+    <button class="btn-next" onclick="nextStep(0)">Comenzar evaluación <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+  </div>
+</div>
+
+<!-- PASO 1: Exactitud de Inventarios (ERI) -->
+<div class="section-card" id="step-1">
+  <div class="section-tag">Paso 2 de 5 · Dimensión 1</div>
+  <h2 class="section-title">Exactitud de Inventarios</h2>
+  <p class="section-desc">Evalúa qué tan confiable es el registro de inventarios vs. el conteo físico real (ERI — Exactitud de Registro de Inventarios).</p>
+
+  <div class="question">
+    <div class="q-label">1. ¿Con qué frecuencia realiza conteos físicos de inventario?</div>
+    <div class="q-hint">Considere ciclos de conteo, no solo el inventario anual.</div>
+    <div class="options" id="q1_1">
+      <div class="opt" onclick="selectOpt(this,'q1_1',0)"><div class="opt-radio"></div><div class="opt-text">Solo una vez al año o nunca</div><div class="opt-score">0 pts</div></div>
+      <div class="opt" onclick="selectOpt(this,'q1_1',1)"><div class="opt-radio"></div><div class="opt-text">Semestralmente</div><div class="opt-score">1 pt</div></div>
+      <div class="opt" onclick="selectOpt(this,'q1_1',2)"><div class="opt-radio"></div><div class="opt-text">Trimestralmente o por categoría</div><div class="opt-score">2 pts</div></div>
+      <div class="opt" onclick="selectOpt(this,'q1_1',3)"><div class="opt-radio"></div><div class="opt-text">Mensual o ciclos rotativos semanales</div><div class="opt-score">3 pts</div></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="q-label">2. ¿Cuál es la brecha promedio entre el inventario del sistema y el físico?</div>
+    <div class="q-hint">ERI = (ítems exactos / total ítems contados) × 100</div>
+    <div class="options" id="q1_2">
+      <div class="opt" onclick="selectOpt(this,'q1_2',0)"><div class="opt-radio"></div><div class="opt-text">Más del 15% de diferencia (ERI &lt; 85%)</div><div class="opt-score">0 pts</div></div>
+      <div class="opt" onclick="selectOpt(this,'q1_2',1)"><div class="opt-radio"></div><div class="opt-text">Entre 5% y 15% (ERI 85–95%)</div><div class="opt-score">1 pt</div></div>
+      <div class="opt" onclick="selectOpt(this,'q1_2',2)"><div class="opt-radio"></div><div class="opt-text">Entre 1% y 5% (ERI 95–99%)</div><div class="opt-score">2 pts</div></div>
+      <div class="opt" onclick="selectOpt(this,'q1_2',3)"><div class="opt-radio"></div><div class="opt-text">Menos del 1% (ERI ≥ 99%)</div><div class="opt-score">3 pts</div></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="q-label">3. ¿Cómo gestiona las diferencias encontradas en los conteos?</div>
+    <div class="options" id="q1_3">
+      <div class="opt" onclick="selectOpt(this,'q1_3',0)"><div class="opt-radio"></div><div class="opt-text">Se ajusta sin análisis de causa raíz</div><div class="opt-score">0 pts</div></div>
+      <div class="opt" onclick="selectOpt(this,'q1_3',1)"><div class="opt-radio"></div><div class="opt-text">Se registra pero rara vez se investiga</div><div class="opt-score">1 pt</div></div>
+      <div class="opt" onclick="selectOpt(this,'q1_3',2)"><div class="opt-radio"></div><div class="opt-text">Se investigan diferencias mayores al umbral</div><div class="opt-score">2 pts</div></div>
+      <div class="opt" onclick="selectOpt(this,'q1_3',3)"><div class="opt-radio"></div><div class="opt-text">Proceso formal de causa raíz y plan de acción</div><div class="opt-score">3 pts</div></div>
+    </div>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="btn-back" onclick="prevStep(1)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Atrás</button>
+    <button class="btn-next" id="next-1" onclick="nextStep(1)">Siguiente dimensión <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+  </div>
+</div>
+
+<!-- PASO 2: Nivel de Servicio -->
+<div class="section-card" id="step-2">
+  <div class="section-tag">Paso 3 de 5 · Dimensión 2</div>
+  <h2 class="section-title">Nivel de Servicio (Fill Rate)</h2>
+  <p class="section-desc">Mide la capacidad de satisfacer pedidos completos a tiempo. Un Fill Rate bajo indica quiebres de stock o problemas de planeación.</p>
+
+  <div class="question">
+    <div class="q-label">4. ¿Qué porcentaje de pedidos despacha completos y a tiempo?</div>
+    <div class="q-hint">Fill Rate = (pedidos completos a tiempo / total pedidos) × 100</div>
+    <div class="options" id="q2_1">
+      <div class="opt" onclick="selectOpt(this,'q2_1',0)"><div class="opt-radio"></div><div class="opt-text">Menos del 80%</div><div class="opt-score">0 pts</div></div>
+      <div class="opt" onclick="selectOpt(this,'q2_1',1)"><div class="opt-radio"></div><div class="opt-text">Entre 80% y 90%</div><div class="opt-score">1 pt</div></div>
+      <div class="opt" onclick="selectOpt(this,'q2_1',2)"><div class="opt-radio"></div><div class="opt-text">Entre 90% y 96%</div><div class="opt-score">2 pts</div></div>
+      <div class="opt" onclick="selectOpt(this,'q2_1',3)"><div class="opt-radio"></div><div class="opt-text">96% o más</div><div class="opt-score">3 pts</div></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="q-label">5. ¿Tiene definido un stock de seguridad por referencia?</div>
+    <div class="options" id="q2_2">
+      <div class="opt" onclick="selectOpt(this,'q2_2',0)"><div class="opt-radio"></div><div class="opt-text">No, trabajamos por intuición o reorden manual</div><div class="opt-score">0 pts</div></div>
+      <div class="opt" onclick="selectOpt(this,'q2_2',1)"><div class="opt-radio"></div><div class="opt-text">Sí, pero basado en experiencia, sin cálculo formal</div><div class="opt-score">1 pt</div></div>
+      <div class="opt" onclick="selectOpt(this,'q2_2',2)"><div class="opt-radio"></div><div class="opt-text">Sí, calculado para las referencias A</div><div class="opt-score">2 pts</div></div>
+      <div class="opt" onclick="selectOpt(this,'q2_2',3)"><div class="opt-radio"></div><div class="opt-text">Sí, calculado con demanda y lead time para todas las referencias</div><div class="opt-score">3 pts</div></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="q-label">6. ¿Cómo gestiona los quiebres de stock cuando ocurren?</div>
+    <div class="options" id="q2_3">
+      <div class="opt" onclick="selectOpt(this,'q2_3',0)"><div class="opt-radio"></div><div class="opt-text">Reactivamente, sin proceso definido</div><div class="opt-score">0 pts</div></div>
+      <div class="opt" onclick="selectOpt(this,'q2_3',1)"><div class="opt-radio"></div><div class="opt-text">Hay un protocolo pero no siempre se sigue</div><div class="opt-score">1 pt</div></div>
+      <div class="opt" onclick="selectOpt(this,'q2_3',2)"><div class="opt-radio"></div><div class="opt-text">Protocolo formal con alertas y sustitutos identificados</div><div class="opt-score">2 pts</div></div>
+      <div class="opt" onclick="selectOpt(this,'q2_3',3)"><div class="opt-radio"></div><div class="opt-text">Sistema de alerta temprana previene la mayoría de quiebres</div><div class="opt-score">3 pts</div></div>
+    </div>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="btn-back" onclick="prevStep(2)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Atrás</button>
+    <button class="btn-next" id="next-2" onclick="nextStep(2)">Siguiente dimensión <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+  </div>
+</div>
+
+<!-- PASO 3: Costos Logísticos -->
+<div class="section-card" id="step-3">
+  <div class="section-tag">Paso 4 de 5 · Dimensión 3</div>
+  <h2 class="section-title">Costos Logísticos vs. Ventas</h2>
+  <p class="section-desc">Evalúa la eficiencia del gasto logístico en relación con los ingresos. Incluye almacenamiento, transporte y manejo.</p>
+
+  <div class="question">
+    <div class="q-label">7. ¿Conoce su costo logístico total como % de las ventas?</div>
+    <div class="options" id="q3_1">
+      <div class="opt" onclick="selectOpt(this,'q3_1',0)"><div class="opt-radio"></div><div class="opt-text">No, no tenemos esa métrica calculada</div><div class="opt-score">0 pts</div></div>
+      <div class="opt" onclick="selectOpt(this,'q3_1',1)"><div class="opt-radio"></div><div class="opt-text">Estimación aproximada, sin datos precisos</div><div class="opt-score">1 pt</div></div>
+      <div class="opt" onclick="selectOpt(this,'q3_1',2)"><div class="opt-radio"></div><div class="opt-text">Sí, calculado anualmente</div><div class="opt-score">2 pts</div></div>
+      <div class="opt" onclick="selectOpt(this,'q3_1',3)"><div class="opt-radio"></div><div class="opt-text">Sí, monitoreado mensualmente con benchmark sectorial</div><div class="opt-score">3 pts</div></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="q-label">8. ¿Qué porcentaje representan sus costos logísticos sobre ventas?</div>
+    <div class="q-hint">Benchmark Colombia: sector consumo masivo 8–12%, industrial 10–15%.</div>
+    <div class="options" id="q3_2">
+      <div class="opt" onclick="selectOpt(this,'q3_2',0)"><div class="opt-radio"></div><div class="opt-text">Más del 18% (muy alto)</div><div class="opt-score">0 pts</div></div>
+      <div class="opt" onclick="selectOpt(this,'q3_2',1)"><div class="opt-radio"></div><div class="opt-text">Entre 13% y 18%</div><div class="opt-score">1 pt</div></div>
+      <div class="opt" onclick="selectOpt(this,'q3_2',2)"><div class="opt-radio"></div><div class="opt-text">Entre 8% y 13%</div><div class="opt-score">2 pts</div></div>
+      <div class="opt" onclick="selectOpt(this,'q3_2',3)"><div class="opt-radio"></div><div class="opt-text">Menos del 8% (clase mundial)</div><div class="opt-score">3 pts</div></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="q-label">9. ¿Tiene identificados sus principales generadores de costo logístico?</div>
+    <div class="options" id="q3_3">
+      <div class="opt" onclick="selectOpt(this,'q3_3',0)"><div class="opt-radio"></div><div class="opt-text">No, los costos logísticos van mezclados en contabilidad</div><div class="opt-score">0 pts</div></div>
+      <div class="opt" onclick="selectOpt(this,'q3_3',1)"><div class="opt-radio"></div><div class="opt-text">Separados pero no analizados por actividad</div><div class="opt-score">1 pt</div></div>
+      <div class="opt" onclick="selectOpt(this,'q3_3',2)"><div class="opt-radio"></div><div class="opt-text">Clasificados por transporte, almacenamiento y administración</div><div class="opt-score">2 pts</div></div>
+      <div class="opt" onclick="selectOpt(this,'q3_3',3)"><div class="opt-radio"></div><div class="opt-text">Costeo por actividad (ABC) con análisis de rentabilidad por canal</div><div class="opt-score">3 pts</div></div>
+    </div>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="btn-back" onclick="prevStep(3)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Atrás</button>
+    <button class="btn-next" id="next-3" onclick="nextStep(3)">Siguiente dimensión <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+  </div>
+</div>
+
+<!-- PASO 4: Tecnología y Datos -->
+<div class="section-card" id="step-4">
+  <div class="section-tag">Paso 5 de 5 · Dimensión 4 y 5</div>
+  <h2 class="section-title">Tecnología, Datos & Procesos</h2>
+  <p class="section-desc">Evalúa el nivel de digitalización, visibilidad de datos y madurez de los procesos operativos.</p>
+
+  <div class="question">
+    <div class="q-label">10. ¿Qué sistema usa para gestionar inventarios y pedidos?</div>
+    <div class="options" id="q4_1">
+      <div class="opt" onclick="selectOpt(this,'q4_1',0)"><div class="opt-radio"></div><div class="opt-text">Cuadernos, notas o sin registro formal</div><div class="opt-score">0 pts</div></div>
+      <div class="opt" onclick="selectOpt(this,'q4_1',1)"><div class="opt-radio"></div><div class="opt-text">Excel o hojas de cálculo compartidas</div><div class="opt-score">1 pt</div></div>
+      <div class="opt" onclick="selectOpt(this,'q4_1',2)"><div class="opt-radio"></div><div class="opt-text">Software especializado (ERP básico, WMS)</div><div class="opt-score">2 pts</div></div>
+      <div class="opt" onclick="selectOpt(this,'q4_1',3)"><div class="opt-radio"></div><div class="opt-text">ERP integrado con dashboards en tiempo real</div><div class="opt-score">3 pts</div></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="q-label">11. ¿Con qué frecuencia toma decisiones basadas en datos, no en intuición?</div>
+    <div class="options" id="q4_2">
+      <div class="opt" onclick="selectOpt(this,'q4_2',0)"><div class="opt-radio"></div><div class="opt-text">Casi nunca, las decisiones son por experiencia</div><div class="opt-score">0 pts</div></div>
+      <div class="opt" onclick="selectOpt(this,'q4_2',1)"><div class="opt-radio"></div><div class="opt-text">A veces, cuando hay tiempo de consultar reportes</div><div class="opt-score">1 pt</div></div>
+      <div class="opt" onclick="selectOpt(this,'q4_2',2)"><div class="opt-radio"></div><div class="opt-text">Frecuentemente, con reportes periódicos</div><div class="opt-score">2 pts</div></div>
+      <div class="opt" onclick="selectOpt(this,'q4_2',3)"><div class="opt-radio"></div><div class="opt-text">Siempre, con dashboards actualizados en tiempo real</div><div class="opt-score">3 pts</div></div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="q-label">12. ¿Tiene sus procesos logísticos documentados y estandarizados?</div>
+    <div class="options" id="q4_3">
+      <div class="opt" onclick="selectOpt(this,'q4_3',0)"><div class="opt-radio"></div><div class="opt-text">No, cada persona lo hace a su manera</div><div class="opt-score">0 pts</div></div>
+      <div class="opt" onclick="selectOpt(this,'q4_3',1)"><div class="opt-radio"></div><div class="opt-text">Algunos procesos documentados informalmente</div><div class="opt-score">1 pt</div></div>
+      <div class="opt" onclick="selectOpt(this,'q4_3',2)"><div class="opt-radio"></div><div class="opt-text">Procesos críticos documentados y revisados periódicamente</div><div class="opt-score">2 pts</div></div>
+      <div class="opt" onclick="selectOpt(this,'q4_3',3)"><div class="opt-radio"></div><div class="opt-text">Sistema de gestión formal con indicadores de cumplimiento</div><div class="opt-score">3 pts</div></div>
+    </div>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="btn-back" onclick="prevStep(4)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Atrás</button>
+    <button class="btn-next" id="next-4" onclick="generateReport()">Generar diagnóstico <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></button>
+  </div>
+</div>
+
+<!-- RESULTADO -->
+<div class="result-card" id="result">
+  <!-- Se genera dinámicamente -->
+</div>
+
+</main>
+
+<script>
+let currentStep = 0;
+const scores = { q1_1:null, q1_2:null, q1_3:null, q2_1:null, q2_2:null, q2_3:null, q3_1:null, q3_2:null, q3_3:null, q4_1:null, q4_2:null, q4_3:null };
+
+function selectOpt(el, group, score) {
+  document.querySelectorAll(`#${group} .opt`).forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  scores[group] = score;
+}
+
+function updateProgress(step) {
+  const pct = (step / 5) * 100;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressFraction').textContent = step + ' / 5';
+  for (let i = 0; i < 5; i++) {
+    const dot = document.getElementById('ph' + i);
+    if (i < step) dot.className = 'phase-dot done';
+    else if (i === step) dot.className = 'phase-dot active';
+    else dot.className = 'phase-dot';
+  }
+}
+
+function showStep(n) {
+  document.querySelectorAll('.section-card, .result-card').forEach(c => c.classList.remove('active'));
+  if (n <= 4) document.getElementById('step-' + n).classList.add('active');
+  else document.getElementById('result').classList.add('active');
+  currentStep = n;
+  updateProgress(n);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function nextStep(from) {
+  const groups = [[], ['q1_1','q1_2','q1_3'], ['q2_1','q2_2','q2_3'], ['q3_1','q3_2','q3_3'], ['q4_1','q4_2','q4_3']];
+  if (from > 0) {
+    const required = groups[from];
+    const unanswered = required.filter(g => scores[g] === null);
+    if (unanswered.length) { alert('Por favor responda todas las preguntas antes de continuar.'); return; }
+  }
+  showStep(from + 1);
+}
+
+function prevStep(from) { showStep(from - 1); }
+
+function getDimScore(keys) { return keys.reduce((a, k) => a + (scores[k] || 0), 0); }
+
+function getColor(pct) {
+  if (pct >= 80) return '#2dd4a0';
+  if (pct >= 60) return '#4a90d4';
+  if (pct >= 40) return '#f0a500';
+  return '#f04444';
+}
+
+function getMaturity(pct) {
+  if (pct >= 80) return { label: 'CLASE MUNDIAL', color: '#2dd4a0', bg: 'rgba(45,212,160,0.12)', border: 'rgba(45,212,160,0.3)' };
+  if (pct >= 60) return { label: 'NIVEL COMPETITIVO', color: '#4a90d4', bg: 'rgba(74,144,212,0.12)', border: 'rgba(74,144,212,0.3)' };
+  if (pct >= 40) return { label: 'EN DESARROLLO', color: '#f0a500', bg: 'rgba(240,165,0,0.12)', border: 'rgba(240,165,0,0.3)' };
+  return { label: 'NIVEL CRÍTICO', color: '#f04444', bg: 'rgba(240,68,68,0.12)', border: 'rgba(240,68,68,0.3)' };
+}
+
+function buildRadar(dims) {
+  const cx = 180, cy = 180, r = 120;
+  const n = dims.length;
+  const labels = dims.map(d => d.name);
+  const values = dims.map(d => d.pct / 100);
+  const angles = labels.map((_, i) => (Math.PI * 2 * i / n) - Math.PI / 2);
+  const pt = (val, ang) => [cx + val * r * Math.cos(ang), cy + val * r * Math.sin(ang)];
+  let gridLines = '', axisLines = '', dataPath = '', dots = '', labelEls = '';
+
+  [0.25, 0.5, 0.75, 1].forEach(scale => {
+    const pts = angles.map(a => pt(scale, a));
+    gridLines += `<polygon points="${pts.map(p=>p.join(',')).join(' ')}" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>`;
+  });
+  angles.forEach(a => {
+    const [x, y] = pt(1, a);
+    axisLines += `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>`;
+  });
+  const dataPts = angles.map((a, i) => pt(values[i], a));
+  dataPath = `<polygon points="${dataPts.map(p=>p.join(',')).join(' ')}" fill="rgba(240,165,0,0.15)" stroke="#f0a500" stroke-width="2"/>`;
+  dataPts.forEach(([x, y], i) => {
+    const c = getColor(dims[i].pct);
+    dots += `<circle cx="${x}" cy="${y}" r="5" fill="${c}" stroke="var(--bg)" stroke-width="2"/>`;
+  });
+  labels.forEach((l, i) => {
+    const [x, y] = pt(1.22, angles[i]);
+    const anchor = x < cx - 5 ? 'end' : x > cx + 5 ? 'start' : 'middle';
+    const lines = l.split(' ');
+    const dy = lines.length > 1 ? -8 : 0;
+    labelEls += `<text x="${x}" y="${y}" text-anchor="${anchor}" font-size="10" fill="var(--text2)" font-family="DM Sans,sans-serif">`;
+    lines.forEach((line, li) => { labelEls += `<tspan x="${x}" dy="${li === 0 ? dy : 14}">${line}</tspan>`; });
+    labelEls += '</text>';
+  });
+  return `<svg class="radar-svg" viewBox="0 0 360 360" xmlns="http://www.w3.org/2000/svg">${gridLines}${axisLines}${dataPath}${dots}${labelEls}</svg>`;
+}
+
+function generateReport() {
+  const required = ['q4_1','q4_2','q4_3'];
+  if (required.filter(g => scores[g] === null).length) { alert('Por favor responda todas las preguntas.'); return; }
+
+  const company = document.getElementById('companyName').value || 'Cliente';
+  const sector = document.getElementById('companySector').value || 'No especificado';
+  const evaluator = document.getElementById('evaluatorName').value || 'Paul André Negrete';
+  const date = new Date().toLocaleDateString('es-CO', { day:'numeric', month:'long', year:'numeric' });
+
+  const dims = [
+    { name: 'Exactitud Inventarios', keys: ['q1_1','q1_2','q1_3'], max: 9 },
+    { name: 'Nivel de Servicio', keys: ['q2_1','q2_2','q2_3'], max: 9 },
+    { name: 'Costos Logísticos', keys: ['q3_1','q3_2','q3_3'], max: 9 },
+    { name: 'Tecnología & Datos', keys: ['q4_1','q4_2'], max: 6 },
+    { name: 'Procesos & Estándares', keys: ['q4_3'], max: 3 },
+  ];
+
+  dims.forEach(d => {
+    d.score = getDimScore(d.keys);
+    d.pct = Math.round((d.score / d.max) * 100);
+    d.color = getColor(d.pct);
+  });
+
+  const totalScore = dims.reduce((a, d) => a + d.score, 0);
+  const totalMax = dims.reduce((a, d) => a + d.max, 0);
+  const totalPct = Math.round((totalScore / totalMax) * 100);
+  const maturity = getMaturity(totalPct);
+
+  const findings = [];
+  dims.forEach(d => {
+    if (d.pct < 40) findings.push({ type: 'critical', label: 'CRÍTICO', title: d.name + ' — Intervención urgente', desc: `Score ${d.pct}%. Esta área representa un riesgo operacional activo. Se requiere intervención prioritaria para evitar pérdidas.` });
+    else if (d.pct < 60) findings.push({ type: 'warning', label: 'MEJORA REQUERIDA', title: d.name + ' — Brechas significativas', desc: `Score ${d.pct}%. Existen ineficiencias que generan costos ocultos y afectan el servicio al cliente.` });
+    else if (d.pct >= 80) findings.push({ type: 'ok', label: 'FORTALEZA', title: d.name + ' — Por encima del estándar', desc: `Score ${d.pct}%. Esta dimensión está bien gestionada. Documentar y replicar las buenas prácticas.` });
+    else findings.push({ type: 'opportunity', label: 'OPORTUNIDAD', title: d.name + ' — Potencial de mejora', desc: `Score ${d.pct}%. Base sólida con espacio claro de mejora que puede generar impacto rápido con intervención focalizada.` });
+  });
+
+  const recs = [];
+  if (dims[0].pct < 60) recs.push({ title: 'Implementar conteo cíclico de inventarios', desc: 'Diseñar un programa de conteo ABC rotativo: referencias A semanalmente, B mensualmente, C trimestralmente. Meta: ERI ≥ 98% en 90 días.', impact: 'Reduce mermas 15–30%' });
+  if (dims[1].pct < 60) recs.push({ title: 'Calcular y parametrizar stock de seguridad', desc: 'Establecer SS = (demanda diaria promedio × lead time) + z × σ × √LT para todas las referencias A y B. Reducir quiebres de stock.', impact: 'Fill Rate +8–15%' });
+  if (dims[2].pct < 60) recs.push({ title: 'Auditoría de costos logísticos por actividad', desc: 'Separar costos de transporte, almacenamiento y administración. Calcular costo/unidad y costo/pedido. Identificar actividades sin valor agregado.', impact: 'Reducción costo 10–20%' });
+  if (dims[3].pct < 60) recs.push({ title: 'Dashboard de KPIs logísticos en Power BI', desc: 'Torre de control con Fill Rate, ERI, costo por unidad, pedidos pendientes y alertas automáticas. Datos actualizados diariamente desde fuentes existentes.', impact: 'Decisiones basadas en datos' });
+  if (dims[4].pct < 60) recs.push({ title: 'Documentación y estandarización de procesos críticos', desc: 'Mapear flujos de recepción, almacenamiento, picking y despacho. Crear SOPs con fotos y tiempos estándar. Base para futura certificación.', impact: 'Reducción errores 25–40%' });
+  if (recs.length === 0) recs.push({ title: 'Optimización avanzada y benchmarking', desc: 'La operación tiene niveles competitivos. El siguiente paso es implementar análisis predictivo, forecast de demanda y optimización de rutas.', impact: 'Ventaja competitiva' });
+
+  const radarHtml = buildRadar(dims);
+
+  const resultHtml = `
+    <div class="score-hero" style="--score-color:${maturity.color}">
+      <div class="score-company">Diagnóstico · ${company} · ${sector} · ${date}</div>
+      <div class="score-big" style="color:${maturity.color}">${totalPct}<span style="font-size:2.5rem;opacity:0.5">%</span></div>
+      <div class="score-label">Índice de Madurez Logística</div>
+      <div class="score-bar-wrap">
+        <div class="score-bar"><div class="score-bar-fill" style="width:${totalPct}%;background:${maturity.color}"></div></div>
+        <div class="score-ticks"><span>Crítico</span><span>Desarrollo</span><span>Competitivo</span><span>Clase Mundial</span></div>
+      </div>
+      <div class="maturity-badge" style="background:${maturity.bg};border:1px solid ${maturity.border};color:${maturity.color}">${maturity.label}</div>
+    </div>
+
+    <div class="dimensions-grid">
+      ${dims.map(d => `
+        <div class="dim-card">
+          <div class="dim-header">
+            <div class="dim-name">${d.name}</div>
+            <div class="dim-score-num" style="color:${d.color}">${d.pct}%</div>
+          </div>
+          <div class="dim-bar"><div class="dim-bar-fill" style="width:${d.pct}%;background:${d.color}"></div></div>
+          <div class="dim-status">${d.score}/${d.max} puntos · ${d.pct >= 80 ? 'Clase mundial' : d.pct >= 60 ? 'Competitivo' : d.pct >= 40 ? 'En desarrollo' : 'Crítico'}</div>
+        </div>
+      `).join('')}
+    </div>
+
+    <div class="radar-wrap">
+      <div class="radar-title">Perfil de Madurez por Dimensión</div>
+      ${radarHtml}
+    </div>
+
+    <div class="section-card active" style="margin-bottom:20px">
+      <div class="section-tag">Hallazgos del diagnóstico</div>
+      <h2 class="section-title">Puntos clave identificados</h2>
+      <div class="findings-grid">
+        ${findings.map(f => `
+          <div class="finding-card ${f.type}">
+            <div class="finding-type">${f.label}</div>
+            <div class="finding-title">${f.title}</div>
+            <div class="finding-desc">${f.desc}</div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+
+    <div class="section-card active" style="margin-bottom:20px">
+      <div class="section-tag">Plan de acción recomendado</div>
+      <h2 class="section-title">Recomendaciones priorizadas</h2>
+      <div class="rec-list">
+        ${recs.map((r, i) => `
+          <div class="rec-item">
+            <div class="rec-num">${String(i+1).padStart(2,'0')}</div>
+            <div class="rec-content">
+              <div class="rec-title">${r.title}</div>
+              <div class="rec-desc">${r.desc}</div>
+              <div class="rec-impact">↑ ${r.impact}</div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+
+    <div class="cta-card">
+      <h3>¿Listo para implementar estas mejoras?</h3>
+      <p>Este diagnóstico es el punto de partida. Paul André Negrete puede acompañarle en la implementación de cada recomendación con metodología probada y herramientas propias.</p>
+      <div class="cta-buttons">
+        <a href="https://wa.me/573008985321?text=${encodeURIComponent('Hola Paul, acabo de hacer el diagnóstico de madurez logística de ' + company + ' y obtuve un ' + totalPct + '%. Me gustaría hablar sobre las recomendaciones.')}" target="_blank" class="btn-cta-primary">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Hablar con Paul
+        </a>
+        <button class="btn-cta-secondary" onclick="window.print()">🖨 Imprimir reporte</button>
+        <button class="btn-cta-secondary" onclick="location.reload()">↺ Nueva evaluación</button>
+      </div>
+    </div>
+
+    <div style="text-align:center;padding:20px 0;font-size:0.74rem;color:var(--text3)">
+      Diagnóstico generado el ${date} · Evaluador: ${evaluator} · Paul Negrete Toolbox v1.0<br>
+      <span style="color:var(--text3);opacity:0.6">© Herramienta propietaria · paulnegrete.netlify.app</span>
+    </div>
+  `;
+
+  document.getElementById('result').innerHTML = resultHtml;
+  updateProgress(5);
+  showStep(5);
+
+  setTimeout(() => {
+    document.querySelectorAll('.dim-bar-fill, .score-bar-fill').forEach(el => {
+      const w = el.style.width; el.style.width = '0'; setTimeout(() => el.style.width = w, 50);
+    });
+  }, 100);
+}
+</script>
+</body>
+</html>
