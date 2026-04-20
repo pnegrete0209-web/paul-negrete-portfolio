@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Analizador de Flotas & CPK · Paul Negrete Toolbox</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{
+  --bg:#060910;--bg2:#0a0f1a;--card:#0d1525;--card2:#111d30;
+  --border:rgba(255,255,255,0.06);--border2:rgba(255,255,255,0.11);
+  --gold:#f0a500;--gold2:#ffd060;--gold-dim:rgba(240,165,0,0.1);
+  --blue:#2e6da4;--blue2:#4a90d4;--blue3:#7ab8f5;
+  --green:#2dd4a0;--red:#f04444;--orange:#f09020;--purple:#a78bfa;
+  --text:#e2eaf5;--text2:#7a9ab8;--text3:#3a5a7a;
+  --r:14px;--r-sm:9px
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 70% 40% at 60% 0%,rgba(46,109,164,0.1),transparent);pointer-events:none;z-index:0}
+
+header{position:relative;z-index:1;padding:24px 40px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;border-bottom:1px solid var(--border)}
+.header-brand{display:flex;align-items:center;gap:10px}
+.hlogo{width:34px;height:34px}
+.htitle{font-family:'Syne',sans-serif;font-size:0.92rem;font-weight:800;color:var(--text)}
+.htitle span{color:var(--gold)}
+.hbadge{display:inline-flex;align-items:center;gap:7px;background:rgba(46,109,164,0.1);border:1px solid rgba(74,144,212,0.25);border-radius:100px;padding:5px 14px;font-size:0.7rem;font-weight:600;color:var(--blue3);letter-spacing:0.06em;text-transform:uppercase}
+
+.hero{position:relative;z-index:1;padding:40px 40px 24px;max-width:900px}
+.hero h1{font-family:'Syne',sans-serif;font-size:clamp(1.8rem,4vw,3rem);font-weight:800;letter-spacing:-0.03em;line-height:1.05;margin-bottom:10px}
+.hero h1 .acc{background:linear-gradient(135deg,var(--blue3),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{font-size:0.95rem;color:var(--text2);font-weight:300;line-height:1.7;max-width:560px;margin-bottom:20px}
+.kpi-pills{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.kpi-pill{display:inline-flex;align-items:center;gap:7px;background:var(--card);border:1px solid var(--border2);border-radius:100px;padding:6px 14px;font-size:0.75rem;color:var(--text2)}
+.kpi-pill .dot{width:7px;height:7px;border-radius:50%}
+
+.layout{display:grid;grid-template-columns:1fr 340px;gap:0;min-height:calc(100vh - 180px)}
+.left{padding:24px 40px 60px;border-right:1px solid var(--border);position:relative;z-index:1}
+.right{padding:24px 24px 60px;background:var(--bg2);position:relative;z-index:1;overflow-y:auto}
+
+/* SECTION */
+.sec{margin-bottom:32px}
+.sec-title{font-family:'Syne',sans-serif;font-size:0.82rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text3);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.sec-title::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* FLEET TABLE */
+.fleet-table-wrap{overflow-x:auto;margin-bottom:12px}
+.fleet-table{width:100%;border-collapse:collapse;min-width:760px}
+.fleet-table th{font-size:0.68rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text3);padding:8px 10px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap}
+.fleet-table td{padding:6px 4px;vertical-align:middle;border-bottom:1px solid var(--border)}
+.fleet-table tr:last-child td{border-bottom:none}
+.fleet-table tr:hover td{background:rgba(255,255,255,0.02)}
+.ti{width:100%;background:var(--card2);border:1px solid var(--border);border-radius:7px;padding:7px 10px;font-family:'DM Sans',sans-serif;font-size:0.8rem;color:var(--text);outline:none;transition:border-color 0.2s}
+.ti:focus{border-color:var(--blue2)}
+.ti.num{font-family:'JetBrains Mono',monospace;text-align:right}
+.ti.placa{text-transform:uppercase;letter-spacing:0.05em;font-weight:500;width:100px}
+.ti.tipo{width:110px}
+.ti.num{width:105px}
+.ti.km{width:100px}
+
+.btn-add-row{display:inline-flex;align-items:center;gap:7px;background:transparent;color:var(--text2);font-family:'DM Sans',sans-serif;font-size:0.82rem;font-weight:500;padding:8px 16px;border-radius:8px;border:1px dashed var(--border2);cursor:pointer;transition:all 0.2s}
+.btn-add-row:hover{border-color:var(--blue2);color:var(--blue3)}
+.btn-del{background:none;border:none;cursor:pointer;color:var(--text3);padding:4px;border-radius:5px;transition:color 0.2s;display:flex;align-items:center}
+.btn-del:hover{color:var(--red)}
+
+/* SETTINGS */
+.settings-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.field{display:flex;flex-direction:column;gap:5px}
+.flabel{font-size:0.72rem;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:var(--text2)}
+.fhint{font-size:0.68rem;color:var(--text3);margin-top:2px}
+
+.btn-analyze{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;background:var(--gold);color:var(--bg);font-family:'DM Sans',sans-serif;font-size:0.95rem;font-weight:700;padding:14px 24px;border-radius:11px;border:none;cursor:pointer;transition:all 0.2s;margin-top:8px}
+.btn-analyze:hover{background:var(--gold2);transform:translateY(-1px);box-shadow:0 8px 24px rgba(240,165,0,0.35)}
+
+/* RIGHT PANEL */
+.summary-cards{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
+.sum-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:16px 18px}
+.sum-card-label{font-size:0.68rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text3);margin-bottom:6px}
+.sum-card-val{font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;letter-spacing:-0.02em;line-height:1}
+.sum-card-sub{font-size:0.75rem;color:var(--text3);margin-top:4px}
+
+.vehicle-list{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.veh-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r-sm);padding:14px 16px;transition:border-color 0.2s}
+.veh-card.critical{border-left:3px solid var(--red)}
+.veh-card.warning{border-left:3px solid var(--orange)}
+.veh-card.ok{border-left:3px solid var(--green)}
+.veh-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.veh-placa{font-family:'JetBrains Mono',monospace;font-size:0.85rem;font-weight:500;color:var(--text);letter-spacing:0.08em}
+.veh-cpk{font-family:'Syne',sans-serif;font-size:1rem;font-weight:800}
+.veh-bars{display:flex;flex-direction:column;gap:5px}
+.vbar-row{display:flex;align-items:center;gap:8px}
+.vbar-label{font-size:0.66rem;color:var(--text3);width:68px;flex-shrink:0}
+.vbar-track{flex:1;height:4px;background:var(--border2);border-radius:2px;overflow:hidden}
+.vbar-fill{height:100%;border-radius:2px;transition:width 0.6s ease}
+.vbar-val{font-family:'JetBrains Mono',monospace;font-size:0.66rem;color:var(--text2);width:50px;text-align:right;flex-shrink:0}
+.veh-badge{font-size:0.66rem;font-weight:700;padding:2px 8px;border-radius:100px;letter-spacing:0.06em}
+
+/* CHARTS */
+.chart-wrap{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:18px;margin-bottom:12px}
+.chart-title{font-family:'Syne',sans-serif;font-size:0.78rem;font-weight:700;color:var(--text2);margin-bottom:14px;letter-spacing:0.05em;text-transform:uppercase}
+.chart-canvas{max-height:220px}
+
+/* FINDINGS */
+.finding-list{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+.finding{background:var(--card);border:1px solid var(--border);border-radius:var(--r-sm);padding:13px 15px;border-left:3px solid var(--border)}
+.finding.critical{border-left-color:var(--red)}
+.finding.warning{border-left-color:var(--orange)}
+.finding.ok{border-left-color:var(--green)}
+.finding-label{font-size:0.65rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:4px}
+.finding.critical .finding-label{color:var(--red)}
+.finding.warning .finding-label{color:var(--orange)}
+.finding.ok .finding-label{color:var(--green)}
+.finding-text{font-size:0.78rem;color:var(--text2);line-height:1.5}
+
+/* EMPTY STATE */
+.empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:300px;gap:12px;color:var(--text3);text-align:center;padding:20px}
+.empty-icon{font-size:2.5rem;opacity:0.3}
+.empty-state p{font-size:0.84rem;line-height:1.6;max-width:220px}
+
+/* CTA */
+.wa-btn{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;background:#25D366;color:white;font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:700;padding:12px 18px;border-radius:10px;border:none;cursor:pointer;transition:all 0.2s;margin-top:8px;text-decoration:none}
+.wa-btn:hover{background:#1db954;transform:translateY(-1px);box-shadow:0 6px 18px rgba(37,211,102,0.3)}
+.print-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;background:transparent;color:var(--text2);font-family:'DM Sans',sans-serif;font-size:0.84rem;font-weight:500;padding:10px 18px;border-radius:10px;border:1px solid var(--border);cursor:pointer;transition:all 0.2s;margin-top:6px}
+.print-btn:hover{border-color:var(--border2);color:var(--text)}
+
+/* SAMPLE DATA BTN */
+.sample-btn{display:inline-flex;align-items:center;gap:7px;background:var(--gold-dim);border:1px solid rgba(240,165,0,0.2);color:var(--gold);font-family:'DM Sans',sans-serif;font-size:0.78rem;font-weight:600;padding:6px 14px;border-radius:8px;cursor:pointer;transition:all 0.2s;margin-left:auto}
+.sample-btn:hover{background:rgba(240,165,0,0.18)}
+
+@media(max-width:1024px){
+  .layout{grid-template-columns:1fr}
+  .right{border-top:1px solid var(--border)}
+}
+@media(max-width:640px){
+  header,.hero,.left,.right{padding-left:18px;padding-right:18px}
+  .settings-grid{grid-template-columns:1fr 1fr}
+  .hero h1{font-size:1.7rem}
+}
+@media print{
+  body{background:white;color:#111}
+  .left,.btn-add-row,.btn-analyze,.sample-btn,.wa-btn,.print-btn,.btn-del{display:none}
+  .layout{grid-template-columns:1fr}
+  .right{background:white;padding:0}
+  header{border-bottom:2px solid #ccc}
+  .sum-card,.veh-card,.chart-wrap,.finding{background:white;border-color:#ddd}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-brand">
+    <svg class="hlogo" viewBox="0 0 48 48" fill="none">
+      <defs><linearGradient id="lg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#7ab8f5"/><stop offset="100%" stop-color="#f0a500"/></linearGradient></defs>
+      <rect width="48" height="48" rx="12" fill="#0a1220"/>
+      <path d="M24 24 C24 18.5,30.5 14,36 17.5 C41.5 21,41.5 27,36 30.5 C30.5 34,24 29.5,24 24 C24 18.5,17.5 14,12 17.5 C6.5 21,6.5 27,12 30.5 C17.5 34,24 29.5,24 24" stroke="url(#lg)" stroke-width="3" stroke-linecap="round" fill="none"/>
+      <circle cx="24" cy="24" r="1.5" fill="#f0a500" opacity="0.8"/>
+    </svg>
+    <div class="htitle">Paul Negrete <span>·</span> Toolbox</div>
+  </div>
+  <div class="hbadge">🚚 Herramienta 2 — Flotas & CPK</div>
+</header>
+
+<div class="hero">
+  <h1>Analizador de Flotas<br><span class="acc">&amp; Costo por Kilómetro</span></h1>
+  <p>Ingrese los datos de su parque automotor y detecte qué vehículos ya no son rentables, cuál es la desviación de mantenimiento y dónde están los puntos de fuga de dinero.</p>
+  <div class="kpi-pills">
+    <div class="kpi-pill"><div class="dot" style="background:#f0a500"></div>CPK por vehículo</div>
+    <div class="kpi-pill"><div class="dot" style="background:#f04444"></div>Vehículos no rentables</div>
+    <div class="kpi-pill"><div class="dot" style="background:#4a90d4"></div>Desviación de mantenimiento</div>
+    <div class="kpi-pill"><div class="dot" style="background:#2dd4a0"></div>Ahorro potencial</div>
+  </div>
+</div>
+
+<div class="layout">
+
+  <!-- LEFT: DATA ENTRY -->
+  <div class="left">
+
+    <!-- BENCHMARK -->
+    <div class="sec">
+      <div class="sec-title">Parámetros de análisis</div>
+      <div class="settings-grid">
+        <div class="field">
+          <label class="flabel">Empresa / Cliente</label>
+          <input class="ti" id="clientName" placeholder="Ej: Transportes XYZ">
+        </div>
+        <div class="field">
+          <label class="flabel">CPK benchmark (COP/km)</label>
+          <input class="ti num" id="cpkBenchmark" type="number" value="850" min="0">
+          <span class="fhint">Referencia del sector. Colom. promedio: $600–$1.200</span>
+        </div>
+        <div class="field">
+          <label class="flabel">Período analizado</label>
+          <select class="ti" id="periodo">
+            <option value="mes">Mes</option>
+            <option value="trimestre" selected>Trimestre</option>
+            <option value="semestre">Semestre</option>
+            <option value="año">Año</option>
+          </select>
+        </div>
+        <div class="field">
+          <label class="flabel">Alerta CPK (% sobre benchmark)</label>
+          <input class="ti num" id="alertPct" type="number" value="20" min="5" max="100">
+          <span class="fhint">Ej: 20% = alerta si CPK &gt; benchmark ×1.2</span>
+        </div>
+        <div class="field">
+          <label class="flabel">Alerta mantenimiento correctivo</label>
+          <input class="ti num" id="alertMant" type="number" value="40" min="10" max="90">
+          <span class="fhint">% correctivo vs total. Ideal &lt;30%</span>
+        </div>
+        <div class="field">
+          <label class="flabel">Moneda</label>
+          <select class="ti" id="moneda">
+            <option value="COP" selected>COP ($ colombianos)</option>
+            <option value="USD">USD</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- FLEET TABLE -->
+    <div class="sec">
+      <div class="sec-title" style="justify-content:space-between">
+        <span style="display:flex;align-items:center;gap:8px">Datos del parque automotor <span style="flex:none;height:1px;width:0;background:none"></span></span>
+        <button class="sample-btn" onclick="loadSampleData()">✦ Cargar datos de ejemplo</button>
+      </div>
+      <div class="fleet-table-wrap">
+        <table class="fleet-table" id="fleetTable">
+          <thead>
+            <tr>
+              <th>Placa</th>
+              <th>Tipo</th>
+              <th>Km recorridos</th>
+              <th>Combustible ($)</th>
+              <th>Mant. preventivo ($)</th>
+              <th>Mant. correctivo ($)</th>
+              <th>Otros ($)</th>
+              <th>Prev. programados</th>
+              <th>Prev. ejecutados</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="fleetBody">
+          </tbody>
+        </table>
+      </div>
+      <button class="btn-add-row" onclick="addRow()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Agregar vehículo
+      </button>
+    </div>
+
+    <!-- ANALYZE -->
+    <button class="btn-analyze" onclick="analyze()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      Analizar flota
+    </button>
+
+  </div>
+
+  <!-- RIGHT: RESULTS -->
+  <div class="right" id="rightPanel">
+    <div class="empty-state">
+      <div class="empty-icon">🚚</div>
+      <p>Ingrese los datos de su flota y presione <strong style="color:var(--gold)">Analizar</strong> para ver el reporte.</p>
+      <p style="color:var(--text3);font-size:0.76rem">Puede cargar datos de ejemplo para explorar la herramienta.</p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+let rowCount = 0;
+const FMT = n => Math.round(n).toLocaleString('es-CO');
+const FMTD = n => n.toFixed(1);
+let chartCPK = null, chartMant = null;
+
+function addRow(data = {}) {
+  rowCount++;
+  const id = 'r' + rowCount;
+  const tr = document.createElement('tr');
+  tr.id = id;
+  tr.innerHTML = `
+    <td><input class="ti placa" placeholder="ABC123" value="${data.placa||''}"></td>
+    <td><select class="ti tipo">
+      <option value="Camión" ${data.tipo==='Camión'?'selected':''}>Camión</option>
+      <option value="Camioneta" ${data.tipo==='Camioneta'?'selected':''}>Camioneta</option>
+      <option value="Auto" ${data.tipo==='Auto'?'selected':''}>Auto</option>
+      <option value="Moto" ${data.tipo==='Moto'?'selected':''}>Moto</option>
+      <option value="Bus" ${data.tipo==='Bus'?'selected':''}>Bus</option>
+      <option value="Furgón" ${data.tipo==='Furgón'?'selected':''}>Furgón</option>
+    </select></td>
+    <td><input class="ti num km" type="number" placeholder="15000" min="0" value="${data.km||''}"></td>
+    <td><input class="ti num" type="number" placeholder="2500000" min="0" value="${data.fuel||''}"></td>
+    <td><input class="ti num" type="number" placeholder="800000" min="0" value="${data.prev||''}"></td>
+    <td><input class="ti num" type="number" placeholder="350000" min="0" value="${data.corr||''}"></td>
+    <td><input class="ti num" type="number" placeholder="120000" min="0" value="${data.otros||''}"></td>
+    <td><input class="ti num" type="number" placeholder="4" min="0" step="1" value="${data.prevProg||''}"></td>
+    <td><input class="ti num" type="number" placeholder="3" min="0" step="1" value="${data.prevEjec||''}"></td>
+    <td><button class="btn-del" onclick="delRow('${id}')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg></button></td>
+  `;
+  document.getElementById('fleetBody').appendChild(tr);
+}
+
+function delRow(id) { document.getElementById(id)?.remove(); }
+
+function getRows() {
+  return [...document.querySelectorAll('#fleetBody tr')].map(tr => {
+    const inputs = tr.querySelectorAll('input, select');
+    const km = parseFloat(inputs[2].value) || 0;
+    const fuel = parseFloat(inputs[3].value) || 0;
+    const prev = parseFloat(inputs[4].value) || 0;
+    const corr = parseFloat(inputs[5].value) || 0;
+    const otros = parseFloat(inputs[6].value) || 0;
+    const prevProg = parseFloat(inputs[7].value) || 0;
+    const prevEjec = parseFloat(inputs[8].value) || 0;
+    const total = fuel + prev + corr + otros;
+    const cpk = km > 0 ? total / km : 0;
+    const maintTotal = prev + corr;
+    const corrPct = maintTotal > 0 ? (corr / maintTotal) * 100 : 0;
+    const prevDeviation = prevProg > 0 ? ((prevProg - prevEjec) / prevProg) * 100 : 0;
+    return {
+      placa: inputs[0].value.toUpperCase() || '---',
+      tipo: inputs[1].value,
+      km, fuel, prev, corr, otros, total,
+      cpk, corrPct, prevDeviation, prevProg, prevEjec
+    };
+  }).filter(r => r.km > 0 || r.total > 0);
+}
+
+function analyze() {
+  const rows = getRows();
+  if (!rows.length) { alert('Agregue al menos un vehículo con datos para analizar.'); return; }
+
+  const benchmark = parseFloat(document.getElementById('cpkBenchmark').value) || 850;
+  const alertPct = parseFloat(document.getElementById('alertPct').value) || 20;
+  const alertMant = parseFloat(document.getElementById('alertMant').value) || 40;
+  const alertThreshold = benchmark * (1 + alertPct / 100);
+  const client = document.getElementById('clientName').value || 'Flota analizada';
+  const periodo = document.getElementById('periodo').value;
+  const moneda = document.getElementById('moneda').value;
+
+  const totalKm = rows.reduce((a, r) => a + r.km, 0);
+  const totalCost = rows.reduce((a, r) => a + r.total, 0);
+  const totalFuel = rows.reduce((a, r) => a + r.fuel, 0);
+  const totalCorr = rows.reduce((a, r) => a + r.corr, 0);
+  const totalMaint = rows.reduce((a, r) => a + r.prev + r.corr, 0);
+  const fleetCPK = totalKm > 0 ? totalCost / totalKm : 0;
+  const fleetCorrPct = totalMaint > 0 ? (totalCorr / totalMaint) * 100 : 0;
+
+  const criticals = rows.filter(r => r.cpk > alertThreshold);
+  const warnings = rows.filter(r => r.cpk > benchmark && r.cpk <= alertThreshold);
+  const oks = rows.filter(r => r.cpk <= benchmark);
+
+  const savings = criticals.reduce((a, r) => a + (r.cpk - benchmark) * r.km, 0);
+
+  const findings = [];
+  criticals.forEach(r => {
+    findings.push({ type:'critical', text:`${r.placa} — CPK $${FMT(r.cpk)}/km (${FMTD((r.cpk/benchmark-1)*100)}% sobre benchmark). Costo excesivo: $${FMT((r.cpk-benchmark)*r.km)} en el período.` });
+  });
+  if (fleetCorrPct > alertMant) {
+    findings.push({ type:'critical', text:`Mantenimiento correctivo representa el ${FMTD(fleetCorrPct)}% del gasto total de mantenimiento. Meta ideal: menos del 30%. Señal de mantenimiento preventivo insuficiente.` });
+  }
+  rows.filter(r => r.prevDeviation > 25).forEach(r => {
+    findings.push({ type:'warning', text:`${r.placa} — ${FMTD(r.prevDeviation)}% de los mantenimientos preventivos programados no se ejecutaron. Riesgo de falla prematura.` });
+  });
+  warnings.forEach(r => {
+    findings.push({ type:'warning', text:`${r.placa} — CPK $${FMT(r.cpk)}/km. Por encima del benchmark pero dentro del umbral de alerta. Monitorear de cerca.` });
+  });
+  if (oks.length) {
+    findings.push({ type:'ok', text:`${oks.map(r=>r.placa).join(', ')} — CPK por debajo del benchmark ($${FMT(benchmark)}/km). Operación eficiente. Documentar sus prácticas.` });
+  }
+  if (findings.length === 0) {
+    findings.push({ type:'ok', text:`Flota dentro de parámetros normales. CPK promedio: $${FMT(fleetCPK)}/km.` });
+  }
+
+  // Destroy previous charts
+  if (chartCPK) { chartCPK.destroy(); chartCPK = null; }
+  if (chartMant) { chartMant.destroy(); chartMant = null; }
+
+  const colors = rows.map(r => r.cpk > alertThreshold ? '#f04444' : r.cpk > benchmark ? '#f09020' : '#2dd4a0');
+
+  const html = `
+    <div class="summary-cards">
+      <div class="sum-card">
+        <div class="sum-card-label">CPK promedio de la flota</div>
+        <div class="sum-card-val" style="color:${fleetCPK > alertThreshold ? 'var(--red)' : fleetCPK > benchmark ? 'var(--orange)' : 'var(--green)'}">
+          $${FMT(fleetCPK)}<span style="font-size:1rem;opacity:0.6"> /km</span>
+        </div>
+        <div class="sum-card-sub">Benchmark: $${FMT(benchmark)}/km · Alerta: $${FMT(alertThreshold)}/km</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div class="sum-card">
+          <div class="sum-card-label">Vehículos críticos</div>
+          <div class="sum-card-val" style="color:var(--red)">${criticals.length}<span style="font-size:1rem;opacity:0.5">/${rows.length}</span></div>
+          <div class="sum-card-sub">CPK &gt; $${FMT(alertThreshold)}/km</div>
+        </div>
+        <div class="sum-card">
+          <div class="sum-card-label">Ahorro potencial</div>
+          <div class="sum-card-val" style="color:var(--gold)">$${FMT(savings)}</div>
+          <div class="sum-card-sub">Si críticos = benchmark</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div class="sum-card">
+          <div class="sum-card-label">% Correctivo</div>
+          <div class="sum-card-val" style="color:${fleetCorrPct > alertMant ? 'var(--red)' : fleetCorrPct > 30 ? 'var(--orange)' : 'var(--green)'}">${FMTD(fleetCorrPct)}%</div>
+          <div class="sum-card-sub">Meta ideal &lt;30%</div>
+        </div>
+        <div class="sum-card">
+          <div class="sum-card-label">Km totales</div>
+          <div class="sum-card-val" style="color:var(--blue3)">${FMT(totalKm)}</div>
+          <div class="sum-card-sub">Costo total: $${FMT(totalCost)}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec-title" style="margin-bottom:10px">CPK por vehículo</div>
+    <div class="chart-wrap">
+      <canvas id="chartCPK" class="chart-canvas"></canvas>
+    </div>
+
+    <div class="sec-title" style="margin-bottom:10px">Composición de costos</div>
+    <div class="chart-wrap">
+      <canvas id="chartMant" class="chart-canvas" style="max-height:180px"></canvas>
+    </div>
+
+    <div class="sec-title" style="margin-bottom:10px">Detalle por vehículo</div>
+    <div class="vehicle-list">
+      ${rows.map(r => {
+        const status = r.cpk > alertThreshold ? 'critical' : r.cpk > benchmark ? 'warning' : 'ok';
+        const statusLabel = status === 'critical' ? 'CRÍTICO' : status === 'warning' ? 'ALERTA' : 'OK';
+        const statusColor = status === 'critical' ? 'var(--red)' : status === 'warning' ? 'var(--orange)' : 'var(--green)';
+        const maxCPK = Math.max(...rows.map(r2 => r2.cpk), alertThreshold * 1.1);
+        return `<div class="veh-card ${status}">
+          <div class="veh-top">
+            <div>
+              <div class="veh-placa">${r.placa} <span style="color:var(--text3);font-size:0.72rem;font-family:'DM Sans',sans-serif;font-weight:400">${r.tipo}</span></div>
+              <div style="font-size:0.68rem;color:var(--text3);margin-top:2px">${FMT(r.km)} km · Total $${FMT(r.total)}</div>
+            </div>
+            <div>
+              <div class="veh-cpk" style="color:${statusColor}">$${FMT(r.cpk)}/km</div>
+              <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.08em;text-align:right;color:${statusColor};opacity:0.8">${statusLabel}</div>
+            </div>
+          </div>
+          <div class="veh-bars">
+            <div class="vbar-row">
+              <div class="vbar-label">CPK</div>
+              <div class="vbar-track"><div class="vbar-fill" style="width:${Math.min(100,(r.cpk/maxCPK)*100)}%;background:${statusColor}"></div></div>
+              <div class="vbar-val">$${FMT(r.cpk)}</div>
+            </div>
+            <div class="vbar-row">
+              <div class="vbar-label">% Correctivo</div>
+              <div class="vbar-track"><div class="vbar-fill" style="width:${r.corrPct}%;background:${r.corrPct>alertMant?'var(--red)':r.corrPct>30?'var(--orange)':'var(--blue2)'}"></div></div>
+              <div class="vbar-val">${FMTD(r.corrPct)}%</div>
+            </div>
+            ${r.prevProg > 0 ? `<div class="vbar-row">
+              <div class="vbar-label">Prev. ejec.</div>
+              <div class="vbar-track"><div class="vbar-fill" style="width:${Math.min(100,(r.prevEjec/r.prevProg)*100)}%;background:var(--purple)"></div></div>
+              <div class="vbar-val">${r.prevEjec}/${r.prevProg}</div>
+            </div>` : ''}
+          </div>
+        </div>`;
+      }).join('')}
+    </div>
+
+    <div class="sec-title" style="margin-bottom:10px">Hallazgos</div>
+    <div class="finding-list">
+      ${findings.map(f => `<div class="finding ${f.type}">
+        <div class="finding-label">${f.type==='critical'?'⚠ CRÍTICO':f.type==='warning'?'↗ ATENCIÓN':'✓ OK'}</div>
+        <div class="finding-text">${f.text}</div>
+      </div>`).join('')}
+    </div>
+
+    <a class="wa-btn" href="https://wa.me/573008985321?text=${encodeURIComponent(
+      'Hola Paul, acabo de analizar la flota de ' + client + ' (' + periodo + ').\n\n' +
+      '📊 RESULTADOS:\n' +
+      '• CPK promedio: $' + FMT(fleetCPK) + '/km (benchmark: $' + FMT(benchmark) + '/km)\n' +
+      '• Vehículos críticos: ' + criticals.length + '/' + rows.length + '\n' +
+      '• % Correctivo: ' + FMTD(fleetCorrPct) + '% (meta <30%)\n' +
+      '• Ahorro potencial: $' + FMT(savings) + '\n\n' +
+      '¿Podemos hablar sobre las recomendaciones?'
+    )}" target="_blank">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Enviar resultados a Paul
+    </a>
+    <button class="print-btn" onclick="window.print()">🖨 Imprimir reporte</button>
+    <div style="text-align:center;font-size:0.68rem;color:var(--text3);margin-top:16px;padding-top:12px;border-top:1px solid var(--border)">
+      ${client} · ${periodo.charAt(0).toUpperCase()+periodo.slice(1)} · Paul Negrete Toolbox v1.0<br>
+      <span style="opacity:0.5">paulnegrete.netlify.app</span>
+    </div>
+  `;
+
+  document.getElementById('rightPanel').innerHTML = html;
+
+  // Render CPK chart
+  const ctxCPK = document.getElementById('chartCPK').getContext('2d');
+  chartCPK = new Chart(ctxCPK, {
+    type: 'bar',
+    data: {
+      labels: rows.map(r => r.placa),
+      datasets: [{
+        label: 'CPK ($/km)',
+        data: rows.map(r => Math.round(r.cpk)),
+        backgroundColor: colors,
+        borderRadius: 6,
+        borderSkipped: false,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: ctx => ' $' + ctx.raw.toLocaleString('es-CO') + '/km' } },
+        annotation: {}
+      },
+      scales: {
+        x: { ticks: { color: '#7a9ab8', font: { family: 'JetBrains Mono', size: 10 } }, grid: { color: 'rgba(255,255,255,0.04)' } },
+        y: { ticks: { color: '#7a9ab8', font: { size: 10 }, callback: v => '$' + v.toLocaleString('es-CO') }, grid: { color: 'rgba(255,255,255,0.04)' } }
+      }
+    }
+  });
+
+  // Add benchmark line manually via plugin
+  const benchmarkVal = benchmark;
+  const alertVal = alertThreshold;
+  chartCPK.options.plugins.annotation = {};
+  // Draw reference lines as additional dataset
+  chartCPK.data.datasets.push({
+    type: 'line', label: 'Benchmark',
+    data: rows.map(() => Math.round(benchmarkVal)),
+    borderColor: '#2dd4a0', borderWidth: 1.5, borderDash: [4, 4],
+    pointRadius: 0, tension: 0
+  });
+  chartCPK.data.datasets.push({
+    type: 'line', label: 'Alerta',
+    data: rows.map(() => Math.round(alertVal)),
+    borderColor: '#f04444', borderWidth: 1.5, borderDash: [4, 4],
+    pointRadius: 0, tension: 0
+  });
+  chartCPK.update();
+
+  // Render cost composition chart
+  const ctxMant = document.getElementById('chartMant').getContext('2d');
+  chartMant = new Chart(ctxMant, {
+    type: 'bar',
+    data: {
+      labels: rows.map(r => r.placa),
+      datasets: [
+        { label: 'Combustible', data: rows.map(r => r.fuel), backgroundColor: '#f0a500', borderRadius: 4, borderSkipped: false },
+        { label: 'Prev.', data: rows.map(r => r.prev), backgroundColor: '#4a90d4', borderRadius: 4, borderSkipped: false },
+        { label: 'Correctivo', data: rows.map(r => r.corr), backgroundColor: '#f04444', borderRadius: 4, borderSkipped: false },
+        { label: 'Otros', data: rows.map(r => r.otros), backgroundColor: '#5a7a9a', borderRadius: 4, borderSkipped: false },
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'bottom', labels: { color: '#7a9ab8', boxWidth: 10, font: { size: 10 } } },
+        tooltip: { callbacks: { label: ctx => ' ' + ctx.dataset.label + ': $' + ctx.raw.toLocaleString('es-CO') } }
+      },
+      scales: {
+        x: { stacked: true, ticks: { color: '#7a9ab8', font: { family: 'JetBrains Mono', size: 10 } }, grid: { color: 'rgba(255,255,255,0.04)' } },
+        y: { stacked: true, ticks: { color: '#7a9ab8', font: { size: 10 }, callback: v => '$' + (v/1000).toFixed(0) + 'k' }, grid: { color: 'rgba(255,255,255,0.04)' } }
+      }
+    }
+  });
+}
+
+function loadSampleData() {
+  document.getElementById('clientName').value = 'Distribuidora del Caribe S.A.S.';
+  document.getElementById('fleetBody').innerHTML = '';
+  rowCount = 0;
+  const sample = [
+    { placa:'ABC-123', tipo:'Camión', km:18500, fuel:4200000, prev:950000, corr:1800000, otros:280000, prevProg:4, prevEjec:2 },
+    { placa:'XYZ-456', tipo:'Camioneta', km:12300, fuel:2100000, prev:600000, corr:320000, otros:150000, prevProg:3, prevEjec:3 },
+    { placa:'DEF-789', tipo:'Camión', km:21000, fuel:5100000, prev:1200000, corr:2600000, otros:320000, prevProg:5, prevEjec:2 },
+    { placa:'GHI-012', tipo:'Furgón', km:9800, fuel:1450000, prev:480000, corr:180000, otros:90000, prevProg:3, prevEjec:3 },
+    { placa:'JKL-345', tipo:'Camioneta', km:15200, fuel:2800000, prev:720000, corr:1100000, otros:200000, prevProg:4, prevEjec:2 },
+  ];
+  sample.forEach(d => addRow(d));
+  analyze();
+}
+
+// Start with 3 empty rows
+addRow(); addRow(); addRow();
+</script>
+</body>
+</html>
