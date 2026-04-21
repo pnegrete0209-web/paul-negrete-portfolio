@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manual de Usuario — Paul Negrete Toolbox</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#060910;--bg2:#0a0f1a;--card:#0d1525;--card2:#111d30;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
+  --gold:#f0a500;--gold2:#ffd060;--gold-dim:rgba(240,165,0,0.1);
+  --blue:#2e6da4;--blue2:#4a90d4;--blue3:#7ab8f5;
+  --green:#2dd4a0;--red:#f04444;--orange:#f09020;--purple:#a78bfa;
+  --text:#e2eaf5;--text2:#8fa3bf;--text3:#4a6a8a;
+  --r:14px;--r-sm:9px;
+  --t1:rgba(240,165,0,0.15);--t2:rgba(74,144,212,0.12);
+  --t3:rgba(240,68,68,0.12);--t4:rgba(167,139,250,0.12);--t5:rgba(45,212,160,0.12)
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:0.5}
+
+/* ── NAV SIDEBAR ── */
+.layout{display:grid;grid-template-columns:260px 1fr;min-height:100vh}
+.sidebar{position:sticky;top:0;height:100vh;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto;padding:0 0 40px}
+.sidebar::-webkit-scrollbar{width:3px}
+.sidebar::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+
+.sidebar-brand{padding:24px 22px 18px;border-bottom:1px solid var(--border)}
+.sb-logo{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.sb-logo svg{width:28px;height:28px;flex-shrink:0}
+.sb-name{font-family:'Syne',sans-serif;font-size:0.9rem;font-weight:800;color:var(--text)}
+.sb-name span{color:var(--gold)}
+.sb-subtitle{font-size:0.64rem;color:var(--text3);letter-spacing:0.1em;text-transform:uppercase}
+.sb-version{font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--text3);margin-top:6px;padding:3px 8px;background:var(--card);border:1px solid var(--border);border-radius:5px;display:inline-block}
+
+.sidebar-nav{padding:16px 14px;flex:1}
+.nav-section{margin-bottom:20px}
+.nav-section-title{font-size:0.62rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--text3);padding:0 8px;margin-bottom:6px}
+.nav-link{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:8px;text-decoration:none;font-size:0.8rem;color:var(--text2);transition:all 0.18s;border:1px solid transparent;margin-bottom:2px}
+.nav-link:hover{background:var(--card);border-color:var(--border);color:var(--text)}
+.nav-link.active{background:var(--card);border-color:var(--border2);color:var(--text)}
+.nav-link .nl-icon{width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:0.85rem;flex-shrink:0}
+.nav-link .nl-num{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--text3);margin-left:auto}
+.nav-link.t1 .nl-icon{background:var(--t1)}
+.nav-link.t2 .nl-icon{background:var(--t2)}
+.nav-link.t3 .nl-icon{background:var(--t3)}
+.nav-link.t4 .nl-icon{background:var(--t4)}
+.nav-link.t5 .nl-icon{background:var(--t5)}
+
+/* ── MAIN CONTENT ── */
+.content{padding:48px 56px 100px;max-width:900px}
+
+/* COVER */
+.cover{margin-bottom:72px;padding-bottom:48px;border-bottom:1px solid var(--border)}
+.cover-eyebrow{font-size:0.7rem;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.cover-eyebrow::before{content:'';width:24px;height:2px;background:var(--gold);border-radius:1px}
+.cover-title{font-family:'Syne',sans-serif;font-size:clamp(2.2rem,5vw,3.8rem);font-weight:800;letter-spacing:-0.04em;line-height:1.05;margin-bottom:18px}
+.cover-title .acc{background:linear-gradient(135deg,var(--blue3),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.cover-desc{font-size:1rem;color:var(--text2);font-weight:300;line-height:1.75;max-width:600px;margin-bottom:24px}
+.cover-meta{display:flex;gap:20px;flex-wrap:wrap}
+.cover-meta-item{display:flex;align-items:center;gap:7px;font-size:0.78rem;color:var(--text3)}
+.cover-meta-item svg{color:var(--gold)}
+
+/* CHAPTER */
+.chapter{margin-bottom:72px;scroll-margin-top:32px}
+.chapter-header{display:flex;align-items:flex-start;gap:18px;margin-bottom:32px;padding-bottom:20px;border-bottom:1px solid var(--border)}
+.ch-icon-wrap{width:56px;height:56px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;flex-shrink:0;border:1px solid var(--border2)}
+.ch-meta{}
+.ch-tag{font-size:0.64rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:5px}
+.ch-title{font-family:'Syne',sans-serif;font-size:clamp(1.5rem,3vw,2.2rem);font-weight:800;letter-spacing:-0.03em;line-height:1.1;margin-bottom:4px}
+.ch-sub{font-size:0.85rem;color:var(--text2);font-weight:300}
+
+/* SECTION HEADERS */
+.sec-h2{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:700;color:var(--text);margin:32px 0 14px;display:flex;align-items:center;gap:10px}
+.sec-h2::after{content:'';flex:1;height:1px;background:var(--border)}
+.sec-h3{font-family:'Syne',sans-serif;font-size:0.9rem;font-weight:700;color:var(--text2);margin:22px 0 10px;letter-spacing:0.02em}
+
+/* PROSE */
+p{font-size:0.9rem;color:var(--text2);line-height:1.78;font-weight:300;margin-bottom:14px}
+p strong{color:var(--text);font-weight:500}
+
+/* CALLOUT */
+.callout{border-radius:var(--r-sm);padding:16px 18px;margin:18px 0;border-left:3px solid;display:flex;gap:12px}
+.callout.tip{background:rgba(45,212,160,0.07);border-color:var(--green)}
+.callout.warn{background:rgba(240,144,32,0.08);border-color:var(--orange)}
+.callout.info{background:rgba(74,144,212,0.08);border-color:var(--blue2)}
+.callout.key{background:rgba(240,165,0,0.08);border-color:var(--gold)}
+.callout-icon{font-size:1rem;flex-shrink:0;margin-top:1px}
+.callout-body{font-size:0.82rem;color:var(--text2);line-height:1.6;font-weight:300}
+.callout-body strong{color:var(--text);font-weight:500}
+
+/* STEP LIST */
+.steps{display:flex;flex-direction:column;gap:12px;margin:16px 0}
+.step{display:flex;gap:14px;align-items:flex-start}
+.step-num{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:0.72rem;font-weight:800;flex-shrink:0;margin-top:1px}
+.step-body{flex:1;padding-top:3px}
+.step-title{font-size:0.86rem;font-weight:600;color:var(--text);margin-bottom:3px}
+.step-desc{font-size:0.8rem;color:var(--text2);line-height:1.55;font-weight:300}
+
+/* FIELD TABLE */
+.field-table{width:100%;border-collapse:collapse;margin:14px 0;font-size:0.82rem}
+.field-table th{text-align:left;font-size:0.63rem;font-weight:700;letter-spacing:0.09em;text-transform:uppercase;color:var(--text3);padding:8px 12px;border-bottom:1px solid var(--border)}
+.field-table td{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,0.03);color:var(--text2);vertical-align:top}
+.field-table td:first-child{font-family:'JetBrains Mono',monospace;font-size:0.76rem;color:var(--text);font-weight:500;white-space:nowrap}
+.field-table td:last-child{font-size:0.78rem}
+.field-table tr:last-child td{border-bottom:none}
+.field-table tr:hover td{background:rgba(255,255,255,0.01)}
+.req{color:var(--red);font-size:0.65rem;font-weight:700}
+.opt{color:var(--text3);font-size:0.65rem}
+
+/* RESULT CARD */
+.result-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+.result-item{background:var(--card);border:1px solid var(--border);border-radius:var(--r-sm);padding:14px 16px}
+.ri-label{font-size:0.64rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text3);margin-bottom:5px}
+.ri-name{font-size:0.86rem;font-weight:600;color:var(--text);margin-bottom:4px}
+.ri-desc{font-size:0.76rem;color:var(--text2);line-height:1.5;font-weight:300}
+
+/* CODE BLOCK */
+.code-block{background:var(--card2);border:1px solid var(--border);border-radius:var(--r-sm);padding:14px 16px;font-family:'JetBrains Mono',monospace;font-size:0.76rem;color:var(--blue3);line-height:1.7;margin:12px 0;overflow-x:auto;white-space:pre}
+
+/* BADGE */
+.badge{display:inline-flex;align-items:center;gap:5px;font-size:0.65rem;font-weight:700;padding:2px 9px;border-radius:100px;letter-spacing:0.05em;white-space:nowrap}
+.badge-gold{background:var(--t1);border:1px solid rgba(240,165,0,0.25);color:var(--gold)}
+.badge-blue{background:var(--t2);border:1px solid rgba(74,144,212,0.25);color:var(--blue3)}
+.badge-green{background:var(--t5);border:1px solid rgba(45,212,160,0.25);color:var(--green)}
+.badge-red{background:var(--t3);border:1px solid rgba(240,68,68,0.25);color:var(--red)}
+.badge-purple{background:var(--t4);border:1px solid rgba(167,139,250,0.25);color:var(--purple)}
+
+/* SCENARIO TABLE */
+.scenario-table{width:100%;border-collapse:collapse;margin:14px 0}
+.scenario-table th{background:var(--card2);font-size:0.65rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text3);padding:9px 12px;border:1px solid var(--border);text-align:left}
+.scenario-table td{padding:10px 12px;border:1px solid var(--border);font-size:0.8rem;color:var(--text2);vertical-align:top}
+.scenario-table td strong{color:var(--text)}
+
+/* DIVIDER */
+.divider{height:1px;background:var(--border);margin:40px 0}
+
+/* PRINT */
+@media print{
+  .sidebar{display:none}
+  .layout{grid-template-columns:1fr}
+  .content{padding:20px;max-width:100%}
+  body{background:white;color:#111}
+  .callout,.result-item,.code-block{background:#f5f5f5;border-color:#ddd}
+  .cover-title .acc{-webkit-text-fill-color:#2e6da4}
+}
+
+@media(max-width:900px){
+  .layout{grid-template-columns:1fr}
+  .sidebar{position:static;height:auto;border-right:none;border-bottom:1px solid var(--border)}
+  .content{padding:28px 22px 60px}
+  .result-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<div class="layout">
+
+<!-- ── SIDEBAR ── -->
+<div class="sidebar">
+  <div class="sidebar-brand">
+    <div class="sb-logo">
+      <svg viewBox="0 0 48 48" fill="none">
+        <defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#7ab8f5"/><stop offset="100%" stop-color="#f0a500"/></linearGradient></defs>
+        <rect width="48" height="48" rx="12" fill="#0a1220"/>
+        <path d="M24 24 C24 18.5,30.5 14,36 17.5 C41.5 21,41.5 27,36 30.5 C30.5 34,24 29.5,24 24 C24 18.5,17.5 14,12 17.5 C6.5 21,6.5 27,12 30.5 C17.5 34,24 29.5,24 24" stroke="url(#g)" stroke-width="3" stroke-linecap="round" fill="none"/>
+        <circle cx="24" cy="24" r="1.5" fill="#f0a500" opacity="0.8"/>
+      </svg>
+      <div class="sb-name">Paul<span>.</span>Toolbox</div>
+    </div>
+    <div class="sb-subtitle">Manual de usuario</div>
+    <div class="sb-version">v1.0 · 2026</div>
+  </div>
+
+  <div class="sidebar-nav">
+    <div class="nav-section">
+      <div class="nav-section-title">Introducción</div>
+      <a class="nav-link" href="#intro"><div class="nl-icon">📖</div> Bienvenida y propósito</a>
+      <a class="nav-link" href="#acceso"><div class="nl-icon">🔐</div> Acceso y seguridad</a>
+      <a class="nav-link" href="#flujo"><div class="nl-icon">🗺</div> Flujo de trabajo</a>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-title">Herramientas</div>
+      <a class="nav-link t1" href="#h1"><div class="nl-icon">📋</div> Madurez Logística <span class="nl-num">01</span></a>
+      <a class="nav-link t2" href="#h2"><div class="nl-icon">🚚</div> Flotas & CPK <span class="nl-num">02</span></a>
+      <a class="nav-link t3" href="#h3"><div class="nl-icon">📦</div> Matriz ABC <span class="nl-num">03</span></a>
+      <a class="nav-link t4" href="#h4"><div class="nl-icon">🔬</div> Simulador Inventario <span class="nl-num">04</span></a>
+      <a class="nav-link t5" href="#h5"><div class="nl-icon">🛡</div> Auditoría ISO 39001 <span class="nl-num">05</span></a>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-title">Uso con clientes</div>
+      <a class="nav-link" href="#diagnostico"><div class="nl-icon">⚡</div> Diagnóstico Express 48h</a>
+      <a class="nav-link" href="#entrega"><div class="nl-icon">📤</div> Entrega de reportes</a>
+      <a class="nav-link" href="#faq"><div class="nl-icon">💬</div> Preguntas frecuentes</a>
+    </div>
+  </div>
+</div>
+
+<!-- ── CONTENT ── -->
+<div class="content">
+
+  <!-- COVER -->
+  <div class="cover">
+    <div class="cover-eyebrow">Documentación oficial</div>
+    <h1 class="cover-title">Manual de Usuario<br><span class="acc">Paul Negrete Toolbox</span></h1>
+    <p class="cover-desc">Guía completa para el uso de las 5 herramientas propietarias de consultoría. Este documento describe cada herramienta, sus campos, cómo interpretar los resultados y cómo aplicarlas en proyectos reales con clientes.</p>
+    <div class="cover-meta">
+      <div class="cover-meta-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Versión 1.0 · Abril 2026</div>
+      <div class="cover-meta-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Paul André Negrete · Consultor</div>
+      <div class="cover-meta-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> Uso exclusivo · Propiedad intelectual</div>
+    </div>
+  </div>
+
+  <!-- INTRO -->
+  <div class="chapter" id="intro">
+    <div class="chapter-header">
+      <div class="ch-icon-wrap" style="background:rgba(240,165,0,0.1);border-color:rgba(240,165,0,0.2)">📖</div>
+      <div class="ch-meta">
+        <div class="ch-tag" style="color:var(--gold)">Introducción</div>
+        <h2 class="ch-title">¿Qué es el Toolbox?</h2>
+        <p class="ch-sub">Activos de propiedad intelectual para consultoría profesional</p>
+      </div>
+    </div>
+
+    <p>El <strong>Paul Negrete Toolbox</strong> es un conjunto de 5 herramientas digitales desarrolladas para apoyar el ciclo completo de una consultoría en logística, operaciones y análisis de datos. No son plantillas genéricas — están diseñadas alrededor de metodologías específicas (ERI, CPK, EOQ, ABC, ISO 39001) y del flujo de trabajo particular de Paul Negrete como consultor.</p>
+
+    <p>Cada herramienta resuelve un problema concreto: <strong>antes de proponer, cuantificar el dolor del cliente</strong>. El objetivo es llegar a la primera reunión con datos, no con opiniones.</p>
+
+    <div class="callout key">
+      <div class="callout-icon">💡</div>
+      <div class="callout-body"><strong>Filosofía central:</strong> "No soy un programador esperando instrucciones, sino un consultor que sabe dónde buscar el problema." — Las herramientas materializan esta diferencia. Con los datos del cliente y 10 minutos, usted llega con un diagnóstico visual que justifica la propuesta económica.</div>
+    </div>
+
+    <div class="sec-h2">Organización por fases</div>
+    <div class="result-grid" style="grid-template-columns:repeat(3,1fr)">
+      <div class="result-item" style="border-left:3px solid var(--gold)">
+        <div class="ri-label">Fase 1 · Diagnóstico</div>
+        <div class="ri-name">Valorar el dolor</div>
+        <div class="ri-desc">Herramientas 01, 02 y 03. Se usan antes o durante la primera consulta para cuantificar ineficiencias.</div>
+      </div>
+      <div class="result-item" style="border-left:3px solid var(--blue2)">
+        <div class="ri-label">Fase 2 · Ejecución</div>
+        <div class="ri-name">Analizar escenarios</div>
+        <div class="ri-desc">Herramienta 04. Se usa durante el proyecto para simular decisiones y presentar alternativas con números.</div>
+      </div>
+      <div class="result-item" style="border-left:3px solid var(--green)">
+        <div class="ri-label">Fase 3 · Control</div>
+        <div class="ri-name">Verificar cumplimiento</div>
+        <div class="ri-desc">Herramienta 05. Se usa para auditar el estado del sistema de gestión de seguridad vial del cliente.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ACCESO -->
+  <div class="chapter" id="acceso">
+    <div class="chapter-header">
+      <div class="ch-icon-wrap" style="background:rgba(45,212,160,0.1);border-color:rgba(45,212,160,0.2)">🔐</div>
+      <div class="ch-meta">
+        <div class="ch-tag" style="color:var(--green)">Seguridad</div>
+        <h2 class="ch-title">Acceso y seguridad</h2>
+        <p class="ch-sub">Sistema de autenticación con contraseña cifrada</p>
+      </div>
+    </div>
+
+    <div class="sec-h2">Cómo ingresar</div>
+    <div class="steps">
+      <div class="step"><div class="step-num" style="background:var(--t1);color:var(--gold)">1</div><div class="step-body"><div class="step-title">Ir a la URL del Toolbox</div><div class="step-desc">Desde el portafolio clic en el ícono 🔐 del nav, o directamente: <span style="font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--blue3)">paulnegrete.netlify.app/toolbox/</span></div></div></div>
+      <div class="step"><div class="step-num" style="background:var(--t1);color:var(--gold)">2</div><div class="step-body"><div class="step-title">Ingresar la contraseña</div><div class="step-desc">Contraseña por defecto: <span style="font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--gold)">PaulN@2026</span>. Se puede cambiar desde el panel de configuración ⚙️ dentro del dashboard.</div></div></div>
+      <div class="step"><div class="step-num" style="background:var(--t1);color:var(--gold)">3</div><div class="step-body"><div class="step-title">Navegar al dashboard</div><div class="step-desc">Al ingresar correctamente, el dashboard muestra las 5 herramientas organizadas por fase. La sesión es válida mientras el navegador esté abierto.</div></div></div>
+    </div>
+
+    <div class="callout warn">
+      <div class="callout-icon">⚠️</div>
+      <div class="callout-body"><strong>Importante:</strong> La contraseña se almacena como hash SHA-256 en su navegador. Si cambia de dispositivo o navegador, use siempre la contraseña por defecto (<code style="font-family:'JetBrains Mono',monospace">PaulN@2026</code>) a menos que la haya cambiado y la recuerde. Los clientes NO tienen acceso — la URL no está enlazada públicamente en el portafolio.</div>
+    </div>
+  </div>
+
+  <!-- FLUJO -->
+  <div class="chapter" id="flujo">
+    <div class="chapter-header">
+      <div class="ch-icon-wrap" style="background:rgba(74,144,212,0.1);border-color:rgba(74,144,212,0.2)">🗺</div>
+      <div class="ch-meta">
+        <div class="ch-tag" style="color:var(--blue3)">Metodología</div>
+        <h2 class="ch-title">Flujo de trabajo recomendado</h2>
+        <p class="ch-sub">Cómo integrar las herramientas en el ciclo de consultoría</p>
+      </div>
+    </div>
+    <p>El flujo ideal para un proyecto de consultoría usando el Toolbox es:</p>
+    <div class="steps">
+      <div class="step"><div class="step-num" style="background:var(--t1);color:var(--gold)">1</div><div class="step-body"><div class="step-title">Primera llamada / diagnóstico gratuito (30 min)</div><div class="step-desc">Abrir la <strong>Herramienta 01</strong> (Madurez Logística) y responder las 12 preguntas junto con el cliente. Al finalizar, el reporte visual sirve como evidencia para justificar la propuesta.</div></div></div>
+      <div class="step"><div class="step-num" style="background:var(--t2);color:var(--blue3)">2</div><div class="step-body"><div class="step-title">Solicitar datos históricos al cliente</div><div class="step-desc">Pedir un CSV o Excel con los últimos 6 meses de: gastos de flota (<strong>H02</strong>), movimientos de inventario (<strong>H03</strong>) o parámetros de compra (<strong>H04</strong>). Sin datos, los resultados son estimados; con datos, son contundentes.</div></div></div>
+      <div class="step"><div class="step-num" style="background:var(--t2);color:var(--blue3)">3</div><div class="step-body"><div class="step-title">Correr el análisis (10–30 min)</div><div class="step-desc">Ingresar los datos en la(s) herramienta(s) pertinente(s). Los botones de <strong>"Cargar datos de ejemplo"</strong> muestran el formato esperado. Los reportes se generan instantáneamente.</div></div></div>
+      <div class="step"><div class="step-num" style="background:var(--t3);color:var(--red)">4</div><div class="step-body"><div class="step-title">Imprimir o enviar el reporte</div><div class="step-desc">Cada herramienta tiene botón <strong>🖨 Imprimir</strong> (genera un PDF limpio sin menús) y botón <strong>WhatsApp</strong> que pre-redacta el mensaje con los hallazgos. El cliente recibe el resumen antes de la propuesta formal.</div></div></div>
+      <div class="step"><div class="step-num" style="background:var(--t5);color:var(--green)">5</div><div class="step-body"><div class="step-title">Propuesta y cierre</div><div class="step-desc">Con los hallazgos cuantificados, la propuesta económica se conecta directamente a los problemas identificados. El cotizador del portafolio envía el desglose por WhatsApp o correo.</div></div></div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- H01 MADUREZ -->
+  <div class="chapter" id="h1">
+    <div class="chapter-header">
+      <div class="ch-icon-wrap" style="background:var(--t1);border-color:rgba(240,165,0,0.25)">📋</div>
+      <div class="ch-meta">
+        <div class="ch-tag" style="color:var(--gold)">Herramienta 01 · Diagnóstico</div>
+        <h2 class="ch-title">Calculadora de Madurez Logística</h2>
+        <p class="ch-sub">Evaluación estructurada de 5 dimensiones clave de la operación</p>
+      </div>
+    </div>
+
+    <div class="callout info"><div class="callout-icon">🎯</div><div class="callout-body"><strong>Cuándo usar esta herramienta:</strong> En la primera reunión con cualquier cliente de logística u operaciones. Es la puerta de entrada — convierte una conversación informal en un diagnóstico visual con score numérico y recomendaciones priorizadas.</div></div>
+
+    <div class="sec-h2">Las 5 dimensiones evaluadas</div>
+    <table class="field-table">
+      <thead><tr><th>Dimensión</th><th>Qué mide</th><th>Preguntas</th><th>Indicador de referencia</th></tr></thead>
+      <tbody>
+        <tr><td>Exactitud Inventarios</td><td>Confiabilidad del registro vs. conteo físico (ERI)</td><td>3</td><td>ERI ≥ 99% = clase mundial</td></tr>
+        <tr><td>Nivel de Servicio</td><td>Fill Rate: pedidos completos a tiempo</td><td>3</td><td>≥ 96% = óptimo</td></tr>
+        <tr><td>Costos Logísticos</td><td>% de costos logísticos sobre ventas totales</td><td>3</td><td>8–12% = benchmark Colombia</td></tr>
+        <tr><td>Tecnología & Datos</td><td>Nivel de digitalización y uso de datos para decisiones</td><td>2</td><td>ERP con dashboards = nivel 3</td></tr>
+        <tr><td>Procesos & Estándares</td><td>Documentación y estandarización de procesos críticos</td><td>1</td><td>SOPs formales = nivel 3</td></tr>
+      </tbody>
+    </table>
+
+    <div class="sec-h2">Escala de calificación</div>
+    <p>Cada pregunta tiene 4 opciones con puntuaciones 0, 1, 2 o 3. El score total es la suma ponderada de todas las respuestas, expresada en porcentaje (0–100%).</p>
+    <table class="field-table">
+      <thead><tr><th>Score</th><th>Nivel</th><th>Qué significa</th></tr></thead>
+      <tbody>
+        <tr><td>80–100%</td><td><span class="badge badge-green">Clase mundial</span></td><td>Operación eficiente. El foco es optimización avanzada y benchmarking.</td></tr>
+        <tr><td>60–79%</td><td><span class="badge badge-blue">Competitivo</span></td><td>Base sólida. Mejoras focalizadas generan alto impacto rápidamente.</td></tr>
+        <tr><td>40–59%</td><td><span class="badge badge-gold">En desarrollo</span></td><td>Brechas significativas. Hay costos ocultos y riesgo operacional activo.</td></tr>
+        <tr><td>0–39%</td><td><span class="badge badge-red">Crítico</span></td><td>Intervención urgente. La operación tiene ineficiencias que afectan la rentabilidad directamente.</td></tr>
+      </tbody>
+    </table>
+
+    <div class="sec-h2">Cómo usar el reporte con el cliente</div>
+    <div class="steps">
+      <div class="step"><div class="step-num" style="background:var(--t1);color:var(--gold)">1</div><div class="step-body"><div class="step-title">Compartir la pantalla o imprimir el reporte</div><div class="step-desc">El radar chart es el elemento más impactante visualmente. Muéstrelo primero, luego explique los hallazgos por dimensión de mayor a menor criticidad.</div></div></div>
+      <div class="step"><div class="step-num" style="background:var(--t1);color:var(--gold)">2</div><div class="step-body"><div class="step-title">Conectar cada hallazgo con dinero</div><div class="step-desc">Ejemplo: "Su ERI es del 85%. Eso significa que 1 de cada 7 registros de inventario está mal — cada error puede costar entre $50.000 y $500.000 en ajustes, mermas o ventas perdidas."</div></div></div>
+      <div class="step"><div class="step-num" style="background:var(--t1);color:var(--gold)">3</div><div class="step-body"><div class="step-title">Usar el botón WhatsApp para enviar el resumen</div><div class="step-desc">El mensaje pre-redactado incluye el score y el nivel de madurez. El cliente lo recibe mientras hablan, lo que refuerza la seriedad del diagnóstico.</div></div></div>
+    </div>
+  </div>
+
+  <!-- H02 FLOTAS -->
+  <div class="chapter" id="h2">
+    <div class="chapter-header">
+      <div class="ch-icon-wrap" style="background:var(--t2);border-color:rgba(74,144,212,0.25)">🚚</div>
+      <div class="ch-meta">
+        <div class="ch-tag" style="color:var(--blue3)">Herramienta 02 · Diagnóstico</div>
+        <h2 class="ch-title">Analizador de Flotas & CPK</h2>
+        <p class="ch-sub">Costo por Kilómetro, desviación de mantenimiento y vehículos no rentables</p>
+      </div>
+    </div>
+
+    <div class="callout info"><div class="callout-icon">🎯</div><div class="callout-body"><strong>Cuándo usar:</strong> Con clientes que tienen vehículos propios (camiones, camionetas, motos, flotas de reparto). Pida el histórico de gastos de los últimos 3–6 meses por vehículo. Con ese Excel, el análisis toma menos de 10 minutos.</div></div>
+
+    <div class="sec-h2">Datos requeridos por vehículo</div>
+    <table class="field-table">
+      <thead><tr><th>Campo</th><th>Descripción</th><th></th></tr></thead>
+      <tbody>
+        <tr><td>Placa</td><td>Identificador del vehículo (ej: ABC-123)</td><td><span class="req">obligatorio</span></td></tr>
+        <tr><td>Tipo</td><td>Camión, Camioneta, Auto, Moto, Bus, Furgón</td><td><span class="req">obligatorio</span></td></tr>
+        <tr><td>Km recorridos</td><td>Total de kilómetros en el período analizado</td><td><span class="req">obligatorio</span></td></tr>
+        <tr><td>Combustible ($)</td><td>Gasto total en combustible del período</td><td><span class="req">obligatorio</span></td></tr>
+        <tr><td>Mant. preventivo ($)</td><td>Costo de mantenimientos programados</td><td><span class="req">obligatorio</span></td></tr>
+        <tr><td>Mant. correctivo ($)</td><td>Costo de reparaciones no programadas</td><td><span class="req">obligatorio</span></td></tr>
+        <tr><td>Otros ($)</td><td>Seguros, peajes, llantas, otros gastos</td><td><span class="opt">opcional</span></td></tr>
+        <tr><td>Prev. programados</td><td>Cantidad de mantenimientos preventivos planificados</td><td><span class="opt">opcional</span></td></tr>
+        <tr><td>Prev. ejecutados</td><td>Cuántos se realizaron realmente</td><td><span class="opt">opcional</span></td></tr>
+      </tbody>
+    </table>
+
+    <div class="sec-h2">Parámetros de análisis</div>
+    <table class="field-table">
+      <thead><tr><th>Parámetro</th><th>Valor por defecto</th><th>Cómo ajustarlo</th></tr></thead>
+      <tbody>
+        <tr><td>CPK benchmark</td><td>$850 COP/km</td><td>Consulte con el cliente su referencia del sector. Para camiones de carga Colombia: $700–$1.200/km</td></tr>
+        <tr><td>Alerta CPK (%)</td><td>20%</td><td>Si un vehículo supera el benchmark × 1.2, se marca como crítico. Ajuste según tolerancia del cliente.</td></tr>
+        <tr><td>Alerta mantenimiento correctivo</td><td>40%</td><td>Si el correctivo supera el 40% del gasto total de mantenimiento, indica falta de preventivo. Meta ideal: &lt;30%</td></tr>
+      </tbody>
+    </table>
+
+    <div class="sec-h2">Cómo calcular el CPK</div>
+    <div class="code-block">CPK = (Combustible + Preventivo + Correctivo + Otros) ÷ Km recorridos
+
+Ejemplo:
+  Combustible:    $4.200.000
+  Preventivo:       $950.000
+  Correctivo:     $1.800.000
+  Otros:            $280.000
+  ─────────────────────────
+  Total:          $7.230.000
+  Km recorridos:      18.500
+
+  CPK = $7.230.000 ÷ 18.500 = $390,8/km</div>
+
+    <div class="callout tip"><div class="callout-icon">💡</div><div class="callout-body"><strong>Tip de consultor:</strong> El indicador más revelador no es el CPK absoluto sino la <strong>proporción correctivo/preventivo</strong>. Una flota donde el 60% del gasto de mantenimiento es correctivo indica un problema sistémico de gestión, no solo vehículos viejos. Eso es lo que justifica el contrato.</div></div>
+  </div>
+
+  <!-- H03 ABC -->
+  <div class="chapter" id="h3">
+    <div class="chapter-header">
+      <div class="ch-icon-wrap" style="background:var(--t3);border-color:rgba(240,68,68,0.25)">📦</div>
+      <div class="ch-meta">
+        <div class="ch-tag" style="color:var(--red)">Herramienta 03 · Diagnóstico</div>
+        <h2 class="ch-title">Matriz ABC Multicriterio</h2>
+        <p class="ch-sub">Clasificación de inventario por valor, criticidad y rotación</p>
+      </div>
+    </div>
+
+    <div class="callout info"><div class="callout-icon">🎯</div><div class="callout-body"><strong>Cuándo usar:</strong> Con clientes que tienen problemas de espacio en bodega, quiebres de stock frecuentes, o exceso de inventario de referencias que no rotan. Pida el maestro de artículos con precios y demanda histórica.</div></div>
+
+    <div class="sec-h2">Los tres criterios de clasificación</div>
+    <p>A diferencia del ABC tradicional (solo por valor económico), esta herramienta combina <strong>3 criterios ponderados</strong> que usted puede ajustar:</p>
+    <table class="field-table">
+      <thead><tr><th>Criterio</th><th>Peso por defecto</th><th>Fórmula</th><th>Ajustar si…</th></tr></thead>
+      <tbody>
+        <tr><td>💰 Valor económico</td><td>50%</td><td>Costo unit. × Demanda anual</td><td>El cliente prioriza impacto financiero sobre todo lo demás</td></tr>
+        <tr><td>⚠️ Criticidad</td><td>30%</td><td>Escala 1–5 asignada manualmente</td><td>El cliente opera en industrias donde el quiebre de un ítem para la línea de producción</td></tr>
+        <tr><td>🔄 Rotación</td><td>20%</td><td>Demanda anual ÷ Stock promedio</td><td>El cliente tiene espacio limitado y quiere priorizar ítems de alta velocidad</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout warn"><div class="callout-icon">⚠️</div><div class="callout-body">Los tres pesos deben sumar exactamente 100%. La herramienta muestra una advertencia si no es así. El ajuste de pesos es una conversación estratégica con el cliente que por sí sola ya justifica el valor de la consultoría.</div></div>
+
+    <div class="sec-h2">Interpretación de resultados</div>
+    <div class="result-grid">
+      <div class="result-item" style="border-left:3px solid var(--red)">
+        <div class="ri-label"><span class="badge badge-red">A · ~20% de SKUs</span></div>
+        <div class="ri-name">Control intensivo</div>
+        <div class="ri-desc"><strong>Bodega:</strong> Zona prime, frente a puertas. <strong>Conteo:</strong> Semanal. <strong>SS:</strong> Alto (z=1.65). <strong>Proveedor:</strong> Mínimo 2 alternativos.</div>
+      </div>
+      <div class="result-item" style="border-left:3px solid var(--orange)">
+        <div class="ri-label"><span class="badge badge-gold">B · ~30% de SKUs</span></div>
+        <div class="ri-name">Control moderado</div>
+        <div class="ri-desc"><strong>Bodega:</strong> Zona media. <strong>Conteo:</strong> Mensual. <strong>SS:</strong> Moderado (z=1.28). <strong>Reorden:</strong> Revisión periódica mensual.</div>
+      </div>
+      <div class="result-item" style="border-left:3px solid var(--blue2)">
+        <div class="ri-label"><span class="badge badge-blue">C · ~50% de SKUs</span></div>
+        <div class="ri-name">Control simplificado</div>
+        <div class="ri-desc"><strong>Bodega:</strong> Zona alejada. <strong>Conteo:</strong> Trimestral. <strong>SS:</strong> Bajo o cero. <strong>Evaluar:</strong> Eliminar si no rota.</div>
+      </div>
+      <div class="result-item">
+        <div class="ri-label">Stock de seguridad recomendado</div>
+        <div class="ri-name">Calculado automáticamente</div>
+        <div class="ri-desc">SS = (Demanda diaria promedio × Lead time) × 1.5. La herramienta lo calcula por ítem y lo muestra en la tabla de resultados.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- H04 SIMULADOR -->
+  <div class="chapter" id="h4">
+    <div class="chapter-header">
+      <div class="ch-icon-wrap" style="background:var(--t4);border-color:rgba(167,139,250,0.25)">🔬</div>
+      <div class="ch-meta">
+        <div class="ch-tag" style="color:var(--purple)">Herramienta 04 · Ejecución</div>
+        <h2 class="ch-title">Simulador de Escenarios de Inventario</h2>
+        <p class="ch-sub">EOQ, Fill Rate y análisis de sensibilidad comparando hasta 3 alternativas</p>
+      </div>
+    </div>
+
+    <div class="callout info"><div class="callout-icon">🎯</div><div class="callout-body"><strong>Cuándo usar:</strong> Cuando el cliente está evaluando cambiar de proveedor, reducir capital en inventario o negociar nuevas condiciones de compra. Es la herramienta que convierte "creemos que deberíamos cambiar de proveedor" en "cambiar de proveedor le ahorra $3.2M anuales con un Fill Rate 7 puntos mayor".</div></div>
+
+    <div class="sec-h2">Parámetros base del producto</div>
+    <table class="field-table">
+      <thead><tr><th>Campo</th><th>Descripción</th><th>Cómo obtenerlo</th></tr></thead>
+      <tbody>
+        <tr><td>Demanda diaria</td><td>Unidades promedio consumidas por día hábil</td><td>Total ventas período ÷ días hábiles</td></tr>
+        <tr><td>Desviación estándar</td><td>Variabilidad de la demanda diaria</td><td>=DESVEST() en Excel sobre los datos de ventas diarias</td></tr>
+        <tr><td>Costo unitario</td><td>Precio de compra del producto</td><td>Factura o lista de precios del proveedor actual</td></tr>
+        <tr><td>Costo de pedido</td><td>Costo administrativo de colocar una orden</td><td>Suma de: tiempo administrativo + flete + recepción</td></tr>
+        <tr><td>Costo almacenamiento</td><td>% del valor del ítem que cuesta guardarlo 1 año</td><td>Incluye: arriendo bodega, seguros, merma, capital inmovilizado. Típico: 20–30%</td></tr>
+        <tr><td>Costo de quiebre</td><td>Costo por cada unidad que falta cuando hay demanda</td><td>Margen perdido + penalidad cliente + gestión de faltante</td></tr>
+      </tbody>
+    </table>
+
+    <div class="sec-h2">Los 3 escenarios comparables</div>
+    <p>Cada escenario modifica 4 variables respecto a la situación base:</p>
+    <table class="scenario-table">
+      <thead><tr><th>Variable</th><th>Qué representa</th><th>Ejemplo de uso</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Lead time (días)</strong></td><td>Tiempo entre pedido y recepción del proveedor</td><td>Proveedor A: 7 días → Proveedor B local: 3 días</td></tr>
+        <tr><td><strong>Stock seguridad (%)</strong></td><td>% del SS calculado automáticamente que se mantiene</td><td>100% = mantener SS estándar · 80% = reducirlo un 20%</td></tr>
+        <tr><td><strong>Descuento proveedor (%)</strong></td><td>Reducción en el costo unitario por negociación</td><td>Contrato anual: 12% descuento</td></tr>
+        <tr><td><strong>Confiabilidad proveedor (%)</strong></td><td>% de veces que el proveedor cumple el lead time</td><td>Proveedor A: 90% · Proveedor B certificado: 98%</td></tr>
+      </tbody>
+    </table>
+
+    <div class="sec-h2">Indicadores calculados</div>
+    <div class="result-grid">
+      <div class="result-item"><div class="ri-label">EOQ</div><div class="ri-name">Cantidad Económica de Pedido</div><div class="ri-desc">Cuántas unidades pedir en cada orden para minimizar el costo total. Fórmula de Wilson: √(2·D·S / h·C)</div></div>
+      <div class="result-item"><div class="ri-label">Fill Rate</div><div class="ri-name">Nivel de servicio estimado</div><div class="ri-desc">% de unidades demandadas que se pueden satisfacer sin quiebre. Se ve afectado por el SS y la confiabilidad del proveedor.</div></div>
+      <div class="result-item"><div class="ri-label">Stock de seguridad</div><div class="ri-name">Buffer de protección</div><div class="ri-desc">SS = z × σ × √LT. Donde z=1.65 (95% nivel de servicio), σ=desviación estándar demanda, LT=lead time.</div></div>
+      <div class="result-item"><div class="ri-label">Costo total anual</div><div class="ri-name">Suma de 3 componentes</div><div class="ri-desc">Almacenamiento + Pedidos + Quiebres esperados. La herramienta desglosa cada componente en la gráfica apilada.</div></div>
+    </div>
+  </div>
+
+  <!-- H05 ISO -->
+  <div class="chapter" id="h5">
+    <div class="chapter-header">
+      <div class="ch-icon-wrap" style="background:var(--t5);border-color:rgba(45,212,160,0.25)">🛡</div>
+      <div class="ch-meta">
+        <div class="ch-tag" style="color:var(--green)">Herramienta 05 · Control</div>
+        <h2 class="ch-title">Módulo de Auditoría ISO 39001</h2>
+        <p class="ch-sub">Checklist digital del Sistema de Gestión de Seguridad Vial</p>
+      </div>
+    </div>
+
+    <div class="callout info"><div class="callout-icon">🎯</div><div class="callout-body"><strong>Cuándo usar:</strong> Con empresas de transporte, distribución o cualquier organización con flota vehicular propia. Es el único servicio que requiere su certificación como Auditor Interno ISO 39001 del Consejo Colombiano de Seguridad — una credencial diferenciadora.</div></div>
+
+    <div class="sec-h2">Estructura de la norma — 7 cláusulas</div>
+    <table class="field-table">
+      <thead><tr><th>Cláusula</th><th>Título</th><th>Ítems</th><th>Qué verifica</th></tr></thead>
+      <tbody>
+        <tr><td>4</td><td>Contexto</td><td>4</td><td>Análisis del contexto, partes interesadas y alcance del SGSV</td></tr>
+        <tr><td>5</td><td>Liderazgo</td><td>5</td><td>Compromiso dirección, política de SV, roles y responsabilidades</td></tr>
+        <tr><td>6</td><td>Planificación</td><td>4</td><td>Identificación de riesgos viales, objetivos y planes de acción</td></tr>
+        <tr><td>7</td><td>Apoyo</td><td>5</td><td>Recursos, competencia del personal, comunicación y documentación</td></tr>
+        <tr><td>8</td><td>Operación</td><td>6</td><td>Mantenimiento vehicular, control de velocidad, fatiga, rutas</td></tr>
+        <tr><td>9</td><td>Evaluación</td><td>4</td><td>KPIs de SV, registro de incidentes, auditorías internas</td></tr>
+        <tr><td>10</td><td>Mejora</td><td>3</td><td>No conformidades, causa raíz y mejora continua</td></tr>
+      </tbody>
+    </table>
+
+    <div class="sec-h2">Escala de calificación por ítem</div>
+    <table class="field-table">
+      <thead><tr><th>Calificación</th><th>Puntos</th><th>Criterio para asignarla</th></tr></thead>
+      <tbody>
+        <tr><td><span class="badge badge-green">✓ Conforme</span></td><td>3 pts</td><td>El requisito se cumple completamente con evidencia objetiva</td></tr>
+        <tr><td><span class="badge badge-blue">◎ Observación</span></td><td>2 pts</td><td>Se cumple pero hay riesgo potencial o aspectos por mejorar</td></tr>
+        <tr><td><span class="badge badge-gold">▲ NC Menor</span></td><td>1 pt</td><td>Incumplimiento parcial que no compromete el sistema completo</td></tr>
+        <tr><td><span class="badge badge-red">✕ NC Mayor</span></td><td>0 pts</td><td>Incumplimiento total o sistemático. Requiere acción correctiva inmediata</td></tr>
+        <tr><td><span class="badge">N/A</span></td><td>—</td><td>El requisito no aplica al contexto de esta organización</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout warn"><div class="callout-icon">⚠️</div><div class="callout-body"><strong>Campo de evidencia:</strong> Por cada ítem, anote en el campo de texto la evidencia encontrada (número de documento, fecha del acta, nombre del procedimiento). Sin evidencia documentada, no se puede calificar como Conforme aunque el proceso exista verbalmente. Este rigor es lo que diferencia a un auditor interno de un simple checklist.</div></div>
+
+    <div class="sec-h2">El informe oficial</div>
+    <p>Al generar el reporte, la herramienta produce un documento con:</p>
+    <div class="steps">
+      <div class="step"><div class="step-num" style="background:var(--t5);color:var(--green)">1</div><div class="step-body"><div class="step-title">Score global y veredicto</div><div class="step-desc">Índice de Conformidad ISO 39001 en porcentaje con veredicto: APTO / CON OBSERVACIONES / REQUIERE MEJORAS / NO CONFORME.</div></div></div>
+      <div class="step"><div class="step-num" style="background:var(--t5);color:var(--green)">2</div><div class="step-body"><div class="step-title">Scores por cláusula</div><div class="step-desc">Permite identificar qué área del sistema de gestión está más débil y priorizar el plan de acción.</div></div></div>
+      <div class="step"><div class="step-num" style="background:var(--t5);color:var(--green)">3</div><div class="step-body"><div class="step-title">Lista de hallazgos</div><div class="step-desc">NC Mayores, menores y observaciones en orden de criticidad, con referencia normativa y la evidencia que usted registró.</div></div></div>
+      <div class="step"><div class="step-num" style="background:var(--t5);color:var(--green)">4</div><div class="step-body"><div class="step-title">Declaración del auditor</div><div class="step-desc">Cierre formal con su nombre, certificación CCS y fecha. Este campo aparece en el documento impreso y le da validez al informe.</div></div></div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- DIAGNOSTICO EXPRESS -->
+  <div class="chapter" id="diagnostico">
+    <div class="chapter-header">
+      <div class="ch-icon-wrap" style="background:rgba(240,165,0,0.1);border-color:rgba(240,165,0,0.2)">⚡</div>
+      <div class="ch-meta">
+        <div class="ch-tag" style="color:var(--gold)">Estrategia de captación</div>
+        <h2 class="ch-title">El Diagnóstico Express de 48 horas</h2>
+        <p class="ch-sub">Cómo convertir datos del cliente en una propuesta contundente</p>
+      </div>
+    </div>
+
+    <p>El <strong>Diagnóstico Express</strong> es la estrategia de captación más poderosa del Toolbox. Permite demostrar valor antes de firmar cualquier contrato:</p>
+
+    <div class="steps">
+      <div class="step"><div class="step-num" style="background:var(--t1);color:var(--gold)">1</div><div class="step-body"><div class="step-title">Solicitar los datos (Hora 0)</div><div class="step-desc">Pida al cliente potencial: <em>"¿Me puede compartir un Excel con los gastos de flota de los últimos 3 meses y el listado de sus ítems de inventario con precio y demanda? Con eso le preparo un diagnóstico inicial sin costo."</em></div></div></div>
+      <div class="step"><div class="step-num" style="background:var(--t1);color:var(--gold)">2</div><div class="step-body"><div class="step-title">Correr los análisis (2–4 horas)</div><div class="step-desc">H01: Madurez Logística (30 min) · H02: Flotas CPK (1 hora) · H03: Matriz ABC (1 hora). Total: menos de 3 horas para 3 reportes completos.</div></div></div>
+      <div class="step"><div class="step-num" style="background:var(--t1);color:var(--gold)">3</div><div class="step-body"><div class="step-title">Preparar el reporte de 3 páginas (1 hora)</div><div class="step-desc">Imprima los 3 reportes y consolide: <strong>Puntos de fuga de dinero</strong> (CPK fuera de benchmark, ítems A mal ubicados), <strong>Cuellos de botella</strong> (ERI bajo, correctivo alto), <strong>Potencial de ahorro</strong> (suma de ahorros calculados por las herramientas).</div></div></div>
+      <div class="step"><div class="step-num" style="background:var(--t1);color:var(--gold)">4</div><div class="step-body"><div class="step-title">Presentar y proponer (reunión virtual 45 min)</div><div class="step-desc">Entregue el diagnóstico primero. Luego conecte cada hallazgo con la solución y la inversión. El cliente ya vio los números — la propuesta es la consecuencia lógica, no una venta.</div></div></div>
+    </div>
+
+    <div class="callout key"><div class="callout-icon">⭐</div><div class="callout-body"><strong>El diferencial:</strong> La mayoría de consultores llegan a proponer sin haber visto los datos. Usted llega con 3 reportes visuales que cuantifican el problema específico del cliente. La pregunta ya no es "¿por qué contratar a Paul?" sino "¿cuándo empezamos?"</div></div>
+  </div>
+
+  <!-- ENTREGA -->
+  <div class="chapter" id="entrega">
+    <div class="chapter-header">
+      <div class="ch-icon-wrap" style="background:rgba(45,212,160,0.1);border-color:rgba(45,212,160,0.2)">📤</div>
+      <div class="ch-meta">
+        <div class="ch-tag" style="color:var(--green)">Comunicación</div>
+        <h2 class="ch-title">Entrega de reportes al cliente</h2>
+        <p class="ch-sub">Cómo y cuándo compartir los resultados</p>
+      </div>
+    </div>
+
+    <div class="sec-h2">Canales disponibles en cada herramienta</div>
+    <table class="field-table">
+      <thead><tr><th>Canal</th><th>Cuándo usar</th><th>Qué incluye el mensaje</th></tr></thead>
+      <tbody>
+        <tr><td>📲 WhatsApp</td><td>Resumen ejecutivo inmediato durante o después de la reunión</td><td>Score, hallazgos principales, ahorro potencial, llamado a la acción</td></tr>
+        <tr><td>🖨 Imprimir PDF</td><td>Reunión presencial o entregable formal</td><td>Reporte completo sin menús ni botones — limpio para presentar</td></tr>
+        <tr><td>✉ Correo</td><td>Seguimiento formal después de la reunión</td><td>Mismo contenido que WhatsApp en formato email</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout tip"><div class="callout-icon">💡</div><div class="callout-body"><strong>Protocolo recomendado:</strong> Durante la reunión → WhatsApp (el cliente tiene el resumen en su teléfono inmediatamente). Al finalizar → imprima el PDF completo y compártalo por correo como adjunto. Esto crea dos puntos de contacto del reporte y refuerza la percepción profesional.</div></div>
+  </div>
+
+  <!-- FAQ -->
+  <div class="chapter" id="faq">
+    <div class="chapter-header">
+      <div class="ch-icon-wrap" style="background:rgba(74,144,212,0.1);border-color:rgba(74,144,212,0.2)">💬</div>
+      <div class="ch-meta">
+        <div class="ch-tag" style="color:var(--blue3)">Soporte</div>
+        <h2 class="ch-title">Preguntas frecuentes</h2>
+      </div>
+    </div>
+
+    <div class="sec-h3">¿Los datos del cliente quedan guardados en algún servidor?</div>
+    <p>No. Todas las herramientas procesan los datos <strong>localmente en el navegador</strong>. Nada se envía a ningún servidor. Cuando se cierra la pestaña, los datos desaparecen. Esto es un argumento de privacidad que puede mencionar al cliente.</p>
+
+    <div class="sec-h3">¿Puedo usar las herramientas en el celular?</div>
+    <p>Sí, todas son responsivas. Sin embargo, para ingresar grandes volúmenes de datos (flotas con 20+ vehículos, inventarios con 50+ ítems) el computador o tablet es más cómodo.</p>
+
+    <div class="sec-h3">¿Qué pasa si el cliente tiene datos en formato diferente al esperado?</div>
+    <p>Use los <strong>botones "Cargar datos de ejemplo"</strong> para ver el formato exacto de entrada. Si el cliente tiene Excel con columnas en diferente orden, simplemente copie los valores manualmente. Para automatizar la importación de datos, ese es un servicio adicional que puede ofrecer con Python.</p>
+
+    <div class="sec-h3">¿Puedo agregar más herramientas al Toolbox?</div>
+    <p>Sí. El Toolbox está diseñado para crecer. En el dashboard hay un espacio reservado "Herramienta 06 — Próximamente". Cuando identifique una necesidad recurrente en sus clientes, la construimos e integramos al panel.</p>
+
+    <div class="sec-h3">¿Los cálculos de la Herramienta 04 son exactos?</div>
+    <p>Son modelos matemáticos estándar (EOQ de Wilson, SS con distribución normal). Funcionan como estimadores confiables para la toma de decisiones. Para resultados más precisos se requieren datos históricos de al menos 12 meses y considerar estacionalidad — ese es el nivel de análisis del contrato, no del diagnóstico gratuito.</p>
+
+    <div class="divider"></div>
+    <div style="text-align:center;padding:20px 0;font-size:0.72rem;color:var(--text3)">
+      Manual elaborado para uso exclusivo de Paul André Negrete · paulnegrete.netlify.app<br>
+      Paul Negrete Toolbox v1.0 · © 2026 · Propiedad intelectual
+    </div>
+  </div>
+
+</div><!-- end content -->
+</div><!-- end layout -->
+
+<script>
+// Highlight active nav link on scroll
+const chapters = document.querySelectorAll('.chapter, .cover');
+const navLinks = document.querySelectorAll('.nav-link');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const id = e.target.id;
+      navLinks.forEach(l => {
+        l.classList.toggle('active', l.getAttribute('href') === '#' + id);
+      });
+    }
+  });
+}, { threshold: 0.3 });
+chapters.forEach(c => observer.observe(c));
+</script>
+</body>
+</html>
