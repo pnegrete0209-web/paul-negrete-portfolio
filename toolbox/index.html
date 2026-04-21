@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Toolbox · Paul André Negrete Burgos</title>
+<title>Toolbox · Paul Negrete</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -46,7 +46,8 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .dashboard.show{display:block}
 
 /* HEADER */
-nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:14px 48px;background:rgba(6,9,16,0.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);flex-wrap:wrap;gap:12px}
+.sticky-header{position:sticky;top:0;z-index:100;background:rgba(6,9,16,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+nav{display:flex;align-items:center;justify-content:space-between;padding:13px 48px;flex-wrap:wrap;gap:12px}
 .nav-brand{display:flex;align-items:center;gap:12px}
 .nav-logo-svg{width:38px;height:38px}
 .nav-brand-text{font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;color:var(--text)}
@@ -60,22 +61,22 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-co
 .btn-portfolio:hover{background:rgba(240,165,0,0.18)}
 
 /* HERO STRIP */
-.hero-strip{padding:40px 48px 0;position:relative;overflow:hidden}
-.hero-strip::before{content:'';position:absolute;top:-60px;right:-60px;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(240,165,0,0.06),transparent);pointer-events:none}
-.hero-greeting{font-size:0.75rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
-.hero-title{font-family:'Syne',sans-serif;font-size:clamp(1.6rem,3.5vw,2.6rem);font-weight:800;letter-spacing:-0.03em;margin-bottom:8px}
-.hero-sub{font-size:0.9rem;color:var(--text2);font-weight:300;max-width:500px;line-height:1.65}
+.hero-strip{padding:14px 48px 0;position:relative;overflow:hidden}
+.hero-strip::before{content:'';position:absolute;top:-60px;right:-60px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(240,165,0,0.05),transparent);pointer-events:none}
+.hero-greeting{font-size:0.7rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);margin-bottom:4px}
+.hero-title{font-family:'Syne',sans-serif;font-size:clamp(1.2rem,2.5vw,1.7rem);font-weight:800;letter-spacing:-0.03em;margin-bottom:2px}
+.hero-sub{font-size:0.78rem;color:var(--text2);font-weight:300;max-width:500px;line-height:1.4}
 
 /* STATS ROW */
-.stats-row{display:flex;gap:14px;padding:24px 48px;flex-wrap:wrap}
-.stat-pill{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--border);border-radius:var(--r-sm);padding:12px 18px;flex:1;min-width:140px}
-.stat-icon{font-size:1.2rem;flex-shrink:0}
+.stats-row{display:flex;gap:10px;padding:10px 48px 13px;flex-wrap:wrap;border-top:1px solid var(--border)}
+.stat-pill{display:flex;align-items:center;gap:8px;background:var(--card2);border:1px solid var(--border);border-radius:var(--r-sm);padding:8px 14px;flex:1;min-width:120px}
+.stat-icon{font-size:1rem;flex-shrink:0}
 .stat-info{}
-.stat-val{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800;color:var(--text);line-height:1}
-.stat-label{font-size:0.68rem;color:var(--text3);text-transform:uppercase;letter-spacing:0.07em;margin-top:2px}
+.stat-val{font-family:'Syne',sans-serif;font-size:0.95rem;font-weight:800;color:var(--text);line-height:1}
+.stat-label{font-size:0.62rem;color:var(--text3);text-transform:uppercase;letter-spacing:0.07em;margin-top:1px}
 
 /* TOOLS GRID */
-.tools-section{padding:0 48px 60px}
+.tools-section{padding:28px 48px 60px}
 .section-hdr{font-family:'Syne',sans-serif;font-size:0.75rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--text3);margin-bottom:16px;display:flex;align-items:center;gap:10px}
 .section-hdr::after{content:'';flex:1;height:1px;background:var(--border)}
 .tools-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:32px}
@@ -119,7 +120,8 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-co
 
 @media(max-width:1024px){
   nav{padding:12px 22px}
-  .hero-strip,.stats-row,.tools-section,.notes-section,.settings-section{padding-left:22px;padding-right:22px}
+  .hero-strip,.tools-section,.notes-section,.settings-section{padding-left:22px;padding-right:22px}
+  .stats-row{padding:10px 22px 12px}
   .tools-grid{grid-template-columns:1fr 1fr}
 }
 @media(max-width:640px){
@@ -163,6 +165,7 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-co
 <!-- ── DASHBOARD ── -->
 <div class="dashboard" id="dashboard">
 
+  <div class="sticky-header">
   <nav>
     <div class="nav-brand">
       <svg class="nav-logo-svg" viewBox="0 0 48 48" fill="none">
@@ -201,6 +204,8 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-co
     <div class="stat-pill"><div class="stat-icon">📊</div><div class="stat-info"><div class="stat-val">3 fases</div><div class="stat-label">Diagnóstico · Ejecución · Control</div></div></div>
     <div class="stat-pill"><div class="stat-icon">📤</div><div class="stat-info"><div class="stat-val">WhatsApp</div><div class="stat-label">Reportes al instante</div></div></div>
   </div>
+
+  </div><!-- end sticky-header -->
 
   <!-- TOOLS -->
   <div class="tools-section">
@@ -257,7 +262,7 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-co
     <div class="section-hdr">Fase 2 · Ejecución y Análisis</div>
     <div class="tools-grid">
 
-      <a class="tool-card" href="./simulador-inventarios.html">
+      <a class="tool-card" href="./simulador-inventario.html">
         <div class="tool-card-top" style="background:linear-gradient(90deg,var(--purple),var(--blue2))"></div>
         <div class="tool-card-body">
           <div class="tool-icon" style="background:rgba(167,139,250,0.1);border-color:rgba(167,139,250,0.2)">🔬</div>
