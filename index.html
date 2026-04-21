@@ -635,14 +635,12 @@ footer{position:relative;z-index:1;background:var(--card);border-top:1px solid v
   <div class="chat-header">
     <div class="chat-avatar">🤖</div>
     <div class="chat-header-info">
-      <div class="chat-header-name">Asistente · Paul André</div>
+      <div class="chat-header-name">LOGI · Asistente de Paul André</div>
       <div class="chat-header-status">En línea · Logística &amp; Datos</div>
     </div>
     <button class="chat-close" onclick="toggleChat()"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
   </div>
-  <div class="chat-messages" id="chatMessages">
-    <div class="chat-msg bot">👋 Hola, soy el asistente de Paul André. Puedo responder preguntas sobre logística, análisis de datos, automatización y los servicios de consultoría. ¿En qué le puedo ayudar?</div>
-  </div>
+  <div class="chat-messages" id="chatMessages"></div>
   <div class="chat-input-wrap">
     <input class="chat-input" id="chatInput" type="text" placeholder="Escriba su pregunta..." onkeydown="if(event.key==='Enter')sendChat()">
     <button class="chat-send" onclick="sendChat()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
@@ -667,48 +665,87 @@ function updateQuote(){const keys=Object.keys(selectedServices),itemsEl=document
 function buildMessage(){const name=document.getElementById('clientName').value||'un cliente interesado',detail=document.getElementById('clientDetail').value,keys=Object.keys(selectedServices);if(!keys.length)return null;const complexity=parseFloat(document.getElementById('complexitySelect').value),modality=parseFloat(document.getElementById('modalitySelect').value),cSel=document.getElementById('complexitySelect'),mSel=document.getElementById('modalitySelect'),cText=cSel.options[cSel.selectedIndex].text.split('—')[0].trim(),mText=mSel.options[mSel.selectedIndex].text.split('(')[0].trim(),uText=urgencyMult===1?'Normal':urgencyMult===1.15?'Prioritario (+15%)':'Urgente (+30%)';let total=0;const lines=keys.map(k=>{const v=Math.round(selectedServices[k]*complexity*modality*urgencyMult);total+=v;return'  \u2022 '+k+': '+formatCOP(v)}).join('\n');return'Hola Paul! \uD83D\uDC4B Soy '+name+' y estoy interesado/a en sus servicios de consultor\xEDa.\n\n\uD83D\uDCCB *SERVICIOS SOLICITADOS:*\n'+lines+'\n\n\u2699\uFE0F *Complejidad:* '+cText+'\n\uD83D\uDCCD *Modalidad:* '+mText+'\n\u23F1 *Urgencia:* '+uText+'\n\n\uD83D\uDCB0 *TOTAL ESTIMADO: '+formatCOP(total)+'*\n\n'+(detail?'\uD83D\uDCDD *Detalle:* '+detail+'\n\n':'')+'?\xBFPodemos agendar el diagn\xF3stico gratuito de 30 minutos?'}
 function sendWhatsApp(){const msg=buildMessage();if(!msg){alert('Seleccione al menos un servicio.');return}window.open('https://wa.me/573008985321?text='+encodeURIComponent(msg),'_blank')}
 function sendEmail(){const msg=buildMessage();if(!msg){alert('Seleccione al menos un servicio.');return}const name=document.getElementById('clientName').value||'Cliente';window.open('mailto:pnegrete0209@gmail.com?subject='+encodeURIComponent('Solicitud de consultor\xEDa \u2014 '+name)+'&body='+encodeURIComponent(msg),'_blank')}
-// ── CHATBOT PRE-PROGRAMADO (sin API, 100% confiable)
+// ── LOGI — Asistente conversacional de Paul Negrete
 let chatOpen = false;
-const FAQ = [
-  { k:['precio','costo','cuánto','cobras','tarifa','inversión','vale'], r:'Los precios varían según el servicio y el alcance del proyecto. Use el cotizador en esta página para obtener un estimado personalizado — selecciona los servicios, ajusta la complejidad y recibe la propuesta directamente por WhatsApp. 📊' },
-  { k:['logística','operaciones','flota','inventario','bodega','almacén','suministro','kpi','indicadores'], r:'Me especializo en optimización de operaciones logísticas: gestión de flota, control de inventarios, cadena de suministro y diseño de KPIs. Con más de 10 años en empresas del Caribe colombiano, identifico ineficiencias y propongo soluciones medibles. ¿Le gustaría agendar un diagnóstico gratuito de 30 minutos?' },
-  { k:['power bi','dashboard','tableau','reporte','análisis','datos','excel','bi'], r:'Diseño dashboards en Power BI con KPIs en tiempo real, conectados a sus fuentes de datos actuales. Incluye modelado DAX, Power Query y reportes gerenciales. Un dashboard básico (hasta 5 vistas) toma entre 5 y 7 días. 📊' },
-  { k:['python','automatización','script','bot','etl','programación','django'], r:'Desarrollo scripts Python para automatizar tareas repetitivas: reportes de fin de mes, procesos ETL, integraciones entre sistemas. También aplico para aplicaciones web con Django. El objetivo siempre es ahorrarle horas de trabajo manual a su equipo. 🐍' },
-  { k:['sql','base de datos','mysql','postgresql','consultas','datos'], r:'Diseño modelos de bases de datos relacionales, escribo consultas SQL avanzadas y genero estructuras limpias para análisis. Trabajo principalmente con MySQL y lo integro con Power BI o Python para análisis completos. 🗄️' },
-  { k:['sap','erp','business one','implementación','sistema'], r:'Tengo experiencia liderando la implementación de SAP Business One en CESINCOR Ltda. Acompaño en mapeo de procesos, capacitación de usuarios y gestión del cambio organizacional. 🔧' },
-  { k:['capacitación','taller','curso','formación','entrena'], r:'Dicto talleres grupales e individuales en Power BI, Python para datos, SQL para no técnicos y gestión logística operativa. Se pueden hacer de forma remota o presencial en Montería y la región Caribe. 🎓' },
-  { k:['serpens','contabilidad','factura','facturación','contable'], r:'SERPENS v5.0 es un sistema contable multiempresa que desarrollé con React + Vite + Supabase. Centraliza la contabilidad con plan PUC de 2.502 cuentas, períodos contables y facturación automática. Está disponible en serpens.vercel.app 📒' },
-  { k:['vértice','vertice','construcción','obra','infraestructura','proyecto'], r:'VÉRTICE es una metodología digitalizada para el control de obras civiles e infraestructura, con módulo de Project Management para cronogramas y presupuestos. Actualmente en desarrollo. ¿Le interesa una demo?' },
-  { k:['vital','salud','médico','citas','fórmula','paciente'], r:'V.I.T.A.L. es una solución de organización de datos médicos con trazabilidad de pacientes y alertas automáticas de citas y fórmulas. Demuestra cómo el análisis de datos aplica al sector bienestar. ¿Le interesa una demo?' },
-  { k:['agendar','cita','reunión','llamada','videollamada','consulta','diagnóstico'], r:'¡Perfecto! El diagnóstico inicial de 30 minutos es completamente gratuito y sin compromiso. Puede agendarlo usando el calendario de esta misma página (sección "Agendar") o escribirme directamente por WhatsApp: +57 300 898 5321 📅' },
-  { k:['whatsapp','contacto','comunicar','escribir','teléfono','correo','email'], r:'Puede contactarme por:\n📲 WhatsApp: +57 300 898 5321\n✉ Correo: pnegrete0209@gmail.com\n📌 Montería, Córdoba, Colombia\n\n¡Respondo en menos de 24 horas hábiles!' },
-  { k:['experiencia','años','quién','paul','negrete','perfil','quien eres'], r:'Soy Paul André Negrete, consultor especializado en logística y análisis de datos con más de 10 años de experiencia en empresas del Caribe colombiano. Combino la gestión operativa con herramientas modernas como Power BI, Python, SQL y SAP Business One para que las empresas tomen decisiones basadas en evidencia. 🚀' },
-  { k:['remoto','presencial','virtual','montería','colombia','ubicación','donde'], r:'Trabajo principalmente de forma remota (videollamada + entregables digitales), aunque también hago visitas presenciales en Montería, Córdoba y la región Caribe colombiana. Para proyectos en otras ciudades, consultamos según el alcance.' },
-  { k:['garantía','entregable','resultado','que incluye','que recibiré'], r:'Cada proyecto incluye un entregable concreto: dashboards, scripts documentados, bases de datos, informes o capacitaciones. Trabajo con cronogramas definidos y seguimiento permanente. La consulta inicial de 30 min es gratuita para alinear expectativas antes de cualquier compromiso. ✅' },
-];
-
-function findAnswer(q) {
-  const ql = q.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
-  for (const f of FAQ) {
-    if (f.k.some(k => ql.includes(k.normalize('NFD').replace(/[\u0300-\u036f]/g,'')))) return f.r;
+let logiState = { step: 'inicio', nombre: '', empresa: '', necesidad: '' };
+ 
+const n = s => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+ 
+// ── Respuestas detalladas por tema
+const TEMAS = {
+  logistica: {
+    k:['logistica','logística','operacion','flota','inventario','bodega','almacen','suministro','kpi','indicador','despacho','distribucion','cadena','transporte'],
+    r: nombre => `Perfecto, ${nombre || 'es un placer ayudarle'}. La consultoría logística es una de las áreas más fuertes de Paul. 🚚\n\nEspecíficamente puede ayudarle con:\n• Diagnóstico y optimización de la cadena de suministro\n• Gestión y control de flota vehicular (CPK, mantenimiento preventivo)\n• Control de inventarios y exactitud de registros (ERI)\n• Diseño de KPIs y tableros de gestión operacional\n• Reducción de costos logísticos vs. ventas\n\nCon más de 10 años en empresas del Caribe colombiano, Paul identifica los puntos de fuga de dinero con datos reales, no suposiciones.\n\n¿Su necesidad está más relacionada con flota, inventarios o procesos de despacho y distribución?`
+  },
+  datos: {
+    k:['power bi','dashboard','dato','excel','reporte','analisis','análisis','bi','tableau','indicador','grafica','grafico','visualizacion'],
+    r: nombre => `Excelente, ${nombre ? nombre + ', eso' : 'eso'} es justo la especialidad de Paul en inteligencia de negocios. 📊\n\nLo que puede entregarle:\n• Dashboards en Power BI con KPIs en tiempo real\n• Conexión a sus fuentes actuales: Excel, bases de datos, ERP\n• Modelado avanzado con DAX y Power Query\n• Reportes gerenciales automáticos (el famoso "informe de lunes por sí solo")\n• Capacitación a su equipo para que los gestionen sin depender de nadie\n\nUn dashboard básico (hasta 5 vistas) tarda entre 5 y 7 días. Uno avanzado multiconexión, alrededor de 2 semanas.\n\n¿Ya tienen datos organizados en algún sistema, o partirían desde cero con Excel?`
+  },
+  automatizacion: {
+    k:['python','automatizar','automatizacion','automatización','script','bot','etl','programacion','repetitiv','manual','proceso','django','web'],
+    r: nombre => `¡Ese es un dolor muy común y muy solucionable! 🐍\n\n${nombre ? nombre + ', lo' : 'Lo'} que Paul hace con Python y automatización:\n• Scripts ETL que extraen, limpian y consolidan datos de múltiples fuentes\n• Automatización de reportes que se generan solos cada semana o mes\n• Integraciones entre sistemas que no se hablan entre sí\n• Aplicaciones web funcionales con Django para digitalizar procesos internos\n• Alertas automáticas cuando un KPI supera o baja del umbral\n\nEl objetivo siempre es el mismo: que su equipo deje de hacer lo que puede hacer una máquina, y se enfoque en lo que realmente agrega valor.\n\n¿Qué tarea específica le consume más tiempo hoy y quisiera automatizar?`
+  },
+  sap: {
+    k:['sap','erp','business one','implementacion','implementación','sistema','modulo','módulo'],
+    r: nombre => `Muy bien, ${nombre ? nombre + ', ' : ''}SAP Business One es una de las credenciales más fuertes de Paul. ⚙️\n\nActualmente lidera la implementación en CESINCOR Ltda., lo que le da experiencia práctica y reciente en:\n• Mapeo y documentación de procesos previos a la implementación\n• Configuración de módulos según el modelo de negocio\n• Gestión del cambio organizacional (el mayor reto en toda implementación)\n• Capacitación a usuarios finales y líderes de área\n• Soporte post-implementación y resolución de brechas\n\nMuchas implementaciones fallan no por problemas técnicos sino por falta de acompañamiento humano. Ahí es donde Paul marca la diferencia.\n\n¿Están en etapa de evaluación de SAP, o ya iniciaron la implementación y necesitan apoyo?`
+  },
+  capacitacion: {
+    k:['capacitacion','capacitación','taller','curso','formacion','formación','aprend','enseñ','entrena','equipo','empleado'],
+    r: nombre => `¡Capacitar equipos es una de las inversiones con mayor retorno! 🎓\n\n${nombre ? nombre + ', Paul' : 'Paul'} ofrece talleres diseñados para empresas, no para estudiantes:\n• Power BI para analistas y gerentes (sin necesidad de programar)\n• Python aplicado a datos empresariales (desde cero hasta ETL)\n• SQL para no técnicos (cómo consultar y entender bases de datos)\n• Gestión logística operativa y diseño de KPIs\n• Uso de Excel avanzado para automatización de reportes\n\nSe hacen de forma remota o presencial en Montería y la región Caribe. El mínimo recomendado es 4 personas para talleres grupales.\n\n¿Para cuántas personas sería la capacitación y en qué herramienta o tema están más interesados?`
+  },
+  precio: {
+    k:['precio','costo','cuanto','cuánto','cobr','tarifa','inversion','inversión','vale','valor','pagar'],
+    r: nombre => `Entiendo, ${nombre ? nombre + ', l' : 'L'}a inversión es siempre una parte importante de la decisión. 💰\n\nLos precios de Paul varían según el alcance, pero como referencia:\n• Sesión de diagnóstico logístico: desde $150.000 COP\n• Dashboard Power BI básico: desde $350.000 COP\n• Scripts Python o automatizaciones: desde $200.000 COP\n• Consultoría SAP/ERP: desde $250.000 COP por sesión\n• Capacitaciones: desde $80.000 COP por persona\n\nLo más recomendable es usar el cotizador de esta misma página — selecciona los servicios que necesita y el estimado llega directo a su WhatsApp con el desglose completo.\n\nAdemás, el diagnóstico inicial de 30 minutos es completamente gratuito. ¿Le agendamos una llamada sin compromiso?`
+  },
+  agendar: {
+    k:['agendar','agenda','cita','reunion','reunión','llamada','videollamada','consulta','diagnostico','diagnóstico','gratis','gratuito','disponib'],
+    r: nombre => `¡Perfecto${nombre ? ', ' + nombre : ''}! El diagnóstico inicial de 30 minutos es 100% gratuito y sin compromiso. 📅\n\nEn esa llamada Paul:\n✓ Escucha la situación actual de su operación\n✓ Identifica los 2 o 3 puntos de mayor impacto\n✓ Le da una orientación concreta aunque no continúen\n\nTiene dos formas de agendarlo:\n\n1️⃣ Usar el calendario en esta página (sección "Agendar diagnóstico") — conectado directamente al Google Calendar de Paul, sin doble reserva.\n\n2️⃣ Escribirle por WhatsApp ahora mismo:\n📲 +57 300 898 5321\n\n¿Cuál de las dos opciones le queda más cómoda?`
+  },
+  contacto: {
+    k:['whatsapp','contacto','comunic','escrib','telefono','teléfono','correo','email','llam','mensaje'],
+    r: nombre => `Claro${nombre ? ', ' + nombre : ''}, aquí están todos los canales de contacto de Paul: 📬\n\n📲 WhatsApp: +57 300 898 5321 (responde en menos de 24h hábiles)\n✉️ Correo: pnegrete0209@gmail.com\n🌐 Portafolio: paulnegrete.netlify.app\n📌 Montería, Córdoba, Colombia\n\nSi quiere una respuesta rápida, WhatsApp es definitivamente el canal más ágil. También puede usar el cotizador de esta página para enviar una propuesta detallada directamente.\n\n¿Hay algo más en lo que pueda orientarle antes de que contacte a Paul?`
+  },
+  paul: {
+    k:['paul','negrete','quien','quién','perfil','experiencia','años','consultor','conoce'],
+    r: nombre => `Con gusto${nombre ? ', ' + nombre : ''}. 🙌\n\nPaul André Negrete es un consultor colombiano especializado en la intersección entre logística operativa y tecnología de datos. Lo que lo diferencia:\n\n📍 Más de 10 años trabajando con empresas reales en el Caribe colombiano\n⚙️ Lidera actualmente la implementación de SAP Business One en CESINCOR Ltda.\n📊 Certificado en Power BI, Python, SQL y Gerencia de Proyectos (2025)\n🛡️ Auditor Interno SGSV ISO 39001 — Consejo Colombiano de Seguridad\n\nSu enfoque no es técnico por el técnico — es usar la tecnología como medio para que las empresas operen mejor y ganen más.\n\n¿Hay algún área específica de su experiencia en la que quisiera profundizar?`
+  },
+  proyectos: {
+    k:['serpens','vertice','vértice','vital','proyecto','software','sistema','app','aplicacion','desarrolló','construyo','construyó'],
+    r: nombre => `Muy bien${nombre ? ', ' + nombre : ''}. Paul tiene 3 soluciones propias en producción: 💻\n\n📒 SERPENS v5.0 — Sistema contable multiempresa para Colombia. Maneja plan PUC con 2.502 cuentas, períodos contables y facturación automática. Stack: React + Vite + Supabase. Disponible en serpens.vercel.app\n\n🏗️ VÉRTICE — Control digital de obras civiles e infraestructura con módulo de Project Management. Garantiza cumplimiento de cronogramas y presupuestos.\n\n💊 V.I.T.A.L. — Gestión de información médica: trazabilidad de pacientes, control de citas y fórmulas, alertas automáticas de seguimiento.\n\nEstos proyectos demuestran que Paul no solo asesora — construye soluciones reales.\n\n¿Le interesa conocer alguno de estos proyectos en detalle, o está pensando en algo similar para su empresa?`
   }
-  return null;
-}
-
+};
+ 
+// ── Flujo guiado por etapas
+const FLUJO = {
+  inicio: {
+    saludos: ['hola','buenos','buenas','buen dia','buen día','hi','hey','saludos','que tal','qué tal'],
+    resp: () => `¡Hola! Bienvenido/a. 😊 Soy **LOGI**, el asistente virtual de **Paul André Negrete**, consultor especializado en logística, análisis de datos y automatización de operaciones.\n\nEstoy aquí para orientarle y ayudarle a entender cómo Paul puede apoyar a su empresa.\n\nPara comenzar, ¿me podría decir su nombre? 🙂`
+  },
+  nombre_recibido: nombre => `Mucho gusto, **${nombre}**. 👋\n\n¿A qué se dedica su empresa o en qué sector trabaja? (Por ejemplo: transporte, retail, manufactura, salud, servicios…)\n\nEso me ayudará a orientarle mejor sobre qué servicio de Paul puede ser más valioso para usted.`,
+  empresa_recibida: (nombre, empresa) => `Excelente, gracias por compartirlo. Las empresas de **${empresa}** suelen tener necesidades muy específicas que Paul conoce bien.\n\n¿Cuál es el principal reto o dolor que enfrenta hoy en su operación?\n\nPor ejemplo: _"perdemos mucho tiempo en reportes manuales"_, _"no sabemos cuánto nos cuesta realmente la flota"_, _"el inventario siempre está descuadrado"_… cuénteme con sus palabras. 🎯`,
+  necesidad_recibida: (nombre) => `Entendido perfectamente, ${nombre}. Eso es exactamente el tipo de problema que Paul resuelve. 💡\n\nTengo algunas opciones para orientarle:\n\n1️⃣ Contarle más sobre el servicio específico que aplica a su caso\n2️⃣ Conocer los precios y tiempo estimado\n3️⃣ Agendar un diagnóstico gratuito de 30 minutos con Paul\n\n¿Por cuál prefiere empezar?`
+};
+ 
 function toggleChat() {
   chatOpen = !chatOpen;
   document.getElementById('chatWindow').classList.toggle('open', chatOpen);
-  if (chatOpen) setTimeout(() => document.getElementById('chatInput').focus(), 300);
+  if (chatOpen) {
+    if (document.getElementById('chatMessages').children.length === 0) {
+      setTimeout(() => logiResponde(FLUJO.inicio.resp()), 600);
+    }
+    setTimeout(() => document.getElementById('chatInput').focus(), 400);
+  }
 }
-
+ 
 function addMsg(text, role) {
   const el = document.createElement('div');
   el.className = 'chat-msg ' + role;
-  el.textContent = text;
+  // Support basic markdown-like bold
+  el.innerHTML = text.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>');
   document.getElementById('chatMessages').appendChild(el);
   document.getElementById('chatMessages').scrollTop = 9999;
 }
-
+ 
 function addTyping() {
   const el = document.createElement('div');
   el.className = 'chat-msg typing';
@@ -717,23 +754,98 @@ function addTyping() {
   document.getElementById('chatMessages').scrollTop = 9999;
   return el;
 }
-
+ 
+function logiResponde(texto, delay = 900) {
+  const typing = addTyping();
+  setTimeout(() => { typing.remove(); addMsg(texto, 'bot'); }, delay);
+}
+ 
+function findTema(q) {
+  const ql = n(q);
+  for (const [, tema] of Object.entries(TEMAS)) {
+    if (tema.k.some(k => ql.includes(n(k)))) return tema;
+  }
+  return null;
+}
+ 
 function sendChat() {
   const input = document.getElementById('chatInput');
   const text = input.value.trim();
   if (!text) return;
   input.value = '';
   addMsg(text, 'user');
-  const typing = addTyping();
-  setTimeout(() => {
-    typing.remove();
-    const answer = findAnswer(text);
-    if (answer) {
-      addMsg(answer, 'bot');
-    } else {
-      addMsg('Gracias por su mensaje. Para esta consulta específica, le recomiendo escribirle directamente a Paul André por WhatsApp (+57 300 898 5321) para una respuesta personalizada. 💬', 'bot');
+  const ql = n(text);
+ 
+  // ── Saludo inicial
+  if (logiState.step === 'inicio') {
+    const esSaludo = FLUJO.inicio.saludos.some(s => ql.includes(s));
+    if (esSaludo || text.length < 20) {
+      logiState.step = 'esperando_nombre';
+      logiResponde(FLUJO.inicio.resp());
+      return;
     }
-  }, 800);
+  }
+ 
+  // ── Captura nombre
+  if (logiState.step === 'esperando_nombre') {
+    const palabras = text.trim().split(' ');
+    logiState.nombre = palabras[0].charAt(0).toUpperCase() + palabras[0].slice(1).toLowerCase();
+    logiState.step = 'esperando_empresa';
+    logiResponde(FLUJO.nombre_recibido(logiState.nombre));
+    return;
+  }
+ 
+  // ── Captura empresa/sector
+  if (logiState.step === 'esperando_empresa') {
+    logiState.empresa = text;
+    logiState.step = 'esperando_necesidad';
+    logiResponde(FLUJO.empresa_recibida(logiState.nombre, logiState.empresa), 1000);
+    return;
+  }
+ 
+  // ── Captura necesidad
+  if (logiState.step === 'esperando_necesidad') {
+    logiState.necesidad = text;
+    logiState.step = 'conversacion';
+    logiResponde(FLUJO.necesidad_recibida(logiState.nombre), 1100);
+    return;
+  }
+ 
+  // ── Opciones del menú guiado
+  if (logiState.step === 'conversacion') {
+    if (ql.includes('1') || ql.includes('servicio') || ql.includes('contame') || ql.includes('cuéntame') || ql.includes('cuentame')) {
+      const tema = findTema(logiState.necesidad);
+      const resp = tema
+        ? tema.r(logiState.nombre)
+        : `${logiState.nombre}, basado en lo que me compartió, lo más relevante sería una consultoría inicial donde Paul analice su operación específica. ¿Prefiere que le cuente sobre logística, datos o automatización?`;
+      logiResponde(resp, 900);
+      return;
+    }
+    if (ql.includes('2') || ql.includes('precio') || ql.includes('costo') || ql.includes('valor') || ql.includes('inversion') || ql.includes('inversión')) {
+      logiResponde(TEMAS.precio.r(logiState.nombre));
+      return;
+    }
+    if (ql.includes('3') || ql.includes('agendar') || ql.includes('cita') || ql.includes('llamada') || ql.includes('gratuito') || ql.includes('reunion') || ql.includes('reunión')) {
+      logiResponde(TEMAS.agendar.r(logiState.nombre));
+      return;
+    }
+  }
+ 
+  // ── Conversación libre — detección de tema
+  const tema = findTema(text);
+  if (tema) {
+    logiResponde(tema.r(logiState.nombre));
+    return;
+  }
+ 
+  // ── Despedida
+  if (['gracias','hasta luego','adios','adiós','chao','bye','hasta pronto'].some(s => ql.includes(s))) {
+    logiResponde(`Ha sido un placer hablar con usted${logiState.nombre ? ', ' + logiState.nombre : ''}. 🙌\n\nRecuerde que Paul está disponible por WhatsApp (+57 300 898 5321) o puede agendar su diagnóstico gratuito directamente en la sección "Agendar" de esta página.\n\n¡Mucho éxito en su operación! ♾️`, 700);
+    return;
+  }
+ 
+  // ── Fallback amable
+  logiResponde(`Gracias por compartirlo${logiState.nombre ? ', ' + logiState.nombre : ''}. 🙏\n\nEsa es exactamente la clase de situación que Paul puede ayudar a resolver. Para darle la mejor orientación, ¿podría contarme un poco más sobre lo que busca?\n\nO si prefiere, puede escribirle directamente por WhatsApp: 📲 **+57 300 898 5321** — responde en menos de 24 horas hábiles.`, 900);
 }
 </script>
 </body>
