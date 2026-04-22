@@ -1,0 +1,29 @@
+📊 Mercados & Commodities
+(Los widgets TradingView se actualizan solos — estos son para tus análisis)
+IndicadorFuenteFrecuenciaWTI, Brent, Gasinvesting.com/commoditiesDiariaBaltic Dry Indexbaltice.orgDiariaCommodities agrícolasCME GroupDiariaÍndices bursátilesTradingViewTiempo realColcap ColombiaBolsa de Valores ColombiaDiaria
+
+💱 Divisas latinoamericanas
+FuenteQué ofreceBanco de la RepúblicaTRM oficial Colombia diariaBanxicoUSD/MXN oficialxe.comTodas las divisas en tiempo realDolarHoyARS (Argentina, muy volátil)
+
+🚢 Logística & Fletes
+IndicadorFuenteNotasFreightos Baltic Index (FBX)app.freightos.comFlete contenedor por rutaDrewry WCIdrewry.co.uk/supply-chain-advisorsWorld Container Index semanalBaltic Dry / Capesize / Panamaxhellenicshippingnews.comGratuito, diarioCongestion portuariaportwatch.imf.orgIMF · GratuitoTarifas aéreastac-index.comTAC Index semanalFlete terrestre Colombiamintransporte.gov.coSIPTT trimestral
+
+🌎 Macroeconomía & Comercio
+IndicadorFuentePIB, inflación, desempleo ColombiaDANEBalanza comercial ColombiaDIAN / DANEDatos globalesWorld Bank Open DataFMI — perspectivas económicasIMF WEOComercio LATAMCEPALPMI manufactura globaltradingeconomics.com
+
+📰 Noticias especializadas (para tus análisis)
+MedioEnfoqueAccesoSupply Chain DiveLogística y SCGratuitoThe LoadstarFlete marítimo y aéreoGratuitoPortafolio.coEconomía colombianaGratuitoLa RepúblicaNegocios ColombiaGratuitoBloomberg LíneaLATAM financieroGratuitoReuters BusinessGlobalGratuitoFreight WavesFlete y logísticaParcial gratuitoAmerican ShipperComercio marítimoGratuito
+
+🤖 Tecnología & IA aplicada
+FuenteContenidoMIT Technology ReviewIA y negociosMcKinsey InsightsTransformación digitalGartner NewsroomTendencias tecnológicasHarvard Business ReviewEstrategia y datos
+
+📅 Rutina semanal recomendada
+Para mantener la página activa con mínimo esfuerzo, te propongo este flujo de 30 minutos cada lunes:
+Lunes AM — 30 minutos
+│
+├── 5 min  → Revisar BDI + Freightos (freightos.com)
+├── 5 min  → Revisar TRM + precio WTI
+├── 5 min  → Leer 1 titular de Supply Chain Dive o The Loadstar
+├── 10 min → Redactar 1 tarjeta de análisis nueva en el slider
+└── 5 min  → Actualizar los 6 indicadores del panel logístico en el HTML
+Un análisis nuevo por semana = 52 análisis al año = un portafolio analítico sólido que ningún CV puede replicar.
