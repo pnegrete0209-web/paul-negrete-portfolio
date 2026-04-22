@@ -117,7 +117,7 @@ section{position:relative;z-index:1;padding:96px 60px}
 .strength-num{font-family:'Syne',sans-serif;font-size:2.2rem;font-weight:800;color:var(--gold);opacity:0.25;line-height:1;margin-bottom:12px}
 .strength-card h3{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;color:var(--text);margin-bottom:10px}
 .strength-card p{font-size:0.86rem;color:var(--text2);line-height:1.72;font-weight:300}
-#validacion{background:var(--bg)}
+#validacion{background:var(--bg);padding:0 60px 96px}
 .validation-wrap{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:48px;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;position:relative;overflow:hidden}
 .validation-wrap::before{content:'';position:absolute;top:-60px;right:-60px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(240,165,0,0.08),transparent)}
 .validation-quote{font-family:'Syne',sans-serif;font-size:3rem;font-weight:800;color:var(--gold);opacity:0.3;line-height:1;margin-bottom:12px}
@@ -245,7 +245,7 @@ footer{position:relative;z-index:1;background:var(--card);border-top:1px solid v
   .quote-result{position:static}
   .about-grid{grid-template-columns:1fr;gap:36px}
   .agenda-layout{grid-template-columns:1fr}
-  .validation-wrap{grid-template-columns:1fr;gap:28px;padding:32px}
+  .validation-wrap{grid-template-columns:1fr;gap:28px;padding:32px} #validacion{padding:0 24px 80px}
   footer{padding:30px 22px;flex-direction:column;align-items:flex-start;gap:18px}
   .footer-links{flex-direction:column;gap:11px}
 }
@@ -271,7 +271,9 @@ footer{position:relative;z-index:1;background:var(--card);border-top:1px solid v
   .cotizador-form{padding:20px 16px}
   .quote-result{padding:20px 16px}
   .project-body{padding:17px}
-  .about-grid{gap:26px}
+  .about-grid{gap:28px} 
+  #validacion{padding:0 17px 60px}
+  .validation-wrap{padding:24px}
   footer{padding:24px 17px}
   .btn-primary,.btn-secondary{padding:12px 20px;font-size:0.88rem}
   .chat-window{width:calc(100vw - 28px);right:14px;bottom:82px}
