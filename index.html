@@ -621,7 +621,7 @@ footer{position:relative;z-index:1;background:var(--card);border-top:1px solid v
   </div>
   <div class="footer-links">
     <a href="tel:+573008985321">📲 +57 300 898 5321</a>
-    <a href="mailto:pnegrete0209@gmail.com">✉ infini.logconsultores@outlook.com</a>
+    <a href="mailto:infiniti.logconsultores@outlook.com">✉ infini.logconsultores@outlook.com</a>
     <a href="#">📌 Montería, Córdoba</a>
   </div>
   <div class="footer-copy">© 2026 · Paul André Negrete Burgos · Consultor en Operaciones Logísticas &amp; Análisis de Datos</div>
@@ -664,7 +664,7 @@ function formatCOP(n){return'$'+Math.round(n).toLocaleString('es-CO')+' COP'}
 function updateQuote(){const keys=Object.keys(selectedServices),itemsEl=document.getElementById('quoteItems'),sendEl=document.getElementById('quoteSend');if(!keys.length){itemsEl.innerHTML='<div class="quote-empty"><span style="font-size:1.8rem">📋</span>Seleccione al menos un servicio</div>';sendEl.style.display='none';return}itemsEl.innerHTML=keys.map(k=>'<div class="quote-item"><div class="qi-dot"></div><div class="qi-name">'+k+'</div></div>').join('');sendEl.style.display='block'}
 function buildMessage(){const name=document.getElementById('clientName').value||'un cliente interesado',detail=document.getElementById('clientDetail').value,keys=Object.keys(selectedServices);if(!keys.length)return null;const complexity=parseFloat(document.getElementById('complexitySelect').value),modality=parseFloat(document.getElementById('modalitySelect').value),cSel=document.getElementById('complexitySelect'),mSel=document.getElementById('modalitySelect'),cText=cSel.options[cSel.selectedIndex].text.split('—')[0].trim(),mText=mSel.options[mSel.selectedIndex].text.split('(')[0].trim(),uText=urgencyMult===1?'Normal':urgencyMult===1.15?'Prioritario (+15%)':'Urgente (+30%)';let total=0;const lines=keys.map(k=>{const v=Math.round(selectedServices[k]*complexity*modality*urgencyMult);total+=v;return'  \u2022 '+k+': '+formatCOP(v)}).join('\n');return'Hola Paul! \uD83D\uDC4B Soy '+name+' y estoy interesado/a en sus servicios de consultor\xEDa.\n\n\uD83D\uDCCB *SERVICIOS SOLICITADOS:*\n'+lines+'\n\n\u2699\uFE0F *Complejidad:* '+cText+'\n\uD83D\uDCCD *Modalidad:* '+mText+'\n\u23F1 *Urgencia:* '+uText+'\n\n\uD83D\uDCB0 *TOTAL ESTIMADO: '+formatCOP(total)+'*\n\n'+(detail?'\uD83D\uDCDD *Detalle:* '+detail+'\n\n':'')+'?\xBFPodemos agendar el diagn\xF3stico gratuito de 30 minutos?'}
 function sendWhatsApp(){const msg=buildMessage();if(!msg){alert('Seleccione al menos un servicio.');return}window.open('https://wa.me/573008985321?text='+encodeURIComponent(msg),'_blank')}
-function sendEmail(){const msg=buildMessage();if(!msg){alert('Seleccione al menos un servicio.');return}const name=document.getElementById('clientName').value||'Cliente';window.open('mailto:pnegrete0209@gmail.com?subject='+encodeURIComponent('Solicitud de consultor\xEDa \u2014 '+name)+'&body='+encodeURIComponent(msg),'_blank')}
+function sendEmail(){const msg=buildMessage();if(!msg){alert('Seleccione al menos un servicio.');return}const name=document.getElementById('clientName').value||'Cliente';window.open('mailto:infiniti.logconsultores@outlook.com?subject='+encodeURIComponent('Solicitud de consultor\xEDa \u2014 '+name)+'&body='+encodeURIComponent(msg),'_blank')}
 // ── LOGI — Asistente conversacional de Paul Negrete
 let chatOpen = false;
 let logiState = { step: 'inicio', nombre: '', empresa: '', necesidad: '' };
@@ -703,7 +703,7 @@ const TEMAS = {
   },
   contacto: {
     k:['whatsapp','contacto','comunic','escrib','telefono','teléfono','correo','email','llam','mensaje'],
-    r: nombre => `Claro${nombre ? ', ' + nombre : ''}, aquí están todos los canales de contacto de Paul: 📬\n\n📲 WhatsApp: +57 300 898 5321 (responde en menos de 24h hábiles)\n✉️ Correo: pnegrete0209@gmail.com\n🌐 Portafolio: paulnegrete.netlify.app\n📌 Montería, Córdoba, Colombia\n\nSi quiere una respuesta rápida, WhatsApp es definitivamente el canal más ágil. También puede usar el cotizador de esta página para enviar una propuesta detallada directamente.\n\n¿Hay algo más en lo que pueda orientarle antes de que contacte a Paul?`
+    r: nombre => `Claro${nombre ? ', ' + nombre : ''}, aquí están todos los canales de contacto de Paul: 📬\n\n📲 WhatsApp: +57 300 898 5321 (responde en menos de 24h hábiles)\n✉️ Correo: infiniti.logconsultores@outlook.com\n🌐 Portafolio: paulnegrete.netlify.app\n📌 Montería, Córdoba, Colombia\n\nSi quiere una respuesta rápida, WhatsApp es definitivamente el canal más ágil. También puede usar el cotizador de esta página para enviar una propuesta detallada directamente.\n\n¿Hay algo más en lo que pueda orientarle antes de que contacte a Paul?`
   },
   paul: {
     k:['paul','negrete','quien','quién','perfil','experiencia','años','consultor','conoce'],
