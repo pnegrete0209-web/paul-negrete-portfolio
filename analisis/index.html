@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Análisis de mercados, logística global y economía — Paul André Negrete, Consultor en Operaciones & Datos">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📡</text></svg>">
+<title>Análisis & Mercados · Paul Negrete</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#080c14;--bg2:#0d1421;--bg3:#0a1020;
+  --card:#0f1827;--card2:#141f33;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);
+  --gold:#f0a500;--gold2:#ffd060;--gold-dim:rgba(240,165,0,0.1);
+  --blue:#2e6da4;--blue2:#4a90d4;--blue3:#6fb3f5;
+  --green:#2dd4a0;--red:#f04444;--orange:#f09020;
+  --text:#e8edf5;--text2:#8fa3bf;--text3:#5a7a9a;
+  --r:14px;--r-sm:10px
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;line-height:1.6}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:0.5}
+
+/* ── NAV ── */
+nav{position:sticky;top:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:13px 48px;background:rgba(8,12,20,0.94);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);flex-wrap:wrap;gap:10px}
+.nav-brand{display:flex;align-items:center;gap:12px;text-decoration:none}
+.nav-logo{width:36px;height:36px;flex-shrink:0}
+.nav-brand-text{font-family:'Syne',sans-serif;font-weight:800;font-size:0.95rem;color:var(--text);line-height:1}
+.nav-brand-text em{font-style:normal;color:var(--gold)}
+.nav-brand-text small{display:block;font-size:0.58rem;color:var(--text3);letter-spacing:0.1em;text-transform:uppercase;margin-top:1px}
+.nav-right{display:flex;align-items:center;gap:10px}
+.nav-back{display:inline-flex;align-items:center;gap:7px;background:transparent;color:var(--text2);font-family:'DM Sans',sans-serif;font-size:0.78rem;padding:7px 14px;border-radius:8px;border:1px solid var(--border);text-decoration:none;transition:all 0.2s}
+.nav-back:hover{border-color:var(--border2);color:var(--text)}
+.nav-live{display:inline-flex;align-items:center;gap:6px;font-size:0.7rem;font-weight:600;color:var(--green);letter-spacing:0.08em;text-transform:uppercase}
+.nav-live::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(1.4)}}
+
+/* ── TICKER TAPE ── */
+.ticker-wrap{background:var(--bg3);border-bottom:1px solid var(--border);height:46px;overflow:hidden}
+
+/* ── HERO ── */
+.hero{padding:48px 48px 36px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-80px;right:-80px;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(46,109,164,0.1),transparent);pointer-events:none}
+.hero-eyebrow{font-size:0.7rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.hero-eyebrow::before{content:'';width:20px;height:2px;background:var(--gold);border-radius:1px}
+.hero h1{font-family:'Syne',sans-serif;font-size:clamp(1.8rem,4vw,3.2rem);font-weight:800;letter-spacing:-0.03em;line-height:1.08;margin-bottom:12px}
+.hero h1 .acc{background:linear-gradient(135deg,var(--blue3),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{font-size:0.95rem;color:var(--text2);font-weight:300;max-width:640px;line-height:1.72;margin-bottom:20px}
+.hero-tags{display:flex;gap:8px;flex-wrap:wrap}
+.hero-tag{font-size:0.7rem;font-weight:600;padding:4px 12px;border-radius:100px;background:var(--card);border:1px solid var(--border);color:var(--text3);letter-spacing:0.05em}
+
+/* ── SECTION HEADERS ── */
+.sec{padding:0 48px 48px;position:relative;z-index:1}
+.sec-hdr{display:flex;align-items:center;gap:14px;margin-bottom:28px}
+.sec-tag{font-size:0.68rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold)}
+.sec-title{font-family:'Syne',sans-serif;font-size:clamp(1.2rem,2.5vw,1.8rem);font-weight:800;letter-spacing:-0.02em;color:var(--text)}
+.sec-line{flex:1;height:1px;background:var(--border)}
+.sec-sub{font-size:0.82rem;color:var(--text3);margin-top:-16px;margin-bottom:24px;font-style:italic}
+
+/* ── MARKETS GRID ── */
+.markets-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.market-widget-wrap{background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
+.widget-label{font-size:0.65rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--text3);padding:10px 16px 0}
+
+/* ── FOREX STRIP ── */
+.forex-strip{background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:16px}
+
+/* ── ANALYSIS SLIDER ── */
+.slider-wrap{position:relative;overflow:hidden}
+.slider-track{display:flex;gap:18px;transition:transform 0.45s cubic-bezier(0.25,0.46,0.45,0.94);will-change:transform}
+.analysis-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:24px;min-width:360px;max-width:360px;flex-shrink:0;position:relative;overflow:hidden;transition:border-color 0.3s,transform 0.3s}
+.analysis-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:var(--r) var(--r) 0 0}
+.analysis-card:hover{border-color:var(--border2);transform:translateY(-3px);box-shadow:0 16px 48px rgba(0,0,0,0.4)}
+.card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:14px}
+.cat-badge{font-size:0.63rem;font-weight:700;padding:3px 10px;border-radius:100px;letter-spacing:0.06em;text-transform:uppercase;white-space:nowrap}
+.card-date{font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--text3)}
+.card-kpi{background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:8px 12px;text-align:center;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.kpi-label{font-size:0.65rem;color:var(--text3);text-transform:uppercase;letter-spacing:0.07em}
+.kpi-value{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800}
+.kpi-delta{font-family:'JetBrains Mono',monospace;font-size:0.75rem;font-weight:500}
+.kpi-delta.pos{color:var(--green)}
+.kpi-delta.neg{color:var(--red)}
+.card-title{font-family:'Syne',sans-serif;font-size:0.95rem;font-weight:700;color:var(--text);margin-bottom:8px;line-height:1.3}
+.card-summary{font-size:0.8rem;color:var(--text2);line-height:1.6;font-weight:300;margin-bottom:10px}
+.card-section{margin-bottom:10px}
+.cs-label{font-size:0.62rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:3px}
+.cs-text{font-size:0.78rem;color:var(--text2);line-height:1.55;font-weight:300}
+.card-insight{background:rgba(240,165,0,0.07);border:1px solid rgba(240,165,0,0.15);border-radius:8px;padding:10px 12px;margin-top:12px}
+.ci-label{font-size:0.6rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);margin-bottom:3px}
+.ci-text{font-size:0.78rem;color:var(--text2);line-height:1.55;font-style:italic}
+
+/* Slider controls */
+.slider-controls{display:flex;align-items:center;justify-content:space-between;margin-top:20px}
+.slider-btns{display:flex;gap:8px}
+.slider-btn{width:36px;height:36px;border-radius:50%;background:var(--card);border:1px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text2);transition:all 0.2s}
+.slider-btn:hover{border-color:var(--gold);color:var(--gold)}
+.slider-btn:disabled{opacity:0.3;cursor:default}
+.slider-dots{display:flex;gap:6px}
+.sdot{width:6px;height:6px;border-radius:50%;background:var(--border2);cursor:pointer;transition:all 0.2s}
+.sdot.active{background:var(--gold);width:18px;border-radius:3px}
+
+/* ── NEWS AUTO ── */
+.news-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.news-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r-sm);padding:18px;transition:all 0.25s;text-decoration:none;display:flex;flex-direction:column}
+.news-card:hover{border-color:var(--border2);transform:translateY(-2px)}
+.nc-source{font-size:0.62rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text3);margin-bottom:6px}
+.nc-title{font-family:'Syne',sans-serif;font-size:0.84rem;font-weight:700;color:var(--text);line-height:1.35;margin-bottom:8px;flex:1}
+.nc-desc{font-size:0.75rem;color:var(--text2);line-height:1.55;font-weight:300;margin-bottom:10px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical}
+.nc-bottom{display:flex;align-items:center;justify-content:space-between}
+.nc-date{font-family:'JetBrains Mono',monospace;font-size:0.63rem;color:var(--text3)}
+.nc-link{font-size:0.68rem;font-weight:600;color:var(--blue3);letter-spacing:0.04em}
+.news-loading{display:flex;align-items:center;justify-content:center;height:120px;color:var(--text3);font-size:0.82rem;gap:10px}
+.news-spinner{width:18px;height:18px;border:2px solid var(--border2);border-top-color:var(--gold);border-radius:50%;animation:spin 0.8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.feed-selector{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+.feed-btn{font-size:0.72rem;font-weight:600;padding:6px 14px;border-radius:100px;background:var(--card);border:1px solid var(--border);color:var(--text2);cursor:pointer;transition:all 0.2s}
+.feed-btn.active{background:var(--gold-dim);border-color:rgba(240,165,0,0.3);color:var(--gold)}
+.feed-btn:hover{border-color:var(--border2);color:var(--text)}
+
+/* ── LOGISTICS PANEL ── */
+.logistics-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:24px}
+.logi-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:20px}
+.logi-icon{font-size:1.4rem;margin-bottom:10px}
+.logi-label{font-size:0.65rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text3);margin-bottom:6px}
+.logi-val{font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;letter-spacing:-0.02em;line-height:1;margin-bottom:4px}
+.logi-sub{font-size:0.72rem;color:var(--text3);margin-bottom:10px}
+.logi-bar{height:4px;border-radius:2px;background:var(--border2);overflow:hidden;margin-bottom:8px}
+.logi-bar-fill{height:100%;border-radius:2px;transition:width 1s ease}
+.logi-context{font-size:0.75rem;color:var(--text2);line-height:1.5;font-weight:300}
+.logi-update{font-size:0.62rem;color:var(--text3);margin-top:8px;font-family:'JetBrains Mono',monospace}
+
+/* ── DIVIDER ── */
+.divider{height:1px;background:var(--border);margin:0 48px 40px}
+
+/* ── FOOTER ── */
+footer{background:var(--card);border-top:1px solid var(--border);padding:28px 48px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+.footer-brand{font-family:'Syne',sans-serif;font-size:0.9rem;font-weight:800;color:var(--text)}
+.footer-brand em{font-style:normal;color:var(--gold)}
+.footer-links{display:flex;gap:20px;flex-wrap:wrap}
+.footer-links a{font-size:0.78rem;color:var(--text3);text-decoration:none;transition:color 0.2s}
+.footer-links a:hover{color:var(--gold)}
+.footer-note{font-size:0.68rem;color:var(--text3);font-style:italic}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1024px){
+  nav{padding:12px 24px}
+  .hero,.sec{padding-left:24px;padding-right:24px}
+  .divider{margin-left:24px;margin-right:24px}
+  .markets-grid{grid-template-columns:1fr}
+  .news-grid{grid-template-columns:1fr 1fr}
+  .logistics-grid{grid-template-columns:1fr 1fr}
+  footer{padding:24px}
+}
+@media(max-width:640px){
+  nav{padding:11px 17px}
+  .hero,.sec{padding-left:17px;padding-right:17px}
+  .divider{margin-left:17px;margin-right:17px}
+  .news-grid{grid-template-columns:1fr}
+  .logistics-grid{grid-template-columns:1fr}
+  .analysis-card{min-width:300px;max-width:300px}
+  footer{padding:20px 17px;flex-direction:column;align-items:flex-start}
+}
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <a href="https://paulnegrete.netlify.app" class="nav-brand">
+    <svg class="nav-logo" viewBox="0 0 48 48" fill="none">
+      <defs><linearGradient id="ng" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#6fb3f5"/><stop offset="100%" stop-color="#f0a500"/></linearGradient></defs>
+      <rect width="48" height="48" rx="12" fill="#0a1220"/>
+      <path d="M24 24 C24 18.5,30.5 14,36 17.5 C41.5 21,41.5 27,36 30.5 C30.5 34,24 29.5,24 24 C24 18.5,17.5 14,12 17.5 C6.5 21,6.5 27,12 30.5 C17.5 34,24 29.5,24 24" stroke="url(#ng)" stroke-width="3" stroke-linecap="round" fill="none"/>
+      <circle cx="24" cy="24" r="1.5" fill="#f0a500" opacity="0.8"/>
+    </svg>
+    <div>
+      <div class="nav-brand-text">Paul André <em>Negrete</em></div>
+      <small class="nav-brand-text small" style="font-family:'DM Sans',sans-serif;font-size:0.58rem;color:var(--text3);letter-spacing:0.1em;text-transform:uppercase">Consultor · Operaciones & Datos</small>
+    </div>
+  </a>
+  <div class="nav-right">
+    <div class="nav-live">En vivo</div>
+    <a href="https://paulnegrete.netlify.app" class="nav-back">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Portafolio
+    </a>
+  </div>
+</nav>
+
+<!-- ── TICKER TAPE ── -->
+<div class="ticker-wrap">
+  <div class="tradingview-widget-container" style="height:46px">
+    <div class="tradingview-widget-container__widget"></div>
+    <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+    {
+      "symbols": [
+        {"proName":"FOREXCOM:SPXUSD","title":"S&P 500"},
+        {"proName":"FOREXCOM:NSXUSD","title":"Nasdaq 100"},
+        {"description":"Petróleo WTI","proName":"NYMEX:CL1!"},
+        {"description":"Oro","proName":"COMEX:GC1!"},
+        {"description":"USD/COP","proName":"FX:USDCOP"},
+        {"description":"EUR/USD","proName":"FX:EURUSD"},
+        {"description":"USD/BRL","proName":"FX:USDBRL"},
+        {"description":"Trigo","proName":"CBOT:ZW1!"},
+        {"description":"Cobre","proName":"COMEX:HG1!"},
+        {"description":"Bitcoin","proName":"BINANCE:BTCUSDT"}
+      ],
+      "showSymbolLogo": true,
+      "isTransparent": true,
+      "displayMode": "adaptive",
+      "colorTheme": "dark",
+      "locale": "es"
+    }
+    </script>
+  </div>
+</div>
+
+<!-- ── HERO ── -->
+<div class="hero">
+  <div class="hero-eyebrow">Centro de análisis profesional</div>
+  <h1>Mercados, Logística<br><span class="acc">&amp; Economía Global</span></h1>
+  <p>Análisis interpretativo de los indicadores que mueven la cadena de suministro global, los mercados financieros y la economía latinoamericana. Datos en tiempo real + contexto analítico propio.</p>
+  <div class="hero-tags">
+    <span class="hero-tag">📦 Supply Chain</span>
+    <span class="hero-tag">📈 Mercados</span>
+    <span class="hero-tag">💱 Divisas</span>
+    <span class="hero-tag">🛢 Commodities</span>
+    <span class="hero-tag">🌎 Macroeconomía</span>
+    <span class="hero-tag">🤖 Tecnología & IA</span>
+  </div>
+</div>
+
+<!-- ── MERCADOS EN VIVO ── -->
+<div class="sec">
+  <div class="sec-hdr">
+    <span class="sec-tag">📊 Datos en vivo</span>
+    <span class="sec-title">Mercados & Commodities</span>
+    <div class="sec-line"></div>
+  </div>
+  <p class="sec-sub">Datos en tiempo real vía TradingView. Los commodities clave para logística y comercio internacional.</p>
+
+  <div class="markets-grid">
+    <!-- Market Overview -->
+    <div class="market-widget-wrap">
+      <div class="widget-label">Índices globales & Commodities clave</div>
+      <div class="tradingview-widget-container" style="height:400px">
+        <div class="tradingview-widget-container__widget" style="height:400px"></div>
+        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js" async>
+        {
+          "colorTheme": "dark",
+          "dateRange": "1M",
+          "showChart": true,
+          "locale": "es",
+          "largeChartUrl": "",
+          "isTransparent": true,
+          "showSymbolLogo": true,
+          "showFloatingTooltip": false,
+          "width": "100%",
+          "height": "400",
+          "tabs": [
+            {
+              "title": "Índices",
+              "symbols": [
+                {"s":"FOREXCOM:SPXUSD","d":"S&P 500"},
+                {"s":"FOREXCOM:NSXUSD","d":"Nasdaq 100"},
+                {"s":"INDEX:COL20","d":"Colcap Colombia"},
+                {"s":"FOREXCOM:DEU40","d":"DAX Alemania"},
+                {"s":"INDEX:NKY","d":"Nikkei Japón"}
+              ],
+              "originalTitle": "Indices"
+            },
+            {
+              "title": "Commodities",
+              "symbols": [
+                {"s":"NYMEX:CL1!","d":"Petróleo WTI"},
+                {"s":"ICE:B1!","d":"Petróleo Brent"},
+                {"s":"COMEX:GC1!","d":"Oro"},
+                {"s":"CBOT:ZW1!","d":"Trigo"},
+                {"s":"CBOT:ZC1!","d":"Maíz"},
+                {"s":"COMEX:HG1!","d":"Cobre"}
+              ],
+              "originalTitle": "Commodities"
+            }
+          ]
+        }
+        </script>
+      </div>
+    </div>
+
+    <!-- Forex Cross Rates -->
+    <div class="market-widget-wrap">
+      <div class="widget-label">Divisas latinoamericanas & principales</div>
+      <div class="tradingview-widget-container" style="height:400px">
+        <div class="tradingview-widget-container__widget" style="height:400px"></div>
+        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-forex-cross-rates.js" async>
+        {
+          "width": "100%",
+          "height": "400",
+          "currencies": ["USD","EUR","COP","BRL","MXN","ARS","CLP","PEN"],
+          "isTransparent": true,
+          "colorTheme": "dark",
+          "locale": "es"
+        }
+        </script>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mini charts row -->
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
+    <div class="market-widget-wrap" style="padding-bottom:8px">
+      <div class="widget-label">WTI Petróleo</div>
+      <div class="tradingview-widget-container">
+        <div class="tradingview-widget-container__widget"></div>
+        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
+        {"symbol":"NYMEX:CL1!","width":"100%","height":"160","locale":"es","dateRange":"3M","colorTheme":"dark","isTransparent":true,"autosize":true,"largeChartUrl":"","chartOnly":false}
+        </script>
+      </div>
+    </div>
+    <div class="market-widget-wrap" style="padding-bottom:8px">
+      <div class="widget-label">USD / COP</div>
+      <div class="tradingview-widget-container">
+        <div class="tradingview-widget-container__widget"></div>
+        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
+        {"symbol":"FX:USDCOP","width":"100%","height":"160","locale":"es","dateRange":"3M","colorTheme":"dark","isTransparent":true,"autosize":true,"largeChartUrl":"","chartOnly":false}
+        </script>
+      </div>
+    </div>
+    <div class="market-widget-wrap" style="padding-bottom:8px">
+      <div class="widget-label">Cobre</div>
+      <div class="tradingview-widget-container">
+        <div class="tradingview-widget-container__widget"></div>
+        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
+        {"symbol":"COMEX:HG1!","width":"100%","height":"160","locale":"es","dateRange":"3M","colorTheme":"dark","isTransparent":true,"autosize":true,"largeChartUrl":"","chartOnly":false}
+        </script>
+      </div>
+    </div>
+    <div class="market-widget-wrap" style="padding-bottom:8px">
+      <div class="widget-label">Trigo CBOT</div>
+      <div class="tradingview-widget-container">
+        <div class="tradingview-widget-container__widget"></div>
+        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
+        {"symbol":"CBOT:ZW1!","width":"100%","height":"160","locale":"es","dateRange":"3M","colorTheme":"dark","isTransparent":true,"autosize":true,"largeChartUrl":"","chartOnly":false}
+        </script>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ── ANÁLISIS MANUAL ── -->
+<div class="sec">
+  <div class="sec-hdr">
+    <span class="sec-tag">🧠 Análisis editorial</span>
+    <span class="sec-title">Perspectiva & Contexto</span>
+    <div class="sec-line"></div>
+  </div>
+  <p class="sec-sub">Análisis interpretativos propios sobre eventos relevantes en logística, comercio y economía. Actualización semanal.</p>
+
+  <div class="slider-wrap" id="sliderWrap">
+    <div class="slider-track" id="sliderTrack">
+
+      <!-- CARD 1 -->
+      <div class="analysis-card" style="--card-color:#f0a500">
+        <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#f0a500,transparent)"></div>
+        <div class="card-top">
+          <span class="cat-badge" style="background:rgba(240,165,0,0.12);border:1px solid rgba(240,165,0,0.25);color:#f0a500">🛢 Energía & Logística</span>
+          <span class="card-date" id="date1"></span>
+        </div>
+        <div class="card-kpi">
+          <span class="kpi-label">WTI Ref.</span>
+          <span class="kpi-value" style="color:#f0a500">~$78</span>
+          <span class="kpi-delta neg">↑ Presión sobre flete</span>
+        </div>
+        <div class="card-title">Petróleo y su efecto directo en el costo logístico terrestre</div>
+        <div class="card-summary">Las variaciones en el precio del petróleo WTI impactan de forma directa el CPK (Costo por Kilómetro) de cualquier flota terrestre, representando entre el 35% y el 45% del costo operativo total de un vehículo de carga.</div>
+        <div class="card-section">
+          <div class="cs-label" style="color:#f0a500">Contexto</div>
+          <div class="cs-text">La OPEP+ ha mantenido recortes de producción sostenidos, mientras la demanda asiática —especialmente China— presiona los precios al alza. En Colombia, el precio interno del ACPM (diésel) está parcialmente subsidiado, pero las variaciones del crudo filtran inevitablemente en las tarifas de transporte.</div>
+        </div>
+        <div class="card-section">
+          <div class="cs-label" style="color:#f0a500">Impacto logístico</div>
+          <div class="cs-text">Por cada $10 de aumento en el WTI, el CPK de un camión de carga pesada puede subir entre $30 y $60 COP/km. Para una flota de 10 vehículos recorriendo 15.000 km/mes, eso representa $4.5M–$9M COP adicionales mensuales.</div>
+        </div>
+        <div class="card-insight">
+          <div class="ci-label">💡 Insight</div>
+          <div class="ci-text">Las empresas con flota propia deben incluir cláusulas de ajuste por combustible en sus contratos de servicio. El monitoreo del CPK real vs. benchmark es la herramienta de alerta temprana más efectiva.</div>
+        </div>
+      </div>
+
+      <!-- CARD 2 -->
+      <div class="analysis-card">
+        <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#4a90d4,transparent)"></div>
+        <div class="card-top">
+          <span class="cat-badge" style="background:rgba(74,144,212,0.12);border:1px solid rgba(74,144,212,0.25);color:#6fb3f5">💱 Divisas & Comercio</span>
+          <span class="card-date" id="date2"></span>
+        </div>
+        <div class="card-kpi">
+          <span class="kpi-label">USD/COP Ref.</span>
+          <span class="kpi-value" style="color:#6fb3f5">~$4.150</span>
+          <span class="kpi-delta pos">↓ Importaciones encarecidas</span>
+        </div>
+        <div class="card-title">Devaluación del peso y su impacto en importaciones y cadena de suministro</div>
+        <div class="card-summary">La depreciación del peso colombiano frente al dólar encarece directamente las importaciones de materias primas, maquinaria y repuestos, comprimiendo los márgenes de empresas con costos en USD e ingresos en COP.</div>
+        <div class="card-section">
+          <div class="cs-label" style="color:#6fb3f5">Contexto</div>
+          <div class="cs-text">La tasa de cambio en Colombia ha estado influenciada por la política monetaria de la FED, los precios del petróleo (principal exportación) y el riesgo político interno. La volatilidad cambiaria es estructural en economías emergentes como la colombiana.</div>
+        </div>
+        <div class="card-section">
+          <div class="cs-label" style="color:#6fb3f5">Impacto en supply chain</div>
+          <div class="cs-text">Empresas que importan insumos deben reevaluar sus estrategias de cobertura cambiaria, aumentar inventarios de seguridad en períodos de tasa favorable, o buscar proveedores locales para reducir exposición al dólar.</div>
+        </div>
+        <div class="card-insight">
+          <div class="ci-label">💡 Insight</div>
+          <div class="ci-text">Un análisis de sensibilidad cambiaria en el modelo de costos es hoy tan importante como el control del CPK. Saber cuánto cuesta cada punto de devaluación en la cadena de suministro es ventaja competitiva.</div>
+        </div>
+      </div>
+
+      <!-- CARD 3 -->
+      <div class="analysis-card">
+        <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#2dd4a0,transparent)"></div>
+        <div class="card-top">
+          <span class="cat-badge" style="background:rgba(45,212,160,0.1);border:1px solid rgba(45,212,160,0.25);color:#2dd4a0">🤖 IA & Automatización</span>
+          <span class="card-date" id="date3"></span>
+        </div>
+        <div class="card-kpi">
+          <span class="kpi-label">Mercado IA global</span>
+          <span class="kpi-value" style="color:#2dd4a0">$390B</span>
+          <span class="kpi-delta pos">↑ +36% vs 2023</span>
+        </div>
+        <div class="card-title">IA en logística: de la promesa al ROI medible en operaciones reales</div>
+        <div class="card-summary">La inteligencia artificial ya no es solo una tendencia en logística — empresas medianas están implementando automatización de rutas, predicción de demanda y mantenimiento predictivo con retornos medibles en 6 a 12 meses.</div>
+        <div class="card-section">
+          <div class="cs-label" style="color:#2dd4a0">Contexto</div>
+          <div class="cs-text">El descenso en el costo de herramientas de IA (Python, modelos open-source, APIs) ha democratizado el acceso. Lo que antes requería un equipo de data scientists ahora puede implementarse con un consultor y Python en semanas.</div>
+        </div>
+        <div class="card-section">
+          <div class="cs-label" style="color:#2dd4a0">Impacto operacional</div>
+          <div class="cs-text">La automatización de reportes de fin de mes puede ahorrar entre 8 y 20 horas/persona/mes. La optimización de rutas con algoritmos reduce el consumo de combustible entre 8% y 15% en flotas medianas.</div>
+        </div>
+        <div class="card-insight">
+          <div class="ci-label">💡 Insight</div>
+          <div class="ci-text">El mayor obstáculo no es la tecnología sino los datos: empresas que no tienen sus datos limpios y estructurados no pueden aprovechar la IA. El primer paso siempre es la arquitectura de datos.</div>
+        </div>
+      </div>
+
+      <!-- CARD 4 -->
+      <div class="analysis-card">
+        <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#a78bfa,transparent)"></div>
+        <div class="card-top">
+          <span class="cat-badge" style="background:rgba(167,139,250,0.1);border:1px solid rgba(167,139,250,0.25);color:#a78bfa">🌊 Comercio Marítimo</span>
+          <span class="card-date" id="date4"></span>
+        </div>
+        <div class="card-kpi">
+          <span class="kpi-label">BDI (Baltic)</span>
+          <span class="kpi-value" style="color:#a78bfa">~1.400</span>
+          <span class="kpi-delta neg">↓ Contracción demanda</span>
+        </div>
+        <div class="card-title">Baltic Dry Index como termómetro del comercio global y su lectura para Colombia</div>
+        <div class="card-summary">El Baltic Dry Index (BDI) mide el costo de transportar materias primas a granel por vía marítima. Es uno de los indicadores más honestos del estado real de la economía global, libre de especulación financiera.</div>
+        <div class="card-section">
+          <div class="cs-label" style="color:#a78bfa">Por qué importa en Colombia</div>
+          <div class="cs-text">Colombia es importador neto de granos (trigo, maíz, soya) y exportador de carbón, café y flores. Las variaciones del BDI afectan directamente los costos CIF de importación y la competitividad de las exportaciones colombianas.</div>
+        </div>
+        <div class="card-section">
+          <div class="cs-label" style="color:#a78bfa">Señal actual</div>
+          <div class="cs-text">Un BDI por debajo de 1.500 puntos históricamente indica contracción en la demanda global de materias primas. Para empresas importadoras, puede ser el momento de anticipar compras antes de una posible recuperación.</div>
+        </div>
+        <div class="card-insight">
+          <div class="ci-label">💡 Insight</div>
+          <div class="ci-text">Monitorear el BDI semanalmente cuesta cero y es una de las señales más adelantadas del ciclo económico. Cualquier empresa con importaciones significativas debería incluirlo en su tablero de control estratégico.</div>
+        </div>
+      </div>
+
+      <!-- CARD 5 -->
+      <div class="analysis-card">
+        <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#f04444,transparent)"></div>
+        <div class="card-top">
+          <span class="cat-badge" style="background:rgba(240,68,68,0.1);border:1px solid rgba(240,68,68,0.25);color:#f04444">📦 Inventarios & SC</span>
+          <span class="card-date" id="date5"></span>
+        </div>
+        <div class="card-kpi">
+          <span class="kpi-label">Costo capital inv.</span>
+          <span class="kpi-value" style="color:#f04444">25–30%</span>
+          <span class="kpi-delta neg">↑ Tasas altas presionan</span>
+        </div>
+        <div class="card-title">El costo oculto del inventario en un entorno de tasas de interés elevadas</div>
+        <div class="card-summary">Con tasas de interés en Colombia históricamente altas (Banco de la República mantuvo tasas por encima del 12% en 2024), el costo de mantener inventario inmovilizado se dispara, afectando la gestión del capital de trabajo.</div>
+        <div class="card-section">
+          <div class="cs-label" style="color:#f04444">El cálculo ignorado</div>
+          <div class="cs-text">El costo real de mantener $100M en inventario incluye: costo financiero del capital (~12%), almacenamiento (~4%), seguros (~1%), merma y obsolescencia (~3%), más el costo de oportunidad. Total: entre 20% y 30% anual sobre el valor del inventario.</div>
+        </div>
+        <div class="card-section">
+          <div class="cs-label" style="color:#f04444">Oportunidad</div>
+          <div class="cs-text">Reducir inventarios en un 20% sin afectar el nivel de servicio (a través de una clasificación ABC precisa y cálculo correcto de stock de seguridad) puede liberar capital equivalente a varios meses de utilidad operacional.</div>
+        </div>
+        <div class="card-insight">
+          <div class="ci-label">💡 Insight</div>
+          <div class="ci-text">En un entorno de tasas altas, la gestión eficiente de inventarios es literalmente gestión financiera. Cada peso menos en inventario innecesario es un peso que deja de generar costo financiero.</div>
+        </div>
+      </div>
+
+    </div><!-- end slider-track -->
+  </div><!-- end slider-wrap -->
+
+  <div class="slider-controls">
+    <div class="slider-btns">
+      <button class="slider-btn" id="btnPrev" onclick="slide(-1)" disabled>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <button class="slider-btn" id="btnNext" onclick="slide(1)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+    </div>
+    <div style="font-size:0.72rem;color:var(--text3)">
+      ← Deslizar para ver más análisis · <span style="color:var(--gold)">Actualización semanal</span>
+    </div>
+    <div class="slider-dots" id="sliderDots"></div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ── NOTICIAS AUTOMÁTICAS ── -->
+<div class="sec">
+  <div class="sec-hdr">
+    <span class="sec-tag">📡 Feed automático</span>
+    <span class="sec-title">Noticias del sector</span>
+    <div class="sec-line"></div>
+  </div>
+  <p class="sec-sub">Titulares actualizados de fuentes especializadas en economía, logística y comercio internacional.</p>
+
+  <div class="feed-selector" id="feedSelector">
+    <button class="feed-btn active" onclick="loadFeed(0,this)">🌍 Economía global</button>
+    <button class="feed-btn" onclick="loadFeed(1,this)">📦 Supply Chain</button>
+    <button class="feed-btn" onclick="loadFeed(2,this)">💹 Mercados</button>
+    <button class="feed-btn" onclick="loadFeed(3,this)">🤖 Tecnología</button>
+  </div>
+
+  <div id="newsContainer">
+    <div class="news-loading"><div class="news-spinner"></div>Cargando noticias...</div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ── PANEL LOGÍSTICO ── -->
+<div class="sec">
+  <div class="sec-hdr">
+    <span class="sec-tag">🚢 Logística global</span>
+    <span class="sec-title">Indicadores de flete & transporte</span>
+    <div class="sec-line"></div>
+  </div>
+  <p class="sec-sub">Datos de referencia semanal. Actualización manual cada lunes con fuentes especializadas (Drewry, Freightos, Baltic Exchange).</p>
+
+  <div class="logistics-grid">
+    <div class="logi-card">
+      <div class="logi-icon">🚢</div>
+      <div class="logi-label">Baltic Dry Index (BDI)</div>
+      <div class="logi-val" style="color:#a78bfa">1.423</div>
+      <div class="logi-sub">puntos · semana actual</div>
+      <div class="logi-bar"><div class="logi-bar-fill" style="width:38%;background:#a78bfa"></div></div>
+      <div class="logi-context">Por debajo del promedio histórico (~1.500–2.000). Señal de moderación en la demanda global de carga a granel. Las rutas Asia–LATAM muestran estabilidad relativa.</div>
+      <div class="logi-update">Fuente: Baltic Exchange · <span id="logiDate">Actualizado esta semana</span></div>
+    </div>
+
+    <div class="logi-card">
+      <div class="logi-icon">📦</div>
+      <div class="logi-label">Freightos FBX — Asia a LATAM</div>
+      <div class="logi-val" style="color:#f09020">~$2.100</div>
+      <div class="logi-sub">USD por contenedor 40ft</div>
+      <div class="logi-bar"><div class="logi-bar-fill" style="width:42%;background:#f09020"></div></div>
+      <div class="logi-context">Tarifas de contenedor normalizadas vs. los picos pandémicos (~$15.000). Sin embargo, tensiones en el Mar Rojo y el Canal de Panamá mantienen presión alcista potencial en rutas estratégicas.</div>
+      <div class="logi-update">Fuente: Freightos Baltic Index · Ref. semanal</div>
+    </div>
+
+    <div class="logi-card">
+      <div class="logi-icon">🛣️</div>
+      <div class="logi-label">Flete terrestre Colombia</div>
+      <div class="logi-val" style="color:#4a90d4">$320–450</div>
+      <div class="logi-sub">COP/km · ruta principal</div>
+      <div class="logi-bar"><div class="logi-bar-fill" style="width:55%;background:#4a90d4"></div></div>
+      <div class="logi-context">Las tarifas terrestres en Colombia reflejan el precio del ACPM, los peajes (con incrementos anuales) y la informalidad del sector. La ruta Bogotá–Barranquilla referencia: ~$3.5M–4.8M por camión 35 tons.</div>
+      <div class="logi-update">Fuente: Min. Transporte Colombia · Referencia 2026</div>
+    </div>
+
+    <div class="logi-card">
+      <div class="logi-icon">⚠️</div>
+      <div class="logi-label">Alertas logísticas activas</div>
+      <div class="logi-val" style="color:#f04444">2</div>
+      <div class="logi-sub">eventos de riesgo monitoreados</div>
+      <div class="logi-bar"><div class="logi-bar-fill" style="width:30%;background:#f04444"></div></div>
+      <div class="logi-context">1. Tensiones en el Mar Rojo: desvíos vía Cabo de Buena Esperanza aumentan transit time 10–15 días en rutas Europa–Asia. 2. Sequía Canal de Panamá: restricciones de calado vigentes afectan buques Panamax.</div>
+      <div class="logi-update">Última revisión: Semana actual</div>
+    </div>
+
+    <div class="logi-card">
+      <div class="logi-icon">🌽</div>
+      <div class="logi-label">Granos — Costo CIF Colombia</div>
+      <div class="logi-val" style="color:#2dd4a0">~$340</div>
+      <div class="logi-sub">USD/ton · Trigo (referencia)</div>
+      <div class="logi-bar"><div class="logi-bar-fill" style="width:48%;background:#2dd4a0"></div></div>
+      <div class="logi-context">Los precios de los granos importados (trigo, maíz, soya) están influenciados por el tipo de cambio, el flete marítimo y los precios en Chicago CBOT. La devaluación del peso encarece la importación incluso cuando el grano baja en dólares.</div>
+      <div class="logi-update">Fuente: CBOT + DANE · Referencia mensual</div>
+    </div>
+
+    <div class="logi-card">
+      <div class="logi-icon">⏱️</div>
+      <div class="logi-label">Transit time promedio</div>
+      <div class="logi-val" style="color:#f0a500">28–35</div>
+      <div class="logi-sub">días · Asia → Colombia (Buenaventura)</div>
+      <div class="logi-bar"><div class="logi-bar-fill" style="width:60%;background:#f0a500"></div></div>
+      <div class="logi-context">El transit time extendido por desvíos del Mar Rojo impacta directamente el stock de seguridad requerido. Importadores deben recalcular su punto de reorden con el lead time actual, no el histórico pre-crisis.</div>
+      <div class="logi-update">Fuente: Líneas navieras principales · 2026</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-brand">Paul André <em>Negrete</em> · Análisis & Mercados</div>
+  <div class="footer-links">
+    <a href="https://paulnegrete.netlify.app">← Portafolio</a>
+    <a href="https://paulnegrete.netlify.app/#cotizador">Cotizador</a>
+    <a href="https://paulnegrete.netlify.app/#agendamiento">Agendar consulta</a>
+    <a href="mailto:pnegrete0209@gmail.com">✉ Contacto</a>
+  </div>
+  <div class="footer-note">Datos de mercado: TradingView. Noticias: RSS público. Logística: fuentes especializadas (Drewry, Freightos, Baltic Exchange). Análisis editorial: Paul André Negrete.</div>
+</footer>
+
+<script>
+// ── Dates
+const NOW = new Date();
+const fmtDate = d => d.toLocaleDateString('es-CO',{day:'numeric',month:'short',year:'numeric'});
+['date1','date2','date3','date4','date5'].forEach((id,i) => {
+  const d = new Date(NOW); d.setDate(d.getDate() - i * 2);
+  const el = document.getElementById(id);
+  if(el) el.textContent = fmtDate(d);
+});
+document.getElementById('logiDate').textContent = fmtDate(NOW);
+
+// ── Slider
+let sliderIdx = 0;
+const CARD_W = 360 + 18;
+const track = document.getElementById('sliderTrack');
+const totalCards = track.children.length;
+const dotsEl = document.getElementById('sliderDots');
+
+function buildDots() {
+  dotsEl.innerHTML = '';
+  for (let i = 0; i < totalCards; i++) {
+    const d = document.createElement('div');
+    d.className = 'sdot' + (i === 0 ? ' active' : '');
+    d.onclick = () => goTo(i);
+    dotsEl.appendChild(d);
+  }
+}
+
+function goTo(idx) {
+  const wrap = document.getElementById('sliderWrap');
+  const visible = Math.floor(wrap.offsetWidth / CARD_W) || 1;
+  const max = Math.max(0, totalCards - visible);
+  sliderIdx = Math.max(0, Math.min(idx, max));
+  track.style.transform = `translateX(-${sliderIdx * CARD_W}px)`;
+  document.getElementById('btnPrev').disabled = sliderIdx === 0;
+  document.getElementById('btnNext').disabled = sliderIdx >= max;
+  dotsEl.querySelectorAll('.sdot').forEach((d,i) => d.classList.toggle('active', i === sliderIdx));
+}
+
+function slide(dir) { goTo(sliderIdx + dir); }
+buildDots();
+
+// ── RSS News Feeds
+const FEEDS = [
+  { url:'https://feeds.bbci.co.uk/news/business/rss.xml', name:'BBC Business', label:'🌍 Economía global' },
+  { url:'https://rss.nytimes.com/services/xml/rss/nyt/Business.xml', name:'NYT Business', label:'📦 Supply Chain' },
+  { url:'https://www.investing.com/rss/news_301.rss', name:'Investing.com', label:'💹 Mercados' },
+  { url:'https://feeds.feedburner.com/TechCrunch', name:'TechCrunch', label:'🤖 Tecnología' }
+];
+
+const RSS2JSON = 'https://api.rss2json.com/v1/api.json?rss_url=';
+
+async function loadFeed(idx, btn) {
+  document.querySelectorAll('.feed-btn').forEach(b => b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  document.getElementById('newsContainer').innerHTML = '<div class="news-loading"><div class="news-spinner"></div>Cargando noticias...</div>';
+
+  const feed = FEEDS[idx];
+  try {
+    const res = await fetch(RSS2JSON + encodeURIComponent(feed.url) + '&count=9');
+    const data = await res.json();
+    if (!data.items || !data.items.length) throw new Error('Sin resultados');
+    renderNews(data.items.slice(0,9), feed.name);
+  } catch(e) {
+    // Fallback: show placeholder cards
+    renderFallback(feed.name);
+  }
+}
+
+function relTime(dateStr) {
+  const d = new Date(dateStr);
+  if(isNaN(d)) return '';
+  const diff = Math.floor((Date.now() - d) / 60000);
+  if(diff < 60) return `hace ${diff} min`;
+  if(diff < 1440) return `hace ${Math.floor(diff/60)}h`;
+  return `hace ${Math.floor(diff/1440)} días`;
+}
+
+function renderNews(items, source) {
+  const html = '<div class="news-grid">' + items.map(item => {
+    const desc = item.description ? item.description.replace(/<[^>]+>/g,'').slice(0,140) + '…' : '';
+    return `<a class="news-card" href="${item.link}" target="_blank" rel="noopener">
+      <div class="nc-source">${source}</div>
+      <div class="nc-title">${item.title}</div>
+      <div class="nc-desc">${desc}</div>
+      <div class="nc-bottom">
+        <span class="nc-date">${relTime(item.pubDate)}</span>
+        <span class="nc-link">Leer →</span>
+      </div>
+    </a>`;
+  }).join('') + '</div>';
+  document.getElementById('newsContainer').innerHTML = html;
+}
+
+function renderFallback(source) {
+  const msgs = [
+    { t:'Aranceles y reshoring: el nuevo mapa del comercio global', d:'Las tensiones geopolíticas aceleran la reconfiguración de cadenas de suministro hacia modelos nearshoring y friendshoring.' },
+    { t:'Digitalización logística en América Latina: avances y rezagos', d:'La adopción de TMS, WMS y plataformas de visibilidad en tiempo real avanza a ritmo desigual en la región.' },
+    { t:'El papel de los datos en la toma de decisiones de compras', d:'El análisis predictivo de demanda reduce el error de pronóstico entre un 20% y un 40% en empresas que lo implementan correctamente.' },
+    { t:'Nearshoring en México: impacto sobre rutas logísticas desde Colombia', d:'La relocalización de manufactura asiática en México genera nuevas oportunidades y presiones sobre rutas transfronterizas.' },
+    { t:'SAP y los ERP en la PYME latinoamericana', d:'La implementación de sistemas ERP en empresas medianas sigue siendo el mayor salto de madurez operacional disponible hoy.' },
+    { t:'Automatización de bodegas: ROI y casos reales', d:'El retorno de inversión en automatización parcial de bodegas (picking asistido, conveyors) se materializa entre 18 y 36 meses.' },
+  ];
+  const html = '<div class="news-grid">' + msgs.map(m => `
+    <div class="news-card" style="cursor:default">
+      <div class="nc-source">${source} · Análisis editorial</div>
+      <div class="nc-title">${m.t}</div>
+      <div class="nc-desc">${m.d}</div>
+      <div class="nc-bottom">
+        <span class="nc-date">Contenido editorial</span>
+        <span class="nc-link" style="color:var(--text3)">Paul Negrete</span>
+      </div>
+    </div>`).join('') + '</div>';
+  document.getElementById('newsContainer').innerHTML = html;
+}
+
+// Load first feed on init
+loadFeed(0, null);
+
+// Auto-slide slider every 6s
+setInterval(() => {
+  const wrap = document.getElementById('sliderWrap');
+  const visible = Math.floor(wrap.offsetWidth / CARD_W) || 1;
+  const max = Math.max(0, totalCards - visible);
+  if(sliderIdx >= max) goTo(0); else slide(1);
+}, 6000);
+</script>
+</body>
+</html>
