@@ -43,10 +43,49 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:cen
 .hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
 .hamburger.open span:nth-child(2){opacity:0}
 .hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
-.mobile-menu{display:none;position:fixed;top:71px;left:0;right:0;background:rgba(8,12,20,0.98);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);z-index:199;overflow:hidden;max-height:0;transition:max-height 0.35s ease}
-.mobile-menu.open{max-height:500px}
-.mobile-menu a{display:block;padding:13px 28px;font-size:0.88rem;font-weight:500;color:var(--text2);text-decoration:none;text-transform:uppercase;letter-spacing:0.05em;border-bottom:1px solid var(--border);transition:color 0.2s}
-.mobile-menu a:hover{color:var(--gold)}
+.mobile-menu{
+  display:none;
+  position:fixed;
+  top:0;left:0;right:0;bottom:0;
+  background:rgba(6,9,16,0.98);
+  backdrop-filter:blur(20px);
+  z-index:999;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  padding:80px 24px 40px;
+}
+.mobile-menu.open{display:flex}
+.mobile-menu a{
+  font-family:'Syne',sans-serif;
+  font-size:1.3rem;
+  font-weight:700;
+  color:var(--text);
+  text-decoration:none;
+  padding:14px 24px;
+  width:100%;
+  text-align:center;
+  border-radius:12px;
+  border:1px solid var(--border);
+  transition:all 0.2s;
+}
+.mobile-menu a:hover{
+  background:var(--card);
+  border-color:var(--gold);
+  color:var(--gold);
+}
+.mobile-menu .menu-close{
+  position:absolute;
+  top:18px;right:18px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:50%;
+  width:40px;height:40px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;color:var(--text2);
+  font-size:1.2rem;
+}
 .mobile-menu .mobile-cta{background:var(--gold);color:var(--bg)!important;margin:14px 28px 20px;border-radius:10px;text-align:center;border-bottom:none;font-weight:700}
 .hero{position:relative;min-height:100vh;display:flex;align-items:center;padding:130px 60px 80px;overflow:hidden;z-index:1}
 .hero-glow{position:absolute;width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(46,109,164,0.18) 0%,transparent 70%);top:-200px;right:-100px;pointer-events:none}
@@ -346,13 +385,14 @@ footer{position:relative;z-index:1;background:var(--card);border-top:1px solid v
 </nav>
 
 <div class="mobile-menu" id="mobileMenu">
+  <button class="menu-close" onclick="closeMenu()">✕</button>
   <a href="#servicios" onclick="closeMenu()">Servicios</a>
   <a href="#proyectos" onclick="closeMenu()">Proyectos</a>
   <a href="#agendamiento" onclick="closeMenu()">Agendar consulta</a>
   <a href="#cotizador" onclick="closeMenu()">Cotizador</a>
   <a href="#sobre-mi" onclick="closeMenu()">Sobre mí</a>
   <a href="./analisis/" onclick="closeMenu()" style="color:var(--blue3)">📡 El mundo en datos</a>
-  <a href="#agendamiento" class="mobile-cta" onclick="closeMenu()">Consultoría gratuita</a>
+  <a href="#agendamiento" onclick="closeMenu()" style="background:var(--gold);color:var(--bg);border-color:var(--gold);font-weight:800">Consultoría gratuita</a>
 </div>
 
 <section class="hero">
@@ -692,8 +732,16 @@ if('IntersectionObserver' in window&&!window.matchMedia('(prefers-reduced-motion
   document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
   setTimeout(()=>document.querySelectorAll('.reveal.animate:not(.visible)').forEach(el=>el.classList.add('visible')),2000);
 }
-function toggleMenu(){document.getElementById('hamburger').classList.toggle('open');document.getElementById('mobileMenu').classList.toggle('open')}
-function closeMenu(){document.getElementById('hamburger').classList.remove('open');document.getElementById('mobileMenu').classList.remove('open')}
+function toggleMenu() {
+  document.getElementById('mobileMenu').classList.toggle('open');
+  document.body.style.overflow =
+    document.getElementById('mobileMenu').classList.contains('open')
+    ? 'hidden' : '';
+}
+function closeMenu() {
+  document.getElementById('mobileMenu').classList.remove('open');
+  document.body.style.overflow = '';
+}
 window.addEventListener('scroll',()=>{if(document.getElementById('mobileMenu').classList.contains('open'))closeMenu()},{passive:true});
 let selectedServices={},urgencyMult=1;
 function toggleCheck(card,name,price){if(card.classList.contains('selected')){card.classList.remove('selected');delete selectedServices[name]}else{card.classList.add('selected');selectedServices[name]=price}updateQuote()}
