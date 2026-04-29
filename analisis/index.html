@@ -753,16 +753,53 @@ function renderFallback(source) {
   document.getElementById('newsContainer').innerHTML = html;
 }
 
-// Load first feed on init
-loadFeed(0, null);
+// ── Auto-slide con soporte cross-browser y touch
+let autoSlideTimer = null;
+let userInteracted = false;
 
-// Auto-slide slider every 6s
-setInterval(() => {
-  const wrap = document.getElementById('sliderWrap');
-  const visible = Math.floor(wrap.offsetWidth / CARD_W) || 1;
-  const max = Math.max(0, totalCards - visible);
-  if(sliderIdx >= max) goTo(0); else slide(1);
-}, 6000);
+function startAutoSlide() {
+  stopAutoSlide();
+  autoSlideTimer = setInterval(() => {
+    if (document.hidden) return; // no animar si pestaña no visible
+    const wrap = document.getElementById('sliderWrap');
+    const visible = Math.floor(wrap.offsetWidth / CARD_W) || 1;
+    const max = Math.max(0, totalCards - visible);
+    if (sliderIdx >= max) goTo(0); else slide(1);
+  }, 6000);
+}
+
+function stopAutoSlide() {
+  if (autoSlideTimer) { clearInterval(autoSlideTimer); autoSlideTimer = null; }
+}
+
+// Iniciar cuando el slider sea visible en pantalla
+const sliderObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) startAutoSlide();
+    else stopAutoSlide();
+  });
+}, { threshold: 0.3 });
+sliderObserver.observe(document.getElementById('sliderWrap'));
+
+// Pausar al pasar el mouse, reanudar al salir
+document.getElementById('sliderWrap').addEventListener('mouseenter', stopAutoSlide);
+document.getElementById('sliderWrap').addEventListener('mouseleave', startAutoSlide);
+
+// ── Soporte táctil (swipe) para móvil y touchpad
+let touchStartX = 0;
+const track2 = document.getElementById('sliderTrack');
+track2.addEventListener('touchstart', e => {
+  touchStartX = e.touches[0].clientX;
+  stopAutoSlide();
+}, { passive: true });
+track2.addEventListener('touchend', e => {
+  const diff = touchStartX - e.changedTouches[0].clientX;
+  if (Math.abs(diff) > 50) diff > 0 ? slide(1) : slide(-1);
+  startAutoSlide();
+}, { passive: true });
+
+// Iniciar también al cargar
+startAutoSlide();
 </script>
 </body>
 </html>
