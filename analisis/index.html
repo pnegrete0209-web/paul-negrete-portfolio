@@ -75,7 +75,7 @@ nav{position:sticky;top:0;z-index:200;display:flex;align-items:center;justify-co
 
 /* ── ANALYSIS SLIDER ── */
 .slider-wrap{position:relative;overflow:hidden}
-.slider-track{display:flex;gap:18px;transition:transform 0.45s cubic-bezier(0.25,0.46,0.45,0.94);will-change:transform}
+.slider-track{display:flex;gap:18px;transition:transform 0.45s cubic-bezier(0.25,0.46,0.45,0.94);will-change:transform;cursor:grab}}
 .analysis-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:24px;min-width:360px;max-width:360px;flex-shrink:0;position:relative;overflow:hidden;transition:border-color 0.3s,transform 0.3s}
 .analysis-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:var(--r) var(--r) 0 0}
 .analysis-card:hover{border-color:var(--border2);transform:translateY(-3px);box-shadow:0 16px 48px rgba(0,0,0,0.4)}
@@ -165,7 +165,10 @@ footer{background:var(--card);border-top:1px solid var(--border);padding:28px 48
   .divider{margin-left:17px;margin-right:17px}
   .news-grid{grid-template-columns:1fr}
   .logistics-grid{grid-template-columns:1fr}
-  .analysis-card{min-width:300px;max-width:300px}
+  .analysis-card{min-width:88vw;max-width:88vw}
+  .slider-wrap{padding:0 6vw}
+  .slider-track{scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
+  .analysis-card{scroll-snap-align:center}
   footer{padding:20px 17px;flex-direction:column;align-items:flex-start}
 }
 </style>
@@ -753,53 +756,35 @@ function renderFallback(source) {
   document.getElementById('newsContainer').innerHTML = html;
 }
 
-// ── Auto-slide con soporte cross-browser y touch
-let autoSlideTimer = null;
-let userInteracted = false;
-
-function startAutoSlide() {
-  stopAutoSlide();
-  autoSlideTimer = setInterval(() => {
-    if (document.hidden) return; // no animar si pestaña no visible
-    const wrap = document.getElementById('sliderWrap');
-    const visible = Math.floor(wrap.offsetWidth / CARD_W) || 1;
-    const max = Math.max(0, totalCards - visible);
-    if (sliderIdx >= max) goTo(0); else slide(1);
-  }, 6000);
-}
-
-function stopAutoSlide() {
-  if (autoSlideTimer) { clearInterval(autoSlideTimer); autoSlideTimer = null; }
-}
-
-// Iniciar cuando el slider sea visible en pantalla
-const sliderObserver = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) startAutoSlide();
-    else stopAutoSlide();
-  });
-}, { threshold: 0.3 });
-sliderObserver.observe(document.getElementById('sliderWrap'));
-
-// Pausar al pasar el mouse, reanudar al salir
-document.getElementById('sliderWrap').addEventListener('mouseenter', stopAutoSlide);
-document.getElementById('sliderWrap').addEventListener('mouseleave', startAutoSlide);
-
-// ── Soporte táctil (swipe) para móvil y touchpad
+// ── Slider manual con swipe táctil
 let touchStartX = 0;
 const track2 = document.getElementById('sliderTrack');
+
+// Swipe en móvil
 track2.addEventListener('touchstart', e => {
   touchStartX = e.touches[0].clientX;
-  stopAutoSlide();
-}, { passive: true });
-track2.addEventListener('touchend', e => {
-  const diff = touchStartX - e.changedTouches[0].clientX;
-  if (Math.abs(diff) > 50) diff > 0 ? slide(1) : slide(-1);
-  startAutoSlide();
 }, { passive: true });
 
-// Iniciar también al cargar
-startAutoSlide();
+track2.addEventListener('touchend', e => {
+  const diff = touchStartX - e.changedTouches[0].clientX;
+  if (Math.abs(diff) > 40) diff > 0 ? slide(1) : slide(-1);
+}, { passive: true });
+
+// Drag con mouse en desktop
+let isDragging = false, dragStartX = 0;
+track2.addEventListener('mousedown', e => {
+  isDragging = true;
+  dragStartX = e.clientX;
+  track2.style.cursor = 'grabbing';
+});
+document.addEventListener('mouseup', e => {
+  if (!isDragging) return;
+  isDragging = false;
+  track2.style.cursor = 'grab';
+  const diff = dragStartX - e.clientX;
+  if (Math.abs(diff) > 40) diff > 0 ? slide(1) : slide(-1);
+});
+track2.style.cursor = 'grab';
 </script>
 </body>
 </html>
